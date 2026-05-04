@@ -33,6 +33,6 @@ public class Evolucion {
     private Nivel id_nivel_FK;
 
     @ManyToOne
-    @JoinColumn(name = "id_mascota")
-    private Mascota id_mascota_FK;
+    @JoinColumn(name = "id_tipo_mascota")
+    private  TipoMascota id_tipoMascota_FK;
 }
