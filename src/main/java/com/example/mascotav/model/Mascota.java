@@ -1,11 +1,4 @@
-<<<<<<< HEAD
 package com.example.mascotav.model;
-
-public class Mascota {
-
-=======
-
-package com.example.mascotav.Model;
 
 import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
@@ -57,23 +50,5 @@ public class Mascota {
     @Column(nullable = false)
     private Integer nivel = 1;
 
-    // Relaciones
 
-    @ManyToOne(fetch = FetchType.EAGER) // OPCIONAL
-    @JoinColumn(name = "id_tipo_mascota_FK", nullable = false)
-    private TipoMascota tipoMascota;
-
-    @ManyToOne(fetch = FetchType.LAZY) // OPCIONAL
-    @JoinColumn(name = "id_user_FK", nullable = false)
-    @ToString.Exclude
-    private Usuario usuario;
-
-    @ManyToOne(fetch = FetchType.EAGER) // OPCIONAL
-    @JoinColumn(name = "id_nivel_FK")
-    private Nivel nivelEntidad; // Relación con la tabla 'nivel' del diagrama
-
-    @OneToOne(mappedBy = "mascota", cascade = CascadeType.ALL)
-    private EstadoMascota estado; // Relación con 'estado_mascota'
-
->>>>>>> 998d38d209692e1589776cc6235be063b49430c2
 }
