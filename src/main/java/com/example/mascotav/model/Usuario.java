@@ -5,9 +5,6 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -35,4 +32,7 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario")
     @ToString.Exclude
     private List<Mascota> mascotas;
-}
+
+    @OneToMany(mappedBy = "usuario")
+    private List<Usuario_Tienda_Item> itemsReclamados;
+    }
