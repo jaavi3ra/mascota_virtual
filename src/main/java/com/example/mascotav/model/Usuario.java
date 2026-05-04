@@ -1,7 +1,5 @@
 package com.example.mascotav.model;
 
-package com.example.mascotav.model;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -32,4 +30,9 @@ public class Usuario {
     @Column(name = "fecha_creacion", updatable = false)
     private LocalDateTime fechaCreacion;
 
+    // --- RELACIÓN ---
+
+    @OneToMany(mappedBy = "usuario")
+    @ToString.Exclude
+    private List<Mascota> mascotas;
 }
