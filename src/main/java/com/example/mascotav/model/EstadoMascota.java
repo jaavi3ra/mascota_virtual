@@ -24,7 +24,7 @@ public class EstadoMascota {
     @Min(value = 0, message = "La mascota ha muerto de hambre ")
     @Max(value = 100, message = "La mascota está completamente satisfecha ")
     @Column(name = "hambre", nullable = false)
-    private int hambre = 50; // Inicia a la mitad (ni lleno ni hambriento)
+    private Integer hambre = 50;
 
     @Builder.Default
     @NotNull(message = "El nivel de felicidad es obligatorio")
@@ -46,5 +46,13 @@ public class EstadoMascota {
     @Max(value = 100, message = "Salud perfecta ")
     @Column(name = "salud", nullable = false)
     private int salud = 100;
+
+    // Relaciones
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_mascota", nullable = false, unique = true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Mascota mascota;
 
 }
