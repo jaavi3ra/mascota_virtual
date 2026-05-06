@@ -35,4 +35,7 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario")
     @ToString.Exclude
     private List<Mascota> mascotas;
-}
+
+    @OneToMany(mappedBy = "usuario")
+    private List<Usuario_Tienda_Item> itemsReclamados;
+    }

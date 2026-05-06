@@ -5,8 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,16 +16,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "historial_acciones")
+public class HistorialAcciones {
 
-@Table(name = "nivel")
-public class Nivel {
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_nivel")
-    private Integer id_nivel;
+    @Column(name = "id_historial")
+    private Integer idHistorial;
 
-    @NotNull
-    @Column(name = "exp_req", nullable = false)
-    private Integer exp_req;
+    // Relaciones
+    @ManyToOne
+    @JoinColumn(name = "id_mascota", nullable = false)
+    private Mascota mascota;
+
+    @ManyToOne
+    @JoinColumn(name = "id_accion", nullable = false)
+    private Accion accion;
 }
