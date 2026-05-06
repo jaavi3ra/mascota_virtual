@@ -52,7 +52,21 @@ public class Mascota {
     @Column(nullable = false)
     private Integer nivel = 1;
 
-    // Relaciones
+    // --- RELACIÓN ---
+
+    // --------------DEFINICIONES--------------
+
+    // @FetchType.LAZY ;
+    // Carga relaciones solo cuando se accede a ellas.
+    // Ejemplo: mascota.getUsuario() ejecuta la consulta recién en ese momento.
+
+    // @EqualsAndHashCode.Exclude ;
+    // Evita incluir relaciones en los métodos equals() y hashCode().
+    // Ejemplo: al comparar dos Mascota, no se evalúa usuario para evitar recursión
+    // o problemas con LAZY.
+
+    // Exclude en toString:
+    // No imprimir relaciones (evita loops y logs gigantes).
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo_mascota_FK", nullable = false)
