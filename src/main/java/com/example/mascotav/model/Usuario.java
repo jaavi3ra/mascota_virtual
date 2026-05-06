@@ -1,15 +1,10 @@
 package com.example.mascotav.model;
 
-package com.example.mascotav.model;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -32,4 +27,15 @@ public class Usuario {
     @Column(name = "fecha_creacion", updatable = false)
     private LocalDateTime fechaCreacion;
 
-}
+    // --- RELACIÓN ---
+
+    // Exclude en toString:
+    // No imprimir relaciones (evita loops y logs gigantes).
+
+    @OneToMany(mappedBy = "usuario")
+    @ToString.Exclude
+    private List<Mascota> mascotas;
+
+    @OneToMany(mappedBy = "usuario")
+    private List<Usuario_Tienda_Item> itemsReclamados;
+    }

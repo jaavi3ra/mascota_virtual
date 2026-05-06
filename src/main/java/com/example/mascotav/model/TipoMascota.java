@@ -2,7 +2,6 @@ package com.example.mascotav.model;
 
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,10 +31,14 @@ public class TipoMascota {
     private Integer id;
 
     @NotBlank(message = "El nombre de la mascota es obligatorio")
-    @Size(min = 10, max = 15, message = "El nombre debe tener al menos 4 caracteres")
+    @Size(min = 4, max = 15, message = "El nombre debe tener al menos 4 caracteres")
     @Column(name = "nombreTipoMascota", length = 15, nullable = false)
     private String nombreTipoMascota;
 
     // Relaciones
+
+    @OneToMany(mappedBy = "tipoMascota")
+    @ToString.Exclude
+    private List<Mascota> mascotas;
 
 }

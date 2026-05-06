@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 public class Evolucion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_evo;
+    private Integer id_evo;
     
     @NotBlank(message = "El nombre de la evolucion es obligatorio")
     @Size(min = 4, max = 10, message = "El nombre debe tener al menos 4 caracteres")
@@ -33,6 +33,6 @@ public class Evolucion {
     private Nivel id_nivel_FK;
 
     @ManyToOne
-    @JoinColumn(name = "id_mascota")
-    private Mascota id_mascota_FK;
+    @JoinColumn(name = "id_tipo_mascota")
+    private  TipoMascota id_tipoMascota_FK;
 }
