@@ -22,15 +22,15 @@ import lombok.NoArgsConstructor;
 public class Inventario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_inven;
+    private Integer id_inven;
     
     @NotNull
     @Column(name = "cantidad", nullable = false)
-    private int cantidad;
+    private Integer cantidad;
 
     @ManyToOne
-    @JoinColumn(name = "id_item") //falta tabla item
-    private int id_item_FK;
+    @JoinColumn(name = "id_item") 
+    private Integer id_item_FK;
 
     @ManyToOne
     @JoinColumn(name = "id_mascota")

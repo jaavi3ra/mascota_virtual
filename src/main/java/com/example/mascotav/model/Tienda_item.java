@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class Tienda_item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_tienda_item;
+    private Integer id_tienda_item;
     
     @NotNull
     @Column(name = "cooldown", nullable = false)

@@ -19,10 +19,10 @@ import lombok.NoArgsConstructor;
 @Table(name= "usuario_tienda_item",
      uniqueConstraints = @UniqueConstraint(columnNames = {"id_user", "id_tienda_item"}))
 public class Usuario_Tienda_Item {
-
+    //tabla intermedia
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "id_user")

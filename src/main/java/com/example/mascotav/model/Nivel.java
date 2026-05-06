@@ -22,9 +22,9 @@ public class Nivel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_nivel")
-    private int id_nivel;
+    private Integer id_nivel;
 
     @NotNull
     @Column(name = "exp_req", nullable = false)
-    private int exp_req;
+    private Integer exp_req;
 }
