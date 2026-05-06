@@ -33,6 +33,6 @@ public class Inventario {
     private Integer id_item_FK;
 
     @ManyToOne
-    @JoinColumn(name = "id_mascota")
-    private Mascota id_mascosta_FK;
+    @JoinColumn(name = "id_user")
+    private Usuario id_mascosta_FK;
 }
