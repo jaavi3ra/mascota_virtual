@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Integer> {
 
-    @Query("SELECT i FROM Item i WHERE i.List<Item> findByTipoItem(String tipoItem); = :tipo")
+    @Query("SELECT i FROM Item i WHERE i.tipoItem = :tipo")
     List<Item> buscarPorTipo(@Param("tipo") String tipo);
 }
