@@ -1,5 +1,10 @@
 package com.example.mascotav.repository;
 
-public class TiendaRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import com.example.mascotav.model.Tienda;
+
+@Repository
+public interface TiendaRepository extends JpaRepository<Tienda, Integer> {
 
 }
