@@ -1,5 +1,9 @@
 package com.example.mascotav.repository;
 
-public interface TipoMascotaRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.mascotav.model.TipoMascota;
+
+public interface TipoMascotaRepository extends JpaRepository<TipoMascota, Integer> {
 
 }
