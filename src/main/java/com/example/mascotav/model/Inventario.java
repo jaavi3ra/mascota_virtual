@@ -30,7 +30,7 @@ public class Inventario {
 
     @ManyToOne
     @JoinColumn(name = "id_item") 
-    private Integer id_item_FK;
+    private Item id_item_FK;
 
     @ManyToOne
     @JoinColumn(name = "id_user")

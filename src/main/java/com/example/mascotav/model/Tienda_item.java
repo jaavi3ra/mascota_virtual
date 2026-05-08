@@ -32,12 +32,12 @@ public class Tienda_item {
     private int cooldown_segundos;
     
     @ManyToOne
-    @JoinColumn(name = "id_item") //falta tabla item
-    private int id_item_FK;
+    @JoinColumn(name = "id_item") 
+    private Item id_item_FK;
 
     @ManyToOne
-    @JoinColumn(name = "id_tienda") //falta tabla tienda
-    private int id_tienda_FK;
+    @JoinColumn(name = "id_tienda") 
+    private Tienda id_tienda_FK;
 
     @OneToMany(mappedBy = "tiendaItem")
     private List<Usuario_Tienda_Item> usuarios;
