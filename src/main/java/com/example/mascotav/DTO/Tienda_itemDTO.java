@@ -2,8 +2,8 @@ package com.example.mascotav.DTO;
 
 import java.util.List;
 import com.example.mascotav.model.Item;
-import com.example.mascotav.model.Usuario_Tienda_Item;
-
+import lombok.Data;
+@Data
 public class Tienda_itemDTO {
     private Integer id_tienda_item;
     private int cooldown_segundos;

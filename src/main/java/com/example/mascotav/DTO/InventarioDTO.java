@@ -1,8 +1,8 @@
 package com.example.mascotav.DTO;
 
 import com.example.mascotav.model.Item;
-import com.example.mascotav.model.Usuario;
-
+import lombok.Data;
+@Data
 public class InventarioDTO {
      private Integer id_inven;
      private Integer cantidad;
