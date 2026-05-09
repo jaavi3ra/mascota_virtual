@@ -1,6 +1,7 @@
 package com.example.mascotav.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,11 +29,11 @@ public class Evolucion {
     @Size(min = 4, max = 10, message = "El nombre debe tener al menos 4 caracteres")
     private String nom_evo;
     
-    @ManyToOne
-    @JoinColumn(name = "id_nivel")
-    private Nivel id_nivel_FK;
+   @ManyToOne()
+    @JoinColumn(name = "id_nivel_fk")
+    private Nivel nivel;
 
-    @ManyToOne
-    @JoinColumn(name = "id_tipo_mascota")
-    private  TipoMascota id_tipoMascota_FK;
+    @ManyToOne()
+    @JoinColumn(name = "id_tipo_mascota_fk")
+    private TipoMascota tipoMascota;
 }

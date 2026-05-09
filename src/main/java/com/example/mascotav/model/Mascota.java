@@ -1,5 +1,7 @@
 package com.example.mascotav.model;
 
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
@@ -52,25 +55,10 @@ public class Mascota {
     @Column(nullable = false)
     private Integer nivel = 1;
 
-    // --- RELACIÓN ---
+    // Relaciones
 
-    // --------------DEFINICIONES--------------
-
-    // @FetchType.LAZY ;
-    // Carga relaciones solo cuando se accede a ellas.
-    // Ejemplo: mascota.getUsuario() ejecuta la consulta recién en ese momento.
-
-    // @EqualsAndHashCode.Exclude ;
-    // Evita incluir relaciones en los métodos equals() y hashCode().
-    // Ejemplo: al comparar dos Mascota, no se evalúa usuario para evitar recursión
-    // o problemas con LAZY.
-
-    // Exclude en toString:
-    // No imprimir relaciones (evita loops y logs gigantes).
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_tipo_mascota_FK", nullable = false)
-    @EqualsAndHashCode.Exclude
+    @ManyToOne
+    @JoinColumn(name = "id_tipo_mascota_fk")
     private TipoMascota tipoMascota;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -84,9 +72,10 @@ public class Mascota {
     @EqualsAndHashCode.Exclude
     private Nivel nivelEntidad;
 
-    @OneToOne(mappedBy = "mascota", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private EstadoMascota estado;
+   @OneToOne(mappedBy = "mascota", fetch = FetchType.LAZY)
+    private EstadoMascota estadoMascota;
+
+    @OneToMany(mappedBy = "mascota", fetch = FetchType.LAZY)
+    private List<HistorialAcciones> historialAcciones;
 
 }

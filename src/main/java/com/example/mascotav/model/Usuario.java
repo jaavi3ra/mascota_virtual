@@ -29,9 +29,6 @@ public class Usuario {
 
     // --- RELACIÓN ---
 
-    // Exclude en toString:
-    // No imprimir relaciones (evita loops y logs gigantes).
-
     @OneToMany(mappedBy = "usuario")
     @ToString.Exclude
     private List<Mascota> mascotas;
