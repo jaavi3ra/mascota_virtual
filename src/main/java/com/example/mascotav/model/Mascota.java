@@ -82,7 +82,7 @@ public class Mascota {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_nivel_FK")
     @EqualsAndHashCode.Exclude
-    private Nivel nivelEntidad;
+    private Nivel nivelMascota;
 
     @OneToOne(mappedBy = "mascota", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
