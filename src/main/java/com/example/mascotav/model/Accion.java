@@ -54,5 +54,5 @@ public class Accion {
 
     // Relaciones 
     @OneToMany(mappedBy = "accion")
-    private List<Accion> accion;
+    private List<HistorialAcciones> historialAcciones;
 }
