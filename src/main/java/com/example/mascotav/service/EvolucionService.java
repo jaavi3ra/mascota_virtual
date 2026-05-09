@@ -1,5 +1,7 @@
 package com.example.mascotav.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.mascotav.DTO.EvolucionDTO;
@@ -10,6 +12,12 @@ import com.example.mascotav.repository.EvolucionRepository;
 public class EvolucionService {
     @Autowired
     private EvolucionRepository evolucionRepository;
+
+    public List<EvolucionDTO> obtenerTodas() {
+        return evolucionRepository.findAll().stream()
+                .map(this::convertirADTO) // Transmutamos cada party
+                .toList();
+    }
 
     public Evolucion crearEvolucion(Evolucion evo){
             return evolucionRepository.save(evo);
