@@ -22,7 +22,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tipo_mascota")
+@Table(name = "tipoMascota")
 public class TipoMascota {
 
     @Id
@@ -40,5 +40,8 @@ public class TipoMascota {
     @OneToMany(mappedBy = "tipoMascota")
     @ToString.Exclude
     private List<Mascota> mascotas;
+
+    @OneToMany(mappedBy = "tipoMascota")
+    private List<Evolucion> evoluciones;
 
 }

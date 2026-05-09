@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,14 +32,14 @@ public class Tienda_item {
     @Column(name = "cooldown", nullable = false)
     private int cooldown_segundos;
     
-    @ManyToOne
-    @JoinColumn(name = "id_item") //falta tabla item
-    private int id_item_FK;
+    @ManyToOne()
+    @JoinColumn(name = "id_tienda_fk")
+    private Tienda tienda;
 
-    @ManyToOne
-    @JoinColumn(name = "id_tienda") //falta tabla tienda
-    private int id_tienda_FK;
+    @ManyToOne()
+    @JoinColumn(name = "id_item_fk")
+    private Item item;
 
-    @OneToMany(mappedBy = "tiendaItem")
-    private List<Usuario_Tienda_Item> usuarios;
+    @OneToMany(mappedBy = "tienda_item")
+    private List<Usuario_Tienda_Item> reclamaciones;
 }
