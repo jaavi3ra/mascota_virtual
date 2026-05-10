@@ -47,5 +47,5 @@ public class Item {
     private List<Inventario> inventarios;
 
     @OneToMany(mappedBy = "item")
-    private List<Tienda_item> tiendaItems;
+    private List<TiendaItem> tiendaItems;
 }

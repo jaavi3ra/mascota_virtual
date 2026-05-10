@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Entity
 
 @Table(name = "tienda_item")
-public class Tienda_item {
+public class TiendaItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_tienda_item;
@@ -40,5 +40,5 @@ public class Tienda_item {
     private Item item;
 
     @OneToMany(mappedBy = "tienda_item")
-    private List<Usuario_Tienda_Item> reclamaciones;
+    private List<UsuarioTiendaItem> reclamaciones;
 }
