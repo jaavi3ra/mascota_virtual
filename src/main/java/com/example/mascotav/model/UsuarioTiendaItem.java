@@ -1,5 +1,7 @@
 package com.example.mascotav.model;
 
+import java.time.LocalDateTime;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 
-@Table(name= "usuario_tienda_item",
+@Table(name= "usuariotiendaitem",
      uniqueConstraints = @UniqueConstraint(columnNames = {"id_user", "id_tienda_item"}))
 public class UsuarioTiendaItem {
     //tabla intermedia
@@ -24,11 +26,14 @@ public class UsuarioTiendaItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "ultimaCompra")
+    private LocalDateTime ultimaCompra;
+
     @ManyToOne
     @JoinColumn(name = "id_user")
     private Usuario usuario;
 
     @ManyToOne
-    @JoinColumn(name = "id_tienda_item")
-    private TiendaItem tienda_item;
+    @JoinColumn(name = "id_tienda_item_fk")
+    private TiendaItem tiendaItem;
 }

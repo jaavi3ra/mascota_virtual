@@ -1,7 +1,6 @@
 package com.example.mascotav.model;
 
 import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +25,10 @@ public class Nivel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_nivel")
     private Integer id_nivel;
+
+    @NotNull
+    @Column(name = "num_nivel", nullable = false)
+    private Integer num_nivel;
 
     @NotNull
     @Column(name = "exp_req", nullable = false)

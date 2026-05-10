@@ -1,14 +1,11 @@
 package com.example.mascotav.service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.mascotav.DTO.EstadoMascotaDTO;
 import com.example.mascotav.model.EstadoMascota;
 import com.example.mascotav.repository.EstadoMascotaRepository;
-
 import jakarta.transaction.Transactional;
 
 @Service
@@ -35,7 +32,7 @@ public class EstadoMascotaService {
                 .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
     }
 
-    private void verificarLimitesYSalud(EstadoMascota estado) {
+    public void verificarLimitesYSalud(EstadoMascota estado) {
 
         // Asegura que nada pase de 100 ni baje de 0
         estado.setHambre(Math.min(100, Math.max(0, estado.getHambre())));
