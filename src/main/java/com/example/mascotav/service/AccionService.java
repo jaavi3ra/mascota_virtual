@@ -7,8 +7,13 @@ import org.springframework.stereotype.Service;
 
 import com.example.mascotav.DTO.AccionDTO;
 import com.example.mascotav.model.Accion;
+import com.example.mascotav.model.EstadoMascota;
+import com.example.mascotav.model.HistorialAcciones;
+import com.example.mascotav.model.Item;
+import com.example.mascotav.model.Mascota;
 import com.example.mascotav.repository.AccionRepository;
 import com.example.mascotav.repository.HistorialAccionesRepository;
+import com.example.mascotav.repository.MascotaRepository;
 
 @Service
 public class AccionService {
@@ -65,7 +70,7 @@ public class AccionService {
         HistorialAcciones registro = new HistorialAcciones();
         registro.setMascota(mascota);
         registro.setAccion(accion);
-        historialRepository.save(registro);
+        historialAccionesRepository.save(registro);
 
         // 6. Otorgamos la experiencia base definida en tu tabla Accion
         mascota.setExpActual(mascota.getExpActual() + accion.getAfectaExpBase());
