@@ -13,7 +13,7 @@ import com.example.mascotav.DTO.InventarioDTO;
 import com.example.mascotav.service.InventarioService;
 
 @RestController
-@RequestMapping("/api/v1/invetario")
+@RequestMapping("/api/v1/inventario")
 public class InventarioController {
     @Autowired
     private InventarioService inventarioService;

@@ -17,7 +17,7 @@ public class NivelService {
 
             nivel = new Nivel();
 
-            nivel.setId_nivel(i);
+            nivel.setNum_nivel(i);
 
             nivel.setExp_req(i * 1);
             nivelRepository.save(nivel);
