@@ -19,8 +19,9 @@ public class EvolucionService {
                 .toList();
     }
 
-    public Evolucion crearEvolucion(Evolucion evo){
-            return evolucionRepository.save(evo);
+    public EvolucionDTO crearEvolucion(Evolucion evo){
+            evolucionRepository.save(evo);
+        return convertirADTO(evo);
         }
      
     public Evolucion editarEvolucion(Integer id,Evolucion evo){
@@ -29,13 +30,15 @@ public class EvolucionService {
         if(evoeditado.getNom_evo() != null){
             evo.setNom_evo(evoeditado.getNom_evo());
         }
-        if(evoeditado.getId_nivel_FK() != null){
-            evo.setId_nivel_FK(evoeditado.getId_nivel_FK());
+        if(evoeditado.getNivel().getId_nivel() != null){
+            evo.getNivel().setId_nivel(evoeditado.getNivel().getId_nivel());
         }
-        if(evoeditado.getId_tipoMascota_FK() != null){
-            evo.setId_tipoMascota_FK(evoeditado.getId_tipoMascota_FK());
+        if(evoeditado.getTipoMascota().getId() != null){
+            evo.getTipoMascota().setId(evoeditado.getTipoMascota().getId());
         }
-        return evolucionRepository.save(evoeditado);
+       
+        return  evolucionRepository.save(evoeditado);
+        
     }
     public String borrarEvolucion(Integer id){
          Evolucion evo = evolucionRepository.findById(id).orElseThrow(
@@ -53,18 +56,19 @@ public class EvolucionService {
         EvolucionDTO evoDTO = new EvolucionDTO();
         evoDTO.setId_evo(evo.getId_evo());
         evoDTO.setNom_evo(evo.getNom_evo());
-        if(evo.getId_nivel_FK() != null){
-           evoDTO.setNivelReq(evo.getId_nivel_FK().getId_nivel());
+        if(evo.getNivel().getId_nivel() != null){
+           evoDTO.setNivelReq(evo.getNivel().getId_nivel());
         }else{
             evoDTO.setNivelReq(0);
 
-        if(evo.getId_tipoMascota_FK() != null){
-            evoDTO.setNombre_tipo(evo.getId_tipoMascota_FK().getNombreTipoMascota());
+        if(evo.getTipoMascota().getId() != null){
+            evoDTO.setNombre_tipo(evo.getTipoMascota().getNombreTipoMascota());
         } else {
             evoDTO.setNombre_tipo("Desconocido");
         }
         return evoDTO;
         }
+        return null;
 
     }
     
