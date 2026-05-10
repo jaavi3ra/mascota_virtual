@@ -26,6 +26,9 @@ public class MascotaService {
     @Autowired
     private NivelRepository nivelRepository;
 
+    @Autowired
+    private EstadoMascotaService estadoMascotaService;
+
     public List<MascotaDTO> obtenerTodos() {
         return mascotaRepository.findAll().stream()
                 .map(this::convertirADTO)
@@ -35,6 +38,11 @@ public class MascotaService {
     public MascotaDTO buscarPorId(Integer id) {
         Mascota mascota = mascotaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
+
+        verificarSupervivencia(mascota);
+
+        mascotaRepository.save(mascota);
+
         return convertirADTO(mascota);
     }
 
@@ -42,9 +50,9 @@ public class MascotaService {
         try {
             Mascota mascota = mascotaRepository.findById(id)
                     .orElseThrow(
-                            () -> new RuntimeException("¡Imposible eliminar! La mascota con ID " + id + " no existe."));
+                            () -> new RuntimeException("¡Imposible eliminar! La mascota no existe."));
             mascotaRepository.delete(mascota);
-            return "La mascota " + mascota.getNombre() + " ha sido borrada de la coleccion.";
+            return "La mascota " + mascota.getNombre() + " ha sido eutanasiada de la coleccion.";
         } catch (RuntimeException e) {
             return e.getMessage();
         }
@@ -54,38 +62,62 @@ public class MascotaService {
         return mascotaRepository.save(mascota);
     }
 
-    // si usuario tiene mas de 2 mascota y aplicar efecto por mascota
-    public MascotaDTO alimentarMascota(Integer idmascota, Integer idItem) { // pasar id de item, item lleva a accion y
-                                                                            // este aplica el efecto a estado
+    public MascotaDTO alimentarMascota(Integer idmascota, Integer idItem) {
+        // este aplica el efecto a estado
         Mascota mascota = mascotaRepository.findById(idmascota)
                 .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
 
-        EstadoMascota estado = mascota.getEstado();
-        // llamar accion por id
-        if (estado.getSalud() <= 0) {
+        if (mascota.getEstadoMascota().getSalud() <= 0) {
             throw new RuntimeException("No puedes alimentar a una mascota que ha fallecido.");
         }
-        if (estado.getHambre() >= 100) {
+        if (mascota.getEstadoMascota().getHambre() >= 100) {
             throw new RuntimeException(mascota.getNombre() + " ya está completamente satisfecho.");
         }
 
-        // agregar edit a estado mascota por id
-        mascotaRepository.save(estado); // ????
-        return convertirADTO(estado);// ??
-    } // tiene que afectar a estado_mascosta dependiendo de la accion
+        estadoMascotaService.aplicarEfectoAlimentar(mascota.getEstadoMascota().getIdEstado(), idItem);
 
-    // separara acciones jugarMascota(id)
+        return buscarPorId(idmascota);
+    }
+
+    public MascotaDTO jugarConMascota(Integer idmascota) {
+        Mascota mascota = mascotaRepository.findById(idmascota)
+                .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
+
+        if (mascota.getEstadoMascota().getSalud() <= 0) {
+            throw new RuntimeException("No puedes jugar con la mascota porque murio.");
+        }
+
+        if (mascota.getEstadoMascota().getFelicidad() >= 100) {
+            throw new RuntimeException(mascota.getNombre() + " ya está completamente feliz.");
+        }
+
+        if (mascota.getEstadoMascota().getEnergia() < 15) {
+            throw new RuntimeException(mascota.getNombre() + " está demasiado cansado para jugar. No lo molestes.");
+        }
+
+        estadoMascotaService.aplicarEfectoJugar(mascota.getEstadoMascota().getIdEstado());
+
+        return buscarPorId(idmascota);
+    }
 
     private void verificarSupervivencia(Mascota mascota) {
-        EstadoMascota estado = mascota.getEstado();
+        EstadoMascota estado = mascota.getEstadoMascota();
 
         if (estado.getHambre() <= 0) {
             estado.setHambre(0);
             estado.setSalud(0);
             estado.setFelicidad(0);
-            System.out.println("La mascota ha muerto de hambre.");
+            System.out.println("La mascota ha " + mascota.getNombre() + " muerto de hambre por tu culpa.");
+        } else {
+            // Estado actual si sigue con vida
+            System.out.println("--- ESTADO DE MASCOTA ---");
+            System.out.println("Nombre: " + mascota.getNombre());
+            System.out.println("Hambre: " + estado.getHambre());
+            System.out.println("Salud: " + estado.getSalud());
+            System.out.println("Felicidad: " + estado.getFelicidad());
+            System.out.println("Energia: " + estado.getEnergia());
+            System.out.println("------------------------------------------");
         }
-        // agregar else si esta vivo muestra estado de la esa mascota por id de mascota
     }
 
     @Transactional
@@ -94,23 +126,19 @@ public class MascotaService {
                 .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
 
         int nuevaExp = mascota.getExpActual() + puntos;
-        int expNecesaria = 100; // Esto podría venir de tu tabla 'Nivel'
+        int expNecesaria = 100;
 
-        // Lógica de Negocio: Subir de nivel si alcanza la experiencia
         if (nuevaExp >= expNecesaria) {
-            // Calculamos el ID del siguiente nivel
-            Integer siguienteId = mascota.getNivelMascota().getId_nivel() + 1;
+            Integer siguienteIdNivel = mascota.getNivelMascota().getId_nivel() + 1;
 
-            // Buscamos el objeto Nivel real para persistirlo
-            Nivel nuevoNivel = nivelRepository.findById(siguienteId)
-                    .orElseThrow(() -> new RuntimeException("¡Felicidades! Alcanzaste el nivel máximo."));
+            Nivel nuevoNivel = nivelRepository.findById(siguienteIdNivel)
+                    .orElseThrow(() -> new RuntimeException("¡Felicidades! nivel máximo."));
 
-            mascota.setNivelMascota(nuevoNivel); // Asignamos el objeto, no el número
+            mascota.setNivelMascota(nuevoNivel);
             mascota.setExpActual(nuevaExp - expNecesaria);
         } else {
             mascota.setExpActual(nuevaExp);
         }
-
         mascotaRepository.save(mascota);
         return convertirADTO(mascota);
     }

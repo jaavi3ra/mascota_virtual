@@ -65,13 +65,13 @@ public class EstadoMascotaService {
         estadoRepository.save(estado);
     }
 
-    public void aplicarEfectoAlimentar(Integer id) {
+    public void aplicarEfectoAlimentar(Integer id, Integer idItem) {
 
         EstadoMascota estado = buscarEntidadPorId(id);
 
         // LÓGICA DE ALIMENTACIÓN
-        // Al comer, el hambre sube (se acerca a 100, que es "satisfecho")
-        estado.setHambre(estado.getHambre() + 25);
+        // Al comer, el hambre baja (se acerca a 100, que es "satisfecho")
+        estado.setHambre(estado.getHambre() - 25);
 
         // Da un energía o salud
         estado.setEnergia(estado.getEnergia() + 5);
