@@ -29,7 +29,7 @@ public class MascotaController {
     public ResponseEntity<List<MascotaDTO>> todasLasMascotas() {
         List<MascotaDTO> mascota = mascotaService.obtenerTodos();
         if (mascota.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(mascota, HttpStatus.OK);
     }
