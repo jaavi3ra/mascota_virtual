@@ -10,7 +10,6 @@ import com.example.mascotav.DTO.MascotaDTO;
 import com.example.mascotav.model.EstadoMascota;
 import com.example.mascotav.model.Mascota;
 import com.example.mascotav.model.Nivel;
-import com.example.mascotav.repository.EstadoMascotaRepository;
 import com.example.mascotav.repository.MascotaRepository;
 import com.example.mascotav.repository.NivelRepository;
 
@@ -75,6 +74,8 @@ public class MascotaService {
         }
 
         estadoMascotaService.aplicarEfectoAlimentar(mascota.getEstadoMascota().getIdEstado(), idItem);
+
+        this.ganarExperiencia(idmascota, 10);
 
         return buscarPorId(idmascota);
     }

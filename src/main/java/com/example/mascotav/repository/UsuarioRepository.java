@@ -3,10 +3,9 @@ package com.example.mascotav.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.query.Param;
 
 import com.example.mascotav.model.Usuario;
-
-import feign.Param;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {

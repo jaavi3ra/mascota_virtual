@@ -71,7 +71,7 @@ public class EstadoMascotaService {
 
         // LÓGICA DE ALIMENTACIÓN
         // Al comer, el hambre baja (se acerca a 100, que es "satisfecho")
-        estado.setHambre(estado.getHambre() - 25);
+        estado.setHambre(estado.getHambre() + 25);
 
         // Da un energía o salud
         estado.setEnergia(estado.getEnergia() + 5);
