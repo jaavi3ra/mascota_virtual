@@ -84,7 +84,7 @@ public class Usuario_tienda_item_Service {
 
             LocalDateTime proximaReclamacion =
             registro.getUltimaCompra()
-                    .plusHours(tiendaItem.getCooldown_segundos());
+                    .plusHours(tiendaItem.getCooldownSegundos());
 
             return LocalDateTime.now()
             .isAfter(proximaReclamacion);
