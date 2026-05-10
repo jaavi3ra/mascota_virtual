@@ -3,7 +3,6 @@ package com.example.mascotav.model;
 import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -54,9 +53,6 @@ public class Accion {
     private Integer afectaExpBase;
 
     // Relaciones 
-    @OneToMany(mappedBy = "accion", fetch = FetchType.LAZY)
-    private List<HistorialAcciones> historial;
-
-    @OneToMany(mappedBy = "accion", fetch = FetchType.LAZY)
-    private List<Item> items;
+    @OneToMany(mappedBy = "accion")
+    private List<HistorialAcciones> historialAcciones;
 }
