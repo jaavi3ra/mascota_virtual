@@ -15,11 +15,13 @@ public interface MascotaRepository extends JpaRepository<Mascota, Integer> {
 
     // Busca coincidencia EXACTA (debe ser igual)
     // Ej: "Triste" → solo encuentra "Triste"
-    List<Mascota> findByEstadoNombre(String nombre);
+    @Query(" SELECT m FROM Mascota m WHERE m.nombre= :nombreMascota")
+    List<Mascota> findByMascosta(String nombreMascota);
 
     // Busca coincidencia PARCIAL (contiene el texto) --Containing
     // Ej: "Tri" → encuentra "Triste", "Tristeza"
-    List<Mascota> findByEstadoNombreContaining(String nombre);
+    //@Query("SELECT m FROM Mascota m WHERE m.estadoMascota.nombre LIKE %:nombre%")
+    //List<Mascota> findByEstadoNombreContaining(String nombre);
 
     @Query("SELECT m FROM Mascota m WHERE m.nivel >= :nivelMinimo")
     List<Mascota> buscarMascotasFuertes(@Param("nivelMinimo") Integer nivelMinimo);

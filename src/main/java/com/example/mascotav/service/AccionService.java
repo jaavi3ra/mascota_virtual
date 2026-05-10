@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.mascotav.DTO.AccionDTO;
 import com.example.mascotav.model.Accion;
 import com.example.mascotav.model.EstadoMascota;

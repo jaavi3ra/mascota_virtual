@@ -50,7 +50,7 @@ public class Mascota {
     @Min(value = 1, message = "El nivel minimo es 1")
     @Max(value = 99, message = "El nivel maximo es 99")
     @Column(nullable = false)
-    private Integer nivel = 1;
+    private Integer nivel = 0;
 
     // --- RELACIÓN ---
 
