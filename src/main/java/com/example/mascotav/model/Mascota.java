@@ -1,10 +1,6 @@
 package com.example.mascotav.model;
 
 import java.util.List;
-<<<<<<< HEAD
-
-=======
->>>>>>> feature/javi3ra
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
