@@ -18,9 +18,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 
-@Table(name= "usuario_tienda_item",
+@Table(name= "usuariotiendaitem",
      uniqueConstraints = @UniqueConstraint(columnNames = {"id_user", "id_tienda_item"}))
-public class Usuario_Tienda_Item {
+public class UsuarioTiendaItem {
     //tabla intermedia
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +34,6 @@ public class Usuario_Tienda_Item {
     private Usuario usuario;
 
     @ManyToOne
-    @JoinColumn(name = "id_tienda_item")
-    private Tienda_item tienda_item;
+    @JoinColumn(name = "id_tienda_item_fk")
+    private TiendaItem tiendaItem;
 }

@@ -1,10 +1,8 @@
 package com.example.mascotav.model;
 
 import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,24 +20,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 
-@Table(name = "tienda_item")
-public class Tienda_item {
-    @Id
+@Table(name = "tiendaItem")
+public class TiendaItem {
+@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_tienda_item;
-    
+    private Integer idTiendaItem;
+
     @NotNull
     @Column(name = "cooldown", nullable = false)
-    private int cooldown_segundos;
-    
-    @ManyToOne()
+    private int cooldownSegundos;
+
+    @ManyToOne
     @JoinColumn(name = "id_tienda_fk")
     private Tienda tienda;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "id_item_fk")
     private Item item;
 
-    @OneToMany(mappedBy = "tienda_item")
-    private List<Usuario_Tienda_Item> reclamaciones;
+    @OneToMany(mappedBy = "tiendaItem")
+    private List<UsuarioTiendaItem> reclamaciones;
 }

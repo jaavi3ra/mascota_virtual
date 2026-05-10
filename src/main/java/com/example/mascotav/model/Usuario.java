@@ -34,5 +34,5 @@ public class Usuario {
     private List<Mascota> mascotas;
 
     @OneToMany(mappedBy = "usuario")
-    private List<Usuario_Tienda_Item> itemsReclamados;
+    private List<UsuarioTiendaItem> itemsReclamados;
     }

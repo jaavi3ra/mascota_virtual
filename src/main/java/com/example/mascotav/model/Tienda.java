@@ -33,5 +33,5 @@ public class Tienda {
 
     // Relaciones
     @OneToMany(mappedBy = "tienda")
-    private List<Tienda_item> tienda_items;
+    private List<TiendaItem> tienda_items;
 }

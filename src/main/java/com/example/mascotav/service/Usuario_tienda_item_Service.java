@@ -4,14 +4,14 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.mascotav.model.Tienda_item;
+import com.example.mascotav.model.TiendaItem;
 import com.example.mascotav.model.Usuario;
-import com.example.mascotav.model.Usuario_Tienda_Item;
+import com.example.mascotav.model.UsuarioTiendaItem;
 import com.example.mascotav.repository.InventarioRepository;
-import com.example.mascotav.repository.Tienda_itemRepository;
+import com.example.mascotav.repository.TiendaItemRepository;
 import com.example.mascotav.repository.UsuarioRepository;
-import com.example.mascotav.repository.Usuario_Tienda_ItemRepository;
-import com.example.mascotav.DTO.Usuario_Tienda_ItemDTO;
+import com.example.mascotav.repository.UsuarioTiendaItemRepository;
+import com.example.mascotav.DTO.UsuarioTiendaItemDTO;
 import com.example.mascotav.model.Inventario;
 import com.example.mascotav.model.Item;
 import jakarta.transaction.Transactional;
@@ -20,34 +20,34 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class Usuario_tienda_item_Service {
     @Autowired
-    private Usuario_Tienda_ItemRepository ushop_item_repo;
+    private UsuarioTiendaItemRepository ushop_item_repo;
     @Autowired
     private UsuarioRepository usuarioRepository;
     @Autowired
-    private Tienda_itemRepository tienda_itemRepository;
+    private TiendaItemRepository tienda_itemRepository;
     @Autowired
     private InventarioRepository inventarioRepository;
 
-    public Usuario_Tienda_Item crearcompra(Integer idusuario, Integer idTiendaItem){
+    public UsuarioTiendaItem crearcompra(Integer idusuario, Integer idTiendaItem){
 
          Usuario usuario = usuarioRepository.findById(idusuario)
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        Tienda_item tiendaItem = tienda_itemRepository.findById(idTiendaItem)
+        TiendaItem tiendaItem = tienda_itemRepository.findById(idTiendaItem)
             .orElseThrow(() -> new RuntimeException("Item de tienda no encontrado"));
    
         //obtener item de tienda
         Item item = tiendaItem.getItem();
 
         //si es primera compra
-        Usuario_Tienda_Item registro;
-        Optional<Usuario_Tienda_Item> optregistro =
-            ushop_item_repo.findByUsuarioAndTienda_item(usuario, tiendaItem);
+        UsuarioTiendaItem registro;
+        Optional<UsuarioTiendaItem> optregistro =
+            ushop_item_repo.findByUsuarioAndTiendaItem(usuario, tiendaItem);
 
         if(optregistro.isEmpty()){
-            registro = new Usuario_Tienda_Item();
+            registro = new UsuarioTiendaItem();
         registro.setUsuario(usuario);
-        registro.setTienda_item(tiendaItem);
+        registro.setTiendaItem(tiendaItem);
         registro.setUltimaCompra(LocalDateTime.now());
         }else{
             registro = optregistro.get();
@@ -80,7 +80,7 @@ public class Usuario_tienda_item_Service {
 
     }
 
-        private boolean puedeReclamar(Usuario_Tienda_Item registro,Tienda_item tiendaItem) {
+        private boolean puedeReclamar(UsuarioTiendaItem registro,TiendaItem tiendaItem) {
 
             LocalDateTime proximaReclamacion =
             registro.getUltimaCompra()
@@ -91,16 +91,16 @@ public class Usuario_tienda_item_Service {
         }
 
 
-        private Usuario_Tienda_ItemDTO convertirADTO (Usuario_Tienda_Item eti){ // metodo DTO sin uso
-        Usuario_Tienda_ItemDTO etiDTO = new Usuario_Tienda_ItemDTO();
+        private UsuarioTiendaItemDTO convertirADTO (UsuarioTiendaItem eti){ // metodo DTO sin uso
+        UsuarioTiendaItemDTO etiDTO = new UsuarioTiendaItemDTO();
             etiDTO.setId(eti.getId());
             etiDTO.setCooldown(eti.getUltimaCompra());
             if(eti.getUsuario().getId() != null){
                etiDTO.getUsuario().setId(eti.getUsuario().getId());
             }
 
-            if(eti.getTienda_item() != null){
-                etiDTO.setItemdelatienda(eti.getTienda_item());
+            if(eti.getTiendaItem() != null){
+                etiDTO.setItemdelatienda(eti.getTiendaItem());
             } 
                 return etiDTO;
 
