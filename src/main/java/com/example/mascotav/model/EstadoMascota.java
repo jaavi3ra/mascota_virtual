@@ -17,7 +17,7 @@ public class EstadoMascota {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_estado")
-    private Integer id;
+    private Integer idEstado;
 
     @Builder.Default
     @NotNull(message = "El nivel de alimentación es obligatorio")

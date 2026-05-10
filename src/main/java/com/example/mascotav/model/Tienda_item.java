@@ -26,19 +26,19 @@ public class Tienda_item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_tienda_item;
-    
+
     @NotNull
     @Column(name = "cooldown", nullable = false)
     private int cooldown_segundos;
-    
-    @ManyToOne
-    @JoinColumn(name = "id_item") //falta tabla item
-    private int id_item_FK;
 
-    @ManyToOne
-    @JoinColumn(name = "id_tienda") //falta tabla tienda
-    private int id_tienda_FK;
+    @ManyToOne()
+    @JoinColumn(name = "id_tienda_fk")
+    private Tienda tienda;
 
-    @OneToMany(mappedBy = "tiendaItem")
-    private List<Usuario_Tienda_Item> usuarios;
+    @ManyToOne()
+    @JoinColumn(name = "id_item_fk")
+    private Item item;
+
+    @OneToMany(mappedBy = "tienda_item")
+    private List<Usuario_Tienda_Item> reclamaciones;
 }

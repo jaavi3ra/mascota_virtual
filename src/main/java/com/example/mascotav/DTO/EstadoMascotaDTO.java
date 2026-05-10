@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class EstadoMascotaDTO {
-    private Integer idMascota;
+    private Integer idEstadoMascota;
     private String nombreMascota;
 
     private Integer hambre;

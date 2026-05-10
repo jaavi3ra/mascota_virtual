@@ -1,6 +1,7 @@
 package com.example.mascotav.model;
 
-import jakarta.persistence.CascadeType;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
@@ -35,7 +37,7 @@ public class Mascota {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_mascota")
-    private Integer id;
+    private Integer idMascota;
 
     @NotBlank(message = "El nombre de la mascota es obligatorio")
     @Size(min = 4, max = 10, message = "El nombre debe tener al menos 4 caracteres")
@@ -68,9 +70,8 @@ public class Mascota {
     // Exclude en toString:
     // No imprimir relaciones (evita loops y logs gigantes).
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_tipo_mascota_FK", nullable = false)
-    @EqualsAndHashCode.Exclude
+    @ManyToOne
+    @JoinColumn(name = "id_tipo_mascota_fk")
     private TipoMascota tipoMascota;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -84,9 +85,10 @@ public class Mascota {
     @EqualsAndHashCode.Exclude
     private Nivel nivelMascota;
 
-    @OneToOne(mappedBy = "mascota", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private EstadoMascota estado;
+    @OneToOne(mappedBy = "mascota", fetch = FetchType.LAZY)
+    private EstadoMascota estadoMascota;
+
+    @OneToMany(mappedBy = "mascota", fetch = FetchType.LAZY)
+    private List<HistorialAcciones> historialAcciones;
 
 }

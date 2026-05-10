@@ -23,16 +23,17 @@ public class Inventario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_inven;
-    
+
     @NotNull
     @Column(name = "cantidad", nullable = false)
     private Integer cantidad;
 
-    @ManyToOne
-    @JoinColumn(name = "id_item") 
-    private Integer id_item_FK;
+    @ManyToOne()
+    @JoinColumn(name = "id_user_fk")
+    private Usuario usuario;
 
-    @ManyToOne
-    @JoinColumn(name = "id_mascota")
-    private Mascota id_mascosta_FK;
+    @ManyToOne()
+    @JoinColumn(name = "id_item_fk")
+    private Item item;
+
 }

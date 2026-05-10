@@ -30,5 +30,5 @@ public class Usuario_Tienda_Item {
 
     @ManyToOne
     @JoinColumn(name = "id_tienda_item")
-    private Tienda_item tiendaItem;
+    private Tienda_item tienda_item;
 }

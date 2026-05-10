@@ -10,9 +10,5 @@ public class MascotaDTO {
     private String tipoMascota;
     private Integer nivelActual;
 
-    // Atributos de estado
-    private Integer hambre;
-    private Integer felicidad;
-    private Integer energia;
-    private Integer salud;
+    private EstadoMascotaDTO estado;
 }

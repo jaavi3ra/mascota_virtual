@@ -5,12 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.mascotav.DTO.EstadoMascotaDTO;
 import com.example.mascotav.DTO.MascotaDTO;
 import com.example.mascotav.model.EstadoMascota;
 import com.example.mascotav.model.Mascota;
 import com.example.mascotav.model.Nivel;
 import com.example.mascotav.repository.EstadoMascotaRepository;
 import com.example.mascotav.repository.MascotaRepository;
+import com.example.mascotav.repository.NivelRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -20,9 +22,6 @@ public class MascotaService {
 
     @Autowired
     private MascotaRepository mascotaRepository;
-
-    @Autowired
-    private EstadoMascotaRepository estadoRepository;
 
     @Autowired
     private NivelRepository nivelRepository;
@@ -55,19 +54,27 @@ public class MascotaService {
         return mascotaRepository.save(mascota);
     }
 
-    public MascotaDTO alimentarMascota(Integer id) {
-        Mascota mascota = mascotaRepository.findById(id)
+    // si usuario tiene mas de 2 mascota y aplicar efecto por mascota
+    public MascotaDTO alimentarMascota(Integer idmascota, Integer idItem) { // pasar id de item, item lleva a accion y
+                                                                            // este aplica el efecto a estado
+        Mascota mascota = mascotaRepository.findById(idmascota)
                 .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
+
         EstadoMascota estado = mascota.getEstado();
+        // llamar accion por id
         if (estado.getSalud() <= 0) {
             throw new RuntimeException("No puedes alimentar a una mascota que ha fallecido.");
         }
         if (estado.getHambre() >= 100) {
             throw new RuntimeException(mascota.getNombre() + " ya está completamente satisfecho.");
         }
-        mascotaRepository.save(mascota);
-        return convertirADTO(mascota);
-    }
+
+        // agregar edit a estado mascota por id
+        mascotaRepository.save(estado); // ????
+        return convertirADTO(estado);// ??
+    } // tiene que afectar a estado_mascosta dependiendo de la accion
+
+    // separara acciones jugarMascota(id)
 
     private void verificarSupervivencia(Mascota mascota) {
         EstadoMascota estado = mascota.getEstado();
@@ -78,6 +85,7 @@ public class MascotaService {
             estado.setFelicidad(0);
             System.out.println("La mascota ha muerto de hambre.");
         }
+        // agregar else si esta vivo muestra estado de la esa mascota por id de mascota
     }
 
     @Transactional
@@ -108,21 +116,27 @@ public class MascotaService {
     }
 
     private MascotaDTO convertirADTO(Mascota mascota) {
-        MascotaDTO dto = new MascotaDTO();
-        dto.setIdMascota(mascota.getId());
-        dto.setNombre(mascota.getNombre());
-        dto.setNivelActual(mascota.getNivel());
+        MascotaDTO masDTO = new MascotaDTO();
+
+        masDTO.setIdMascota(mascota.getIdMascota());
+        masDTO.setNombre(mascota.getNombre());
+        masDTO.setNivelActual(mascota.getNivel());
 
         if (mascota.getTipoMascota() != null) {
-            dto.setTipoMascota(mascota.getTipoMascota().getNombreTipoMascota());
+            masDTO.setTipoMascota(mascota.getTipoMascota().getNombreTipoMascota());
         }
-        if (mascota.getEstado() != null) {
-            dto.setHambre(mascota.getEstado().getHambre());
-            dto.setFelicidad(mascota.getEstado().getFelicidad());
-            dto.setEnergia(mascota.getEstado().getEnergia());
-            dto.setSalud(mascota.getEstado().getSalud());
+        if (mascota.getEstadoMascota() != null) {
+            EstadoMascotaDTO estDTO = new EstadoMascotaDTO();
+
+            estDTO.setIdEstadoMascota(mascota.getEstadoMascota().getIdEstado());
+            estDTO.setHambre(mascota.getEstadoMascota().getHambre());
+            estDTO.setFelicidad(mascota.getEstadoMascota().getFelicidad());
+            estDTO.setEnergia(mascota.getEstadoMascota().getEnergia());
+            estDTO.setSalud(mascota.getEstadoMascota().getSalud());
+
+            masDTO.setEstado(estDTO);
         }
-        return dto;
+        return masDTO;
     }
 
 }

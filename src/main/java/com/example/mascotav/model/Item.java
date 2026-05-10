@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -28,7 +30,7 @@ public class Item {
 
     @NotBlank(message = "El nombre del item es obligatorio")
     @Size(min = 3, max = 100, message = "El nombre del item debe tener entre 3 y 100 caracteres")
-    @Column(name = "nom_item",length = 100, nullable = false)
+    @Column(name = "nom_item", length = 100, nullable = false)
     private String nombreItem;
 
     @NotBlank(message = "El tipo de item es obligatorio")
@@ -37,9 +39,13 @@ public class Item {
     private String tipoItem;
 
     // Relaciones
-    @OneToMany(mappedBy = "item")
-    private List<Tienda_item> tienda_items;
+    @ManyToOne()
+    @JoinColumn(name = "id_accion_fk")
+    private Accion accion;
 
     @OneToMany(mappedBy = "item")
     private List<Inventario> inventarios;
+
+    @OneToMany(mappedBy = "item")
+    private List<Tienda_item> tiendaItems;
 }

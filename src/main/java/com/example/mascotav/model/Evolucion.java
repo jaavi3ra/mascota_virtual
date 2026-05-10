@@ -23,16 +23,16 @@ public class Evolucion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_evo;
-    
+
     @NotBlank(message = "El nombre de la evolucion es obligatorio")
     @Size(min = 4, max = 10, message = "El nombre debe tener al menos 4 caracteres")
     private String nom_evo;
-    
-    @ManyToOne
-    @JoinColumn(name = "id_nivel")
-    private Nivel id_nivel_FK;
 
-    @ManyToOne
-    @JoinColumn(name = "id_tipo_mascota")
-    private  TipoMascota id_tipoMascota_FK;
+    @ManyToOne()
+    @JoinColumn(name = "id_nivel_fk")
+    private Nivel nivel;
+
+    @ManyToOne()
+    @JoinColumn(name = "id_tipo_mascota_fk")
+    private TipoMascota tipoMascota;
 }
