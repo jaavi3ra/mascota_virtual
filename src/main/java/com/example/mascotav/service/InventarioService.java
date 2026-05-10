@@ -2,10 +2,8 @@ package com.example.mascotav.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.mascotav.DTO.InventarioDTO;
 import com.example.mascotav.model.Inventario;
 import com.example.mascotav.repository.InventarioRepository;
@@ -33,11 +31,12 @@ public class InventarioService {
         
         if(inv.getItem() != null){
             invDTO.setItem((inv.getItem()).getIdItem());
-
+        }
         if(inv.getUsuario() != null){
             invDTO.setUsuario((inv.getUsuario()).getId());
         }
         return invDTO;
     }
-    
 }
+    
+

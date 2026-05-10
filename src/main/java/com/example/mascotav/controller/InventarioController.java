@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.example.mascotav.DTO.EvolucionDTO;
 import com.example.mascotav.DTO.InventarioDTO;
 import com.example.mascotav.service.InventarioService;
 
@@ -21,7 +19,7 @@ public class InventarioController {
     private InventarioService inventarioService;
 
     @GetMapping
-    public ResponseEntity<?> listarEvoluciones(@PathVariable Integer iduser) {
+    public ResponseEntity<?> listarItemdDeInventario(@PathVariable Integer iduser) {
 
         List<InventarioDTO> items = inventarioService.listarItemdelInventario(iduser);
         return items.isEmpty() 

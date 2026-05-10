@@ -1,9 +1,7 @@
 package com.example.mascotav.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.mascotav.model.Tienda_item;
@@ -13,11 +11,9 @@ import com.example.mascotav.repository.InventarioRepository;
 import com.example.mascotav.repository.Tienda_itemRepository;
 import com.example.mascotav.repository.UsuarioRepository;
 import com.example.mascotav.repository.Usuario_Tienda_ItemRepository;
-import com.example.mascotav.DTO.EvolucionDTO;
 import com.example.mascotav.DTO.Usuario_Tienda_ItemDTO;
-import com.example.mascotav.model.Evolucion;
 import com.example.mascotav.model.Inventario;
-import com.example.mascotav.model.Item
+import com.example.mascotav.model.Item;
 import jakarta.transaction.Transactional;
 
 @Service
