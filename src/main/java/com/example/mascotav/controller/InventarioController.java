@@ -18,12 +18,16 @@ public class InventarioController {
     @Autowired
     private InventarioService inventarioService;
 
-    @GetMapping
+    @GetMapping("/{iduser}")
     public ResponseEntity<?> listarItemdDeInventario(@PathVariable Integer iduser) {
-
-        List<InventarioDTO> items = inventarioService.listarItemdelInventario(iduser);
+        try{
+             List<InventarioDTO> items = inventarioService.listarItemdelInventario(iduser);
         return items.isEmpty() 
-            ? new ResponseEntity<>("No hay items en el inventario de este usuario.",HttpStatus.NO_CONTENT) 
+            ? new ResponseEntity<>("No hay items en el inventario de este usuario.",HttpStatus.OK) 
             : new ResponseEntity<>(items, HttpStatus.OK);
+        }catch(RuntimeException e ){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+       
     }
 }
