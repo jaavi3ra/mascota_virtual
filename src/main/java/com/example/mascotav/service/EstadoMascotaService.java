@@ -1,11 +1,11 @@
 package com.example.mascotav.service;
 
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.mascotav.DTO.EstadoMascotaDTO;
 import com.example.mascotav.model.EstadoMascota;
+import com.example.mascotav.model.Item;
 import com.example.mascotav.model.Mascota;
 import com.example.mascotav.repository.EstadoMascotaRepository;
 import jakarta.transaction.Transactional;
@@ -27,8 +27,7 @@ public class EstadoMascotaService {
     
         EstadoMascota estado = new EstadoMascota();
 
-        // REGLA CRÍTICA: Hambre llega a 0, explota todo      
-           
+        // REGLA CRÍTICA: Hambre llega a 0, explota todo  
             estado.setHambre(100);
             estado.setSalud(100);
             estado.setFelicidad(100);
@@ -36,7 +35,7 @@ public class EstadoMascotaService {
             estado.setMascota(mascota);
         
            estadoRepository.save(estado);
-            return estado;
+        return estado;
         
     }
 
@@ -46,10 +45,6 @@ public class EstadoMascotaService {
         return convertirADTO(estado);
     }
 
-    private EstadoMascota buscarEntidadPorId(Integer id) {
-        return estadoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
-    }
 
     public void verificarLimitesYSalud(EstadoMascota estado) {
 
@@ -69,36 +64,33 @@ public class EstadoMascotaService {
         }
     }
 
-    public void aplicarEfectoJugar(Integer id) {
-        EstadoMascota estado = buscarEntidadPorId(id);
+    public EstadoMascotaDTO aplicarEfecto(Mascota mascota, Item item){
 
-        // LÓGICA DE JUEGO ( Cambia en stats)
-        estado.setFelicidad(Math.min(100, estado.getFelicidad() + 20));
-        estado.setEnergia(Math.max(0, estado.getEnergia() - 15));
-        estado.setHambre(Math.max(0, estado.getHambre() - 10)); // El ejercicio da hambre
+        EstadoMascota estado = mascota.getEstadoMascota();
 
-        verificarLimitesYSalud(estado);
+        estado.setFelicidad(
+            estado.getFelicidad() + item.getAccion().getAfectaFelicidad()
+        );
+        estado.setEnergia(
+            estado.getEnergia() + item.getAccion().getAfectaEnergia()
+        );
+        estado.setHambre(
+            estado.getHambre() + item.getAccion().getAfectaHambre()
+        );
+
+        estado.setSalud(
+            estado.getSalud() + item.getAccion().getAfectaSalud()
+        );
+        mascota.setExpActual(
+            mascota.getExpActual() +item.getAccion().getAfectaExpBase()
+        );
+
+        // guardar estado actualizado
         estadoRepository.save(estado);
+
+        return convertirADTO(estado);
     }
-
-    public void aplicarEfectoAlimentar(Integer id, Integer idItem) {
-
-        EstadoMascota estado = buscarEntidadPorId(id);
-
-        // LÓGICA DE ALIMENTACIÓN
-        // Al comer, el hambre baja (se acerca a 100, que es "satisfecho")
-        estado.setHambre(estado.getHambre() + 25);
-
-        // Da un energía o salud
-        estado.setEnergia(estado.getEnergia() + 5);
-        estado.setSalud(estado.getSalud() + 10);
-
-        // VALIDACIÓN FINAL (Filtro)
-        // verificarLimitesYSalud asegura que si el hambre
-        // quedó en 115, baje automáticamente a 100 antes de guardar.
-        verificarLimitesYSalud(estado);
-        estadoRepository.save(estado);
-    }
+    
 
     private EstadoMascotaDTO convertirADTO(EstadoMascota estado) {
         EstadoMascotaDTO estDTO = new EstadoMascotaDTO();

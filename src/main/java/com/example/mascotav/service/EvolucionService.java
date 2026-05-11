@@ -1,11 +1,11 @@
 package com.example.mascotav.service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.mascotav.DTO.EvolucionDTO;
 import com.example.mascotav.model.Evolucion;
+import com.example.mascotav.model.Mascota;
 import com.example.mascotav.repository.EvolucionRepository;
 
 @Service
@@ -17,6 +17,19 @@ public class EvolucionService {
         return evolucionRepository.findAll().stream()
                 .map(this::convertirADTO) // Transmutamos cada party
                 .toList();
+    }
+
+    public String verificarEvolucion(Mascota mascota){
+
+    Evolucion evolucion = evolucionRepository
+        .findByTipoOrigen(mascota.getTipoMascota())
+        .orElse(null);
+
+         if(evolucion != null && mascota.getNivel().getId_nivel() >= evolucion.getNivel().getId_nivel()){
+
+           return "Tu mascota "+mascota.getNombre()+" Evolucionó!";
+        }
+        return mascota.getNombre()+" subió de nivel.";
     }
 
     public EvolucionDTO crearEvolucion(Evolucion evo){

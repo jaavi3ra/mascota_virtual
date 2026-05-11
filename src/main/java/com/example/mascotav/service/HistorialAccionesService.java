@@ -1,14 +1,13 @@
 package com.example.mascotav.service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.mascotav.DTO.HistorialAccionesDTO;
 import com.example.mascotav.model.HistorialAcciones;
+import com.example.mascotav.model.Item;
+import com.example.mascotav.model.Mascota;
 import com.example.mascotav.repository.HistorialAccionesRepository;
-
 import jakarta.transaction.Transactional;
 
 @Service
@@ -24,8 +23,16 @@ public class HistorialAccionesService {
                 .toList();
     }
 
-    public HistorialAcciones guardar(HistorialAcciones historialAcciones) {
-        return historialAccionesRepository.save(historialAcciones);
+    public HistorialAccionesDTO registrarHistorial(Mascota mascota, Item item){
+
+    HistorialAcciones historial = new HistorialAcciones();
+
+    historial.setMascota(mascota);
+    historial.setAccion(item.getAccion());
+    historial.setDescripcion(mascota.getNombre() +" usó el item " + item.getNombreItem());
+
+        historialAccionesRepository.save(historial);
+        return convertirADTO(historial);
     }
 
     private HistorialAccionesDTO convertirADTO(HistorialAcciones h) {

@@ -1,6 +1,5 @@
 package com.example.mascotav.DTO;
 
-import java.util.List;
 import com.example.mascotav.model.Item;
 import com.example.mascotav.model.Tienda;
 

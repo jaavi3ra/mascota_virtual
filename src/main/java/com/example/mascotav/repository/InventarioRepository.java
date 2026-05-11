@@ -2,7 +2,6 @@ package com.example.mascotav.repository;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,6 +17,7 @@ public interface InventarioRepository extends JpaRepository<Inventario, Integer>
      @Query("SELECT i FROM Inventario i WHERE i.usuario.id = :userId")
      List<Inventario> findInventbyUsuario(Integer userId); // Obtener todo el inventario de un usuario
 
+    
     // void deleteByUsuarioAndItem(Integer userId, Integer itemId); // elimnar un
     // item de un usuario del inventario
 }

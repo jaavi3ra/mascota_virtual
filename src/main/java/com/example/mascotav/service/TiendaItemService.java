@@ -58,8 +58,8 @@ public class TiendaItemService {
 
     public Inventario comprarItem(Integer idUsuario,Integer idItem) {
 
-        System.out.println("ID USUARIO: " + idUsuario);
-    System.out.println("ID ITEM: " + idItem);
+        //System.out.println("ID USUARIO: " + idUsuario);
+        //System.out.println("ID ITEM: " + idItem);
 
     Usuario usuario = usuarioRepository
         .findById(idUsuario)

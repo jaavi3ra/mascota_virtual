@@ -11,7 +11,6 @@ import com.example.mascotav.repository.InventarioRepository;
 import com.example.mascotav.repository.TiendaItemRepository;
 import com.example.mascotav.repository.UsuarioRepository;
 import com.example.mascotav.repository.UsuarioTiendaItemRepository;
-import com.example.mascotav.DTO.UsuarioTiendaItemDTO;
 import com.example.mascotav.model.Inventario;
 import com.example.mascotav.model.Item;
 import jakarta.transaction.Transactional;
@@ -90,19 +89,4 @@ public class Usuario_tienda_item_Service {
             .isAfter(proximaReclamacion);
         }
 
-
-        private UsuarioTiendaItemDTO convertirADTO (UsuarioTiendaItem eti){ // metodo DTO sin uso
-        UsuarioTiendaItemDTO etiDTO = new UsuarioTiendaItemDTO();
-            etiDTO.setId(eti.getId());
-            etiDTO.setCooldown(eti.getUltimaCompra());
-            if(eti.getUsuario().getId() != null){
-               etiDTO.getUsuario().setId(eti.getUsuario().getId());
-            }
-
-            if(eti.getTiendaItem() != null){
-                etiDTO.setItemdelatienda(eti.getTiendaItem());
-            } 
-                return etiDTO;
-
-    }
 }

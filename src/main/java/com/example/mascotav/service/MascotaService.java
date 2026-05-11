@@ -10,12 +10,10 @@ import com.example.mascotav.model.Mascota;
 import com.example.mascotav.model.Nivel;
 import com.example.mascotav.model.TipoMascota;
 import com.example.mascotav.model.Usuario;
-import com.example.mascotav.repository.EstadoMascotaRepository;
 import com.example.mascotav.repository.MascotaRepository;
 import com.example.mascotav.repository.NivelRepository;
 import com.example.mascotav.repository.TipoMascotaRepository;
 import com.example.mascotav.repository.UsuarioRepository;
-
 import jakarta.transaction.Transactional;
 
 @Service
@@ -31,9 +29,6 @@ public class MascotaService {
     @Autowired
     private EstadoMascotaService estadoMascotaService;
     
-    @Autowired
-    private EstadoMascotaRepository estadoRepository;
-
     @Autowired
     private UsuarioRepository usuarioRepository;
 
@@ -102,46 +97,6 @@ public class MascotaService {
         return convertirADTO(mascotaGuardada);
     }
 
-    public MascotaDTO alimentarMascota(Integer idmascota, Integer idItem) {
-        // este aplica el efecto a estado
-        Mascota mascota = mascotaRepository.findById(idmascota)
-                .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
-
-        if (mascota.getEstadoMascota().getSalud() <= 0) {
-            throw new RuntimeException("No puedes alimentar a una mascota que ha fallecido.");
-        }
-        if (mascota.getEstadoMascota().getHambre() >= 100) {
-            throw new RuntimeException(mascota.getNombre() + " ya está completamente satisfecho.");
-        }
-
-        estadoMascotaService.aplicarEfectoAlimentar(mascota.getEstadoMascota().getIdEstado(), idItem);
-
-        this.ganarExperiencia(idmascota, 10);
-
-        return buscarPorId(idmascota);
-    }
-
-    public MascotaDTO jugarConMascota(Integer idmascota) {
-        Mascota mascota = mascotaRepository.findById(idmascota)
-                .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
-
-        if (mascota.getEstadoMascota().getSalud() <= 0) {
-            throw new RuntimeException("No puedes jugar con la mascota porque murio.");
-        }
-
-        if (mascota.getEstadoMascota().getFelicidad() >= 100) {
-            throw new RuntimeException(mascota.getNombre() + " ya está completamente feliz.");
-        }
-
-        if (mascota.getEstadoMascota().getEnergia() < 15) {
-            throw new RuntimeException(mascota.getNombre() + " está demasiado cansado para jugar. No lo molestes.");
-        }
-
-        estadoMascotaService.aplicarEfectoJugar(mascota.getEstadoMascota().getIdEstado());
-
-        return buscarPorId(idmascota);
-    }
-
     private void verificarSupervivencia(Mascota mascota) {
         EstadoMascota estado = mascota.getEstadoMascota();
 
@@ -162,27 +117,27 @@ public class MascotaService {
         }
     }
 
-    @Transactional
-    public MascotaDTO ganarExperiencia(Integer id, Integer puntos) {
-        Mascota mascota = mascotaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
+     //revisar y cambiar
+    public String validarSubirDeNivel(Mascota mascota) {
+       String mensaje =null;
+        int exp = mascota.getExpActual();
+        int expNecesaria = mascota.getNivel().getExp_req();
 
-        int nuevaExp = mascota.getExpActual() + puntos;
-        int expNecesaria = 100;
-
-        if (nuevaExp >= expNecesaria) {
+        if (exp >= expNecesaria) {
             Integer siguienteIdNivel = mascota.getNivel().getId_nivel() + 1;
 
             Nivel nuevoNivel = nivelRepository.findById(siguienteIdNivel)
                     .orElseThrow(() -> new RuntimeException("¡Felicidades! nivel máximo."));
 
             mascota.setNivel(nuevoNivel);
-            mascota.setExpActual(nuevaExp - expNecesaria);
+            mascota.setExpActual(exp - expNecesaria);
         } else {
-            mascota.setExpActual(nuevaExp);
+            mascota.setExpActual(exp);
+            mensaje = "Falta para subir de nivel";
         }
         mascotaRepository.save(mascota);
-        return convertirADTO(mascota);
+        mensaje = "Felicidas tu Mascota subio de nivel";
+        return mensaje;
     }
 
     private MascotaDTO convertirADTO(Mascota mascota) {

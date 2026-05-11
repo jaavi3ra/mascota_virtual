@@ -34,6 +34,8 @@ public class ItemService {
         return convertirADTO(item);
     }
 
+    
+
     private ItemDTO convertirADTO(Item item) {
         ItemDTO itDTO = new ItemDTO();
         itDTO.setIdItem(item.getIdItem());

@@ -3,8 +3,6 @@ package com.example.mascotav.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Data

@@ -24,6 +24,9 @@ public class HistorialAcciones {
     @Column(name = "id_historial")
     private Integer idHistorial;
 
+    @Column(name = "descripcion")
+    private String descripcion;
+
     // Relaciones
     @ManyToOne
     @JoinColumn(name = "id_mascota", nullable = false)
