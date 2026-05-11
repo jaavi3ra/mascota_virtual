@@ -23,19 +23,20 @@ public class EstadoMascotaService {
                 .toList();
     }
 
-    public EstadoMascotaDTO iniciarEstado(Mascota mascota){
+    public EstadoMascota iniciarEstado(Mascota mascota){
     
         EstadoMascota estado = new EstadoMascota();
 
         // REGLA CRÍTICA: Hambre llega a 0, explota todo      
+           
             estado.setHambre(100);
             estado.setSalud(100);
             estado.setFelicidad(100);
             estado.setEnergia(100);
             estado.setMascota(mascota);
         
-            estadoRepository.save(estado);
-            return convertirADTO(estado);
+           estadoRepository.save(estado);
+            return estado;
         
     }
 

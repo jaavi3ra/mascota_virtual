@@ -79,19 +79,18 @@ public class MascotaController {
     }
 
     //crear mascota, se crea junto con estado mascota
-    @PostMapping
-    public ResponseEntity<?> crearMascota(@RequestBody Mascota mascota) {
+    @PostMapping("/crear/{userid}")
+    public ResponseEntity<?> crearMascota(@PathVariable Integer userid,@RequestBody Mascota mascota) {
         try {
-            MascotaDTO mascotacreada = mascotaService.guardarMascota(mascota);
-            EstadoMascotaDTO estadoMascota = estadoMascotaService.iniciarEstado(mascota);
+            MascotaDTO mascotacreada = mascotaService.crearMascota(userid,mascota);
             
             Map<String, Object> response = new HashMap<>();
 
             response.put("Mensaje: ", "Mascota Creada.");
-            response.put("Estado Mascota: ", estadoMascota);
+            response.put("Estado Mascota: ", mascotacreada.getTipoMascota());
             return new ResponseEntity<>(mascotacreada, HttpStatus.CREATED);
         } catch (RuntimeException e) {
-            return new ResponseEntity<>("Error al crear Mascota.",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 

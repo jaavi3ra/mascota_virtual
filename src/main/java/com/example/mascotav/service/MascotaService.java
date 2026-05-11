@@ -8,8 +8,14 @@ import com.example.mascotav.DTO.MascotaDTO;
 import com.example.mascotav.model.EstadoMascota;
 import com.example.mascotav.model.Mascota;
 import com.example.mascotav.model.Nivel;
+import com.example.mascotav.model.TipoMascota;
+import com.example.mascotav.model.Usuario;
+import com.example.mascotav.repository.EstadoMascotaRepository;
 import com.example.mascotav.repository.MascotaRepository;
 import com.example.mascotav.repository.NivelRepository;
+import com.example.mascotav.repository.TipoMascotaRepository;
+import com.example.mascotav.repository.UsuarioRepository;
+
 import jakarta.transaction.Transactional;
 
 @Service
@@ -24,6 +30,15 @@ public class MascotaService {
 
     @Autowired
     private EstadoMascotaService estadoMascotaService;
+    
+    @Autowired
+    private EstadoMascotaRepository estadoRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private TipoMascotaRepository tipoMascotaRepository;
 
     public List<MascotaDTO> obtenerTodos() {
         return mascotaRepository.findAll().stream()
@@ -54,10 +69,35 @@ public class MascotaService {
         }
     }
 
-    public MascotaDTO guardarMascota(Mascota mascota) {
-        //EstadoMascotaDTO estado = new 
-        mascotaRepository.save(mascota);
-        return convertirADTO(mascota);
+    public MascotaDTO crearMascota(Integer userid,Mascota mascota) {
+        Usuario usuario = usuarioRepository
+        .findById(userid)
+        .orElseThrow(() ->
+            new RuntimeException("Usuario no encontrado"));  
+
+        TipoMascota tipoMascota = tipoMascotaRepository
+        .findById(mascota.getTipoMascota().getId())
+        .orElseThrow(() ->
+       
+        new RuntimeException("Tipo mascota no encontrado"));
+
+        Nivel nivel = nivelRepository
+        .findById(mascota.getNivel().getId_nivel())
+        .orElseThrow(() ->
+            new RuntimeException("Nivel no encontrado"));
+       
+        mascota.setUsuario(usuario); 
+        mascota.setTipoMascota(tipoMascota);
+        mascota.setNivel(nivel);
+
+        //guardar datos para generar idmascota
+        Mascota mascotaGuardada = mascotaRepository.save(mascota);
+        EstadoMascota estado = estadoMascotaService.iniciarEstado(mascota);
+        mascotaGuardada.setEstadoMascota(estado);
+        
+        //actualizo mascota seteo estado
+        mascotaRepository.save(mascotaGuardada);
+        return convertirADTO(mascotaGuardada);
     }
 
     public MascotaDTO alimentarMascota(Integer idmascota, Integer idItem) {
@@ -129,12 +169,12 @@ public class MascotaService {
         int expNecesaria = 100;
 
         if (nuevaExp >= expNecesaria) {
-            Integer siguienteIdNivel = mascota.getNivelMascota().getId_nivel() + 1;
+            Integer siguienteIdNivel = mascota.getNivel().getId_nivel() + 1;
 
             Nivel nuevoNivel = nivelRepository.findById(siguienteIdNivel)
                     .orElseThrow(() -> new RuntimeException("¡Felicidades! nivel máximo."));
 
-            mascota.setNivelMascota(nuevoNivel);
+            mascota.setNivel(nuevoNivel);
             mascota.setExpActual(nuevaExp - expNecesaria);
         } else {
             mascota.setExpActual(nuevaExp);
@@ -148,7 +188,7 @@ public class MascotaService {
 
         masDTO.setIdMascota(mascota.getIdMascota());
         masDTO.setNombre(mascota.getNombre());
-        masDTO.setNivelActual(mascota.getNivel());
+        masDTO.setNivelActual(mascota.getNivel().getNum_nivel());
 
         if (mascota.getTipoMascota() != null) {
             masDTO.setTipoMascota(mascota.getTipoMascota().getNombreTipoMascota());

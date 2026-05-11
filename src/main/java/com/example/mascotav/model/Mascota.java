@@ -1,6 +1,8 @@
 package com.example.mascotav.model;
 
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,8 +40,8 @@ public class Mascota {
     private Integer idMascota;
 
     @NotBlank(message = "El nombre de la mascota es obligatorio")
-    @Size(min = 4, max = 10, message = "El nombre debe tener al menos 4 caracteres")
-    @Column(length = 10, nullable = false)
+    @Size(min = 4, max = 50, message = "El nombre debe tener al menos 4 caracteres")
+    @Column(nullable = false)
     private String nombre;
 
     @NotNull
@@ -82,8 +84,8 @@ public class Mascota {
     @JoinColumn(name = "id_nivel_FK")
     @EqualsAndHashCode.Exclude
     private Nivel nivel;
-
-    @OneToOne(mappedBy = "mascota", fetch = FetchType.LAZY)
+    //cascade type ayuda a la creacion de estado automatico
+    @OneToOne(mappedBy = "mascota", cascade = CascadeType.ALL)
     private EstadoMascota estadoMascota;
 
     @OneToMany(mappedBy = "mascota", fetch = FetchType.LAZY)
