@@ -35,11 +35,11 @@ public class InventarioController {
     @PostMapping("/{idmascota}/darItem/{iditem}")
     public ResponseEntity<?> usarItem(@PathVariable Integer idmascota,@PathVariable Integer iditem){
         try{
-            inventarioService.usarItem(idmascota, iditem);
-            return new ResponseEntity<>("Item entregado a Mascota", HttpStatus.CREATED);
+           String mensaje = inventarioService.usarItem(idmascota, iditem);
+            return new ResponseEntity<>(mensaje, HttpStatus.CREATED);
             
         }catch(RuntimeException e){
-            return new ResponseEntity<>("No se pudo dar el item a la mascota :(", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

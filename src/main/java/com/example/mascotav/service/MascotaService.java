@@ -117,26 +117,29 @@ public class MascotaService {
         }
     }
 
-     //revisar y cambiar
+   
     public String validarSubirDeNivel(Mascota mascota) {
-       String mensaje =null;
+        String mensaje;
         int exp = mascota.getExpActual();
         int expNecesaria = mascota.getNivel().getExp_req();
+        Nivel nivel = mascota.getNivel();
+
+    System.err.println("exp: " + exp);
+    System.err.println("expNecesaria: " + expNecesaria);
 
         if (exp >= expNecesaria) {
-            Integer siguienteIdNivel = mascota.getNivel().getId_nivel() + 1;
+            Integer nuevoNivel = nivel.getNum_nivel() + 1;
+            System.err.println("lvl new: " + nuevoNivel);
 
-            Nivel nuevoNivel = nivelRepository.findById(siguienteIdNivel)
-                    .orElseThrow(() -> new RuntimeException("¡Felicidades! nivel máximo."));
-
-            mascota.setNivel(nuevoNivel);
-            mascota.setExpActual(exp - expNecesaria);
-        } else {
-            mascota.setExpActual(exp);
-            mensaje = "Falta para subir de nivel";
+            nivel.setNum_nivel(nuevoNivel);
+            mascota.setExpActual(exp - expNecesaria); // con exp=10 y expNecesaria=10 → queda en 0
+            nivelRepository.save(nivel);
+           
+            mensaje = "¡Felicidades! Tu mascota subió al nivel " + nuevoNivel;
+        } else {           
+            mensaje = "Falta " + (expNecesaria - exp) + " exp para subir de nivel";
         }
-        mascotaRepository.save(mascota);
-        mensaje = "Felicidas tu Mascota subio de nivel";
+
         return mensaje;
     }
 

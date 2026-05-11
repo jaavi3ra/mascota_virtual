@@ -8,5 +8,5 @@ import com.example.mascotav.model.TipoMascota;
 
 @Repository
 public interface EvolucionRepository extends JpaRepository<Evolucion, Integer>{
-    Optional<Evolucion> findByTipoOrigen(TipoMascota tipoMascota);
+    Optional<Evolucion> findByTipoMascota(TipoMascota tipoMascota);
 }

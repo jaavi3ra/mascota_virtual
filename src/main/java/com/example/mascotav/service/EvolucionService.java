@@ -22,7 +22,7 @@ public class EvolucionService {
     public String verificarEvolucion(Mascota mascota){
 
     Evolucion evolucion = evolucionRepository
-        .findByTipoOrigen(mascota.getTipoMascota())
+        .findByTipoMascota(mascota.getTipoMascota())
         .orElse(null);
 
          if(evolucion != null && mascota.getNivel().getId_nivel() >= evolucion.getNivel().getId_nivel()){

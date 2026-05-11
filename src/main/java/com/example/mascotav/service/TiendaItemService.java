@@ -1,13 +1,9 @@
 package com.example.mascotav.service;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.example.mascotav.DTO.InventarioDTO;
-import com.example.mascotav.DTO.TiendaDTO;
 import com.example.mascotav.DTO.TiendaItemDTO;
 import com.example.mascotav.model.Inventario;
 import com.example.mascotav.model.Item;

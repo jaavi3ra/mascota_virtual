@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.mascotav.DTO.EstadoMascotaDTO;
 import com.example.mascotav.model.EstadoMascota;
-import com.example.mascotav.model.Item;
 import com.example.mascotav.model.Mascota;
 import com.example.mascotav.repository.EstadoMascotaRepository;
 import jakarta.transaction.Transactional;
@@ -49,10 +48,10 @@ public class EstadoMascotaService {
     public void verificarLimitesYSalud(EstadoMascota estado) {
 
         // Asegura que nada pase de 100 ni baje de 0
-        estado.setHambre(Math.min(100, Math.max(0, estado.getHambre())));
-        estado.setFelicidad(Math.min(100, Math.max(0, estado.getFelicidad())));
-        estado.setEnergia(Math.min(100, Math.max(0, estado.getEnergia())));
-        estado.setSalud(Math.min(100, Math.max(0, estado.getSalud())));
+        estado.setHambre(Math.min(200, Math.max(0, estado.getHambre())));
+        estado.setFelicidad(Math.min(200, Math.max(0, estado.getFelicidad())));
+        estado.setEnergia(Math.min(200, Math.max(0, estado.getEnergia())));
+        estado.setSalud(Math.min(200, Math.max(0, estado.getSalud())));
 
         // REGLA CRÍTICA: Hambre llega a 0, explota todo
         if (estado.getHambre() <= 0) {
@@ -63,33 +62,7 @@ public class EstadoMascotaService {
             throw new RuntimeException("¡La mascota implosiono y ha muerto!");
         }
     }
-
-    public EstadoMascotaDTO aplicarEfecto(Mascota mascota, Item item){
-
-        EstadoMascota estado = mascota.getEstadoMascota();
-
-        estado.setFelicidad(
-            estado.getFelicidad() + item.getAccion().getAfectaFelicidad()
-        );
-        estado.setEnergia(
-            estado.getEnergia() + item.getAccion().getAfectaEnergia()
-        );
-        estado.setHambre(
-            estado.getHambre() + item.getAccion().getAfectaHambre()
-        );
-
-        estado.setSalud(
-            estado.getSalud() + item.getAccion().getAfectaSalud()
-        );
-        mascota.setExpActual(
-            mascota.getExpActual() +item.getAccion().getAfectaExpBase()
-        );
-
-        // guardar estado actualizado
-        estadoRepository.save(estado);
-
-        return convertirADTO(estado);
-    }
+   
     
 
     private EstadoMascotaDTO convertirADTO(EstadoMascota estado) {

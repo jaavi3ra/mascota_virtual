@@ -2,14 +2,11 @@ package com.example.mascotav.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.mascotav.DTO.TiendaDTO;
 import com.example.mascotav.model.Tienda;
 import com.example.mascotav.repository.TiendaRepository;
-
 import jakarta.transaction.Transactional;
 
 @Service

@@ -27,12 +27,14 @@ public class HistorialAccionesService {
 
     HistorialAcciones historial = new HistorialAcciones();
 
-    historial.setMascota(mascota);
-    historial.setAccion(item.getAccion());
-    historial.setDescripcion(mascota.getNombre() +" usó el item " + item.getNombreItem());
+        historial.setMascota(mascota);
+        historial.setAccion(item.getAccion());
+        historial.setDescripcion(mascota.getNombre() +" usó el item " + item.getNombreItem());
 
-        historialAccionesRepository.save(historial);
-        return convertirADTO(historial);
+        //historialAccionesRepository.save(historial);
+       
+
+       return convertirADTO(historial);
     }
 
     private HistorialAccionesDTO convertirADTO(HistorialAcciones h) {

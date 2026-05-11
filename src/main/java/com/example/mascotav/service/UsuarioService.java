@@ -1,14 +1,11 @@
 package com.example.mascotav.service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.mascotav.DTO.UsuarioDTO;
 import com.example.mascotav.model.Usuario;
 import com.example.mascotav.repository.UsuarioRepository;
-
 import jakarta.transaction.Transactional;
 
 @Service

@@ -22,30 +22,30 @@ public class EstadoMascota {
     @Builder.Default
     @NotNull(message = "El nivel de alimentación es obligatorio")
     @Min(value = 0, message = "La mascota ha muerto de hambre ")
-    @Max(value = 100, message = "La mascota está completamente satisfecha ")
+    @Max(value = 200, message = "La mascota está completamente satisfecha ")
     @Column(name = "hambre", nullable = false)
     private Integer hambre = 50;
 
     @Builder.Default
     @NotNull(message = "El nivel de felicidad es obligatorio")
     @Min(value = 0, message = "La mascota está en depresión total ")
-    @Max(value = 100, message = "La mascota está sumamente feliz ")
+    @Max(value = 200, message = "La mascota está sumamente feliz ")
     @Column(name = "felicidad", nullable = false)
     private int felicidad = 100;
 
     @Builder.Default
     @NotNull(message = "El nivel de energía es obligatorio")
     @Min(value = 0, message = "La mascota está agotada, no puede más ")
-    @Max(value = 100, message = "La mascota tiene energía máxima ")
+    @Max(value = 200, message = "La mascota tiene energía máxima ")
     @Column(name = "energia", nullable = false)
-    private int energia = 100;
+    private int energia = 200;
 
     @Builder.Default
     @NotNull(message = "El nivel de salud es obligatorio")
     @Min(value = 0, message = "La mascota ha fallecido por falta de salud ")
     @Max(value = 100, message = "Salud perfecta ")
     @Column(name = "salud", nullable = false)
-    private int salud = 100;
+    private int salud = 200;
 
     // Relaciones
 
