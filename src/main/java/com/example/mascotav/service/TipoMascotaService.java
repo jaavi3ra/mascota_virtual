@@ -3,15 +3,11 @@ package com.example.mascotav.service;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.mascotav.DTO.TipoMascotaDTO;
 import com.example.mascotav.model.TipoMascota;
 import com.example.mascotav.repository.TipoMascotaRepository;
-
 import jakarta.transaction.Transactional;
 
 @Service

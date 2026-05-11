@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -21,11 +22,11 @@ public class Usuario {
 
     @NotBlank(message = "El nombre de usuario es obligatorio")
     @Size(min = 5, max = 15, message = "El nombre debe tener entre 5 y 15 caracteres")
-    @Column(name = "nombre_user", length = 15, nullable = false)
+    @Column(name = "nombre_user", nullable = false)
     private String nombreUsuario;
 
     @Column(name = "fecha_creacion", updatable = false)
-    private LocalDateTime fechaCreacion;
+    private String fechaCreacion;
 
     // --- RELACIÓN ---
 
