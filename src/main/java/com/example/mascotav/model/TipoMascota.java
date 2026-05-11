@@ -31,8 +31,8 @@ public class TipoMascota {
     private Integer id;
 
     @NotBlank(message = "El nombre de la mascota es obligatorio")
-    @Size(min = 4, max = 15, message = "El nombre debe tener al menos 4 caracteres")
-    @Column(name = "nombreTipoMascota", length = 15, nullable = false)
+    @Size(min = 4, max = 50, message = "El nombre debe tener al menos 4 caracteres")
+    @Column(name = "nombreTipoMascota", nullable = false)
     private String nombreTipoMascota;
 
     // Relaciones

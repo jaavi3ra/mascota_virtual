@@ -1,7 +1,8 @@
 package com.example.mascotav.controller;
 
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +14,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.example.mascotav.DTO.EstadoMascotaDTO;
 import com.example.mascotav.DTO.MascotaDTO;
 import com.example.mascotav.model.Mascota;
+import com.example.mascotav.service.EstadoMascotaService;
 import com.example.mascotav.service.MascotaService;
 
 @RestController
@@ -24,6 +26,8 @@ public class MascotaController {
 
     @Autowired
     private MascotaService mascotaService;
+    @Autowired
+    private EstadoMascotaService estadoMascotaService;
 
     @GetMapping
     public ResponseEntity<List<MascotaDTO>> todasLasMascotas() {
@@ -74,14 +78,20 @@ public class MascotaController {
         }
     }
 
+    //crear mascota, se crea junto con estado mascota
     @PostMapping
-    public ResponseEntity<MascotaDTO> crearMascota(@RequestBody Mascota mascota) {
+    public ResponseEntity<?> crearMascota(@RequestBody Mascota mascota) {
         try {
-            Mascota guardada = mascotaService.guardarMascota(mascota);
-            MascotaDTO mascotaDTO = mascotaService.buscarPorId(guardada.getIdMascota());
-            return new ResponseEntity<>(mascotaDTO, HttpStatus.CREATED);
+            MascotaDTO mascotacreada = mascotaService.guardarMascota(mascota);
+            EstadoMascotaDTO estadoMascota = estadoMascotaService.iniciarEstado(mascota);
+            
+            Map<String, Object> response = new HashMap<>();
+
+            response.put("Mensaje: ", "Mascota Creada.");
+            response.put("Estado Mascota: ", estadoMascota);
+            return new ResponseEntity<>(mascotacreada, HttpStatus.CREATED);
         } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error al crear Mascota.",HttpStatus.BAD_REQUEST);
         }
     }
 

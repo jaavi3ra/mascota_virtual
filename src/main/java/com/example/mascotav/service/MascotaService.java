@@ -57,8 +57,9 @@ public class MascotaService {
         }
     }
 
-    public Mascota guardarMascota(Mascota mascota) {
-        return mascotaRepository.save(mascota);
+    public MascotaDTO guardarMascota(Mascota mascota) {
+        mascotaRepository.save(mascota);
+        return convertirADTO(mascota);
     }
 
     public MascotaDTO alimentarMascota(Integer idmascota, Integer idItem) {

@@ -1,10 +1,13 @@
 package com.example.mascotav.service;
 
 import java.util.List;
+
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.mascotav.DTO.EstadoMascotaDTO;
 import com.example.mascotav.model.EstadoMascota;
+import com.example.mascotav.model.Mascota;
 import com.example.mascotav.repository.EstadoMascotaRepository;
 import jakarta.transaction.Transactional;
 
@@ -15,10 +18,26 @@ public class EstadoMascotaService {
     @Autowired
     private EstadoMascotaRepository estadoRepository;
 
-    public List<EstadoMascotaDTO> obtenerTodos() {
+    public List<EstadoMascotaDTO> obtenerTodos() { //no lo vamos usar
         return estadoRepository.findAll().stream()
                 .map(this::convertirADTO)
                 .toList();
+    }
+
+    public EstadoMascotaDTO iniciarEstado(Mascota mascota){
+    
+        EstadoMascota estado = new EstadoMascota();
+
+        // REGLA CRÍTICA: Hambre llega a 0, explota todo      
+            estado.setHambre(100);
+            estado.setSalud(100);
+            estado.setFelicidad(100);
+            estado.setEnergia(100);
+            estado.setMascota(mascota);
+        
+            estadoRepository.save(estado);
+            return convertirADTO(estado);
+        
     }
 
     public EstadoMascotaDTO buscarPorId(Integer id) {

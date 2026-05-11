@@ -19,7 +19,7 @@ public class NivelService {
 
             nivel.setNum_nivel(i);
 
-            nivel.setExp_req(i * 1);
+            nivel.setExp_req(i * 10);
             nivelRepository.save(nivel);
            
         }

@@ -46,11 +46,11 @@ public class Mascota {
     @Column(name = "exp_actual", nullable = false)
     private Integer expActual;
 
-    @Builder.Default
-    @Min(value = 1, message = "El nivel minimo es 1")
-    @Max(value = 99, message = "El nivel maximo es 99")
-    @Column(nullable = false)
-    private Integer nivel = 0;
+    //@Builder.Default
+    //@Min(value = 1, message = "El nivel minimo es 1")
+    //@Max(value = 99, message = "El nivel maximo es 99")
+    //@Column(nullable = false)
+    //private Integer nivel = 0;
 
     // --- RELACIÓN ---
 
@@ -81,7 +81,7 @@ public class Mascota {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_nivel_FK")
     @EqualsAndHashCode.Exclude
-    private Nivel nivelMascota;
+    private Nivel nivel;
 
     @OneToOne(mappedBy = "mascota", fetch = FetchType.LAZY)
     private EstadoMascota estadoMascota;
