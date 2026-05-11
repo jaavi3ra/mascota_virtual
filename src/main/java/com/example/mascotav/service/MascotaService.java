@@ -92,7 +92,9 @@ public class MascotaService {
 
         //guardar datos para generar idmascota
         Mascota mascotaGuardada = mascotaRepository.save(mascota);
-        EstadoMascota estado = estadoMascotaService.iniciarEstado(mascota);
+        EstadoMascota estado = estadoMascotaService
+            .iniciarEstado(mascotaGuardada);
+        
         mascotaGuardada.setEstadoMascota(estado);
         
         //actualizo mascota seteo estado
