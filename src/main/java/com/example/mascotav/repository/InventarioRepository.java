@@ -10,7 +10,9 @@ import com.example.mascotav.model.Inventario;
 
 @Repository
 public interface InventarioRepository extends JpaRepository<Inventario, Integer>{
-     Optional<Inventario> findByUsuarioAndItem(Integer userId, Integer itemId);  // Buscar un item de un usuario || Optional es contenedor que puede o no tener un valor
+     
+    //@Query("SELECT i FROM Inventario i WHERE i.id_item_FK = :itemId AND i.id_user_FK = :userId")
+    Optional<Inventario> findByUsuarioAndItem(Integer userId, Integer itemId);  // Buscar un item de un usuario || Optional es contenedor que puede o no tener un valor
 
      @Query("SELECT i FROM Inventario i WHERE i.usuario.id = :userId")
      List<Inventario> findInventbyUsuario(Integer userId); // Obtener todo el inventario de un usuario

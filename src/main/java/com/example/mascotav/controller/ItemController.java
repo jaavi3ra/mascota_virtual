@@ -27,7 +27,7 @@ public class ItemController {
     }
     
     @PostMapping
-    public ResponseEntity<Item> crear(@RequestBody Item item) {
+    public ResponseEntity<?> crear(@RequestBody Item item) {
         return new ResponseEntity<>(itemService.guardar(item), HttpStatus.CREATED);
     }
 }
