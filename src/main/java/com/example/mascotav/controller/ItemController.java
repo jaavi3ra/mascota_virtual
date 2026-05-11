@@ -28,6 +28,11 @@ public class ItemController {
     
     @PostMapping
     public ResponseEntity<?> crear(@RequestBody Item item) {
-        return new ResponseEntity<>(itemService.guardar(item), HttpStatus.CREATED);
+        try{
+                    return new ResponseEntity<>(itemService.guardar(item), HttpStatus.CREATED);
+
+        }catch(RuntimeException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

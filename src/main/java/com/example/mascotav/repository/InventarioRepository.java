@@ -5,14 +5,15 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.example.mascotav.model.Inventario;
 
 @Repository
 public interface InventarioRepository extends JpaRepository<Inventario, Integer>{
      
-    //@Query("SELECT i FROM Inventario i WHERE i.id_item_FK = :itemId AND i.id_user_FK = :userId")
-    Optional<Inventario> findByUsuarioAndItem(Integer userId, Integer itemId);  // Buscar un item de un usuario || Optional es contenedor que puede o no tener un valor
+    @Query("SELECT i FROM Inventario i WHERE i.usuario.id = :userId AND i.item.idItem = :itemId")
+    Optional<Inventario> findByUsuarioAndItem(@Param("userId") Integer userId,@Param("itemId") Integer itemId);  // Buscar un item de un usuario || Optional es contenedor que puede o no tener un valor
 
      @Query("SELECT i FROM Inventario i WHERE i.usuario.id = :userId")
      List<Inventario> findInventbyUsuario(Integer userId); // Obtener todo el inventario de un usuario

@@ -27,13 +27,13 @@ public class TiendaItemController {
        }
     }
 
-    @PostMapping("/comprarItems/{isuser},{iditem}")
-    public ResponseEntity<?> comprarItem(@PathVariable Integer isuser, Integer iditem){
+    @PostMapping("/{isuser}/comprarItems/{iditem}")
+    public ResponseEntity<?> comprarItem(@PathVariable Integer isuser, @PathVariable Integer iditem){
        try {
         tiendaItemService.comprarItem(isuser, iditem);
         return new ResponseEntity<>("Item comprado y añadido al invetario!.",HttpStatus.CREATED);
        } catch(RuntimeException e){
-        return new ResponseEntity<>("No se pudo comprar :(", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
        }
         
     }

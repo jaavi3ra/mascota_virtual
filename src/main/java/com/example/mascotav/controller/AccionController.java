@@ -37,9 +37,15 @@ public class AccionController {
     }
 
     @PostMapping
-    public ResponseEntity<Accion> crear(@RequestBody Accion accion) {
-        return new ResponseEntity<>(accionService.guardar(accion),HttpStatus.CREATED);
-    }
+ 
+        public ResponseEntity<?> crear(@RequestBody Accion accion) {
+            try{
+                 return new ResponseEntity<>(accionService.guardar(accion),HttpStatus.CREATED);
+            }catch(RuntimeException e){
+                 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            }
+       
+        }
 
     /**
      * MÉTODO PARA PROBAR EN POSTMAN: Ejecuta una acción usando IDs
