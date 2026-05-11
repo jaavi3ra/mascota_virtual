@@ -1,10 +1,8 @@
 package com.example.mascotav.service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.mascotav.DTO.EstadoMascotaDTO;
 import com.example.mascotav.DTO.MascotaDTO;
 import com.example.mascotav.model.EstadoMascota;
@@ -12,7 +10,6 @@ import com.example.mascotav.model.Mascota;
 import com.example.mascotav.model.Nivel;
 import com.example.mascotav.repository.MascotaRepository;
 import com.example.mascotav.repository.NivelRepository;
-
 import jakarta.transaction.Transactional;
 
 @Service
@@ -58,6 +55,7 @@ public class MascotaService {
     }
 
     public MascotaDTO guardarMascota(Mascota mascota) {
+        //EstadoMascotaDTO estado = new 
         mascotaRepository.save(mascota);
         return convertirADTO(mascota);
     }
