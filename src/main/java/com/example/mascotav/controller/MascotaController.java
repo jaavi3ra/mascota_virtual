@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.mascotav.DTO.MascotaDTO;
 import com.example.mascotav.model.Mascota;
-import com.example.mascotav.service.EstadoMascotaService;
 import com.example.mascotav.service.MascotaService;
 
 @RestController
@@ -24,8 +23,6 @@ public class MascotaController {
 
     @Autowired
     private MascotaService mascotaService;
-    @Autowired
-    private EstadoMascotaService estadoMascotaService;
 
     @GetMapping
     public ResponseEntity<List<MascotaDTO>> todasLasMascotas() {
