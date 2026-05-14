@@ -15,6 +15,7 @@ import com.example.mascotav.repository.ItemRepository;
 import com.example.mascotav.repository.MascotaRepository;
 import jakarta.transaction.Transactional;
 
+@Transactional
 @Service
 public class InventarioService {
     @Autowired
@@ -26,10 +27,11 @@ public class InventarioService {
     @Autowired
     private ItemRepository itemRepository;
     @Autowired
-    private HistorialAccionesService historialAccionesService;
-   
+    private HistorialAccionesService historialAccionesService; 
     @Autowired
     private EstadoMascotaRepository estadoRepository;
+    @Autowired
+    private EstadoMascotaService estadoserService;
 
     public List<InventarioDTO> listarItemdelInventario(Integer iduser){
         List<InventarioDTO> inventItem = new ArrayList<>();
@@ -39,7 +41,7 @@ public class InventarioService {
         return inventItem;
     }
 
-    @Transactional
+    
     public String usarItem(Integer idMascota, Integer idItem){
 
         Mascota mascota = mascotaRepository.findById(idMascota)
@@ -59,13 +61,11 @@ public class InventarioService {
         inventario.setCantidad(inventario.getCantidad() - 1);
         inventarioRepository.save(inventario);
 
-        //aplicarEfecto(mascota, item);
         mascota.setExpActual( mascota.getExpActual() + item.getAccion().getAfectaExpBase());
         
-
         // guardar cambios
         mascotaRepository.save(mascota);
-        mascotaService.validarSubirDeNivel(mascota);
+        estadoserService.editarEstado(mascota, item);   
         historialAccionesService.registrarHistorial(mascota, item);
 
         return Mensaje(mascota, item);
@@ -74,35 +74,11 @@ public class InventarioService {
     private String Mensaje(Mascota mascota, Item item){
 
     return " La Mascota: " + mascota.getNombre() +
-           " usó el item '" + item.getNombreItem() +
-           "' y activó la acción '" + item.getAccion().getNombreAccion();
+           "\n\tUsó el item :" + item.getNombreItem() +
+           "\n\tActivó la acción :" + item.getAccion().getNombreAccion()+
+           "\n\t"+ mascotaService.validarSubirDeNivel(mascota);
            
 }
-
-        public EstadoMascota aplicarEfecto(Mascota mascota, Item item){
-
-            EstadoMascota estado = mascota.getEstadoMascota();
-
-        estado.setFelicidad(
-             mascota.getEstadoMascota().getFelicidad() + item.getAccion().getAfectaFelicidad()
-        );
-        estado.setEnergia(
-             mascota.getEstadoMascota().getEnergia() + item.getAccion().getAfectaEnergia()
-        );
-         estado.setHambre(
-             mascota.getEstadoMascota().getHambre() + item.getAccion().getAfectaHambre()
-        );
-
-       estado.setSalud(
-            mascota.getEstadoMascota().getSalud() + item.getAccion().getAfectaSalud()
-        );
-    
-           return  estadoRepository.save(estado);
-        }
-
-
-
-
 
     private InventarioDTO convertirADTO (Inventario inv){
         InventarioDTO invDTO = new InventarioDTO();

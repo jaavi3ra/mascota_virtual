@@ -73,8 +73,7 @@ public class MascotaService {
         TipoMascota tipoMascota = tipoMascotaRepository
         .findById(mascota.getTipoMascota().getId())
         .orElseThrow(() ->
-       
-        new RuntimeException("Tipo mascota no encontrado"));
+            new RuntimeException("Tipo mascota no encontrado"));
 
         Nivel nivel = nivelRepository
         .findById(mascota.getNivel().getId_nivel())
@@ -86,15 +85,12 @@ public class MascotaService {
         mascota.setNivel(nivel);
 
         //guardar datos para generar idmascota
-        Mascota mascotaGuardada = mascotaRepository.save(mascota);
-        EstadoMascota estado = estadoMascotaService
-            .iniciarEstado(mascotaGuardada);
-        
-        mascotaGuardada.setEstadoMascota(estado);
-        
+        EstadoMascota estado = estadoMascotaService.iniciarEstado(mascota);   
+        mascota.setEstadoMascota(estado);
+
         //actualizo mascota seteo estado
-        mascotaRepository.save(mascotaGuardada);
-        return convertirADTO(mascotaGuardada);
+        mascotaRepository.save(mascota);
+        return convertirADTO(mascota);
     }
 
     private void verificarSupervivencia(Mascota mascota) {
@@ -119,28 +115,23 @@ public class MascotaService {
 
    
     public String validarSubirDeNivel(Mascota mascota) {
-        String mensaje;
+        
         int exp = mascota.getExpActual();
         int expNecesaria = mascota.getNivel().getExp_req();
         Nivel nivel = mascota.getNivel();
 
-    System.err.println("exp: " + exp);
-    System.err.println("expNecesaria: " + expNecesaria);
-
         if (exp >= expNecesaria) {
             Integer nuevoNivel = nivel.getNum_nivel() + 1;
-            System.err.println("lvl new: " + nuevoNivel);
 
             nivel.setNum_nivel(nuevoNivel);
             mascota.setExpActual(exp - expNecesaria); // con exp=10 y expNecesaria=10 → queda en 0
             nivelRepository.save(nivel);
+            mascotaRepository.save(mascota);
            
-            mensaje = "¡Felicidades! Tu mascota subió al nivel " + nuevoNivel;
-        } else {           
-            mensaje = "Falta " + (expNecesaria - exp) + " exp para subir de nivel";
-        }
-
-        return mensaje;
+           return "¡Felicidades! Tu mascota subió al nivel " + nuevoNivel;
+        }     
+        return "Falta " + (expNecesaria - exp) + " exp para subir de nivel";
+        
     }
 
     private MascotaDTO convertirADTO(Mascota mascota) {

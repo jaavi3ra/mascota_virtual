@@ -4,7 +4,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.mascotav.DTO.EstadoMascotaDTO;
+import com.example.mascotav.model.Accion;
 import com.example.mascotav.model.EstadoMascota;
+import com.example.mascotav.model.Item;
 import com.example.mascotav.model.Mascota;
 import com.example.mascotav.repository.EstadoMascotaRepository;
 import jakarta.transaction.Transactional;
@@ -42,6 +44,19 @@ public class EstadoMascotaService {
         EstadoMascota estado = estadoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
         return convertirADTO(estado);
+    }
+
+    public EstadoMascota editarEstado(Mascota estado, Item item){
+            System.out.println("idestado: "+estado.getEstadoMascota());
+            EstadoMascota estadonuevo = estadoRepository.findById(estado.getEstadoMascota().getIdEstado())
+                    .orElseThrow(() ->  new RuntimeException("Tipo mascota no encontrado"));
+           
+            estadonuevo.setEnergia(item.getAccion().getAfectaEnergia() + estadonuevo.getEnergia());
+            estadonuevo.setFelicidad(item.getAccion().getAfectaFelicidad() + estadonuevo.getFelicidad());
+            estadonuevo.setHambre(item.getAccion().getAfectaHambre() + estadonuevo.getHambre());
+            estadonuevo.setSalud(item.getAccion().getAfectaSalud() + estadonuevo.getSalud());
+            estadoRepository.save(estadonuevo);
+            return estadonuevo;
     }
 
 

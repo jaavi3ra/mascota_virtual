@@ -9,6 +9,5 @@ public class MascotaDTO {
     private String nombre;
     private String tipoMascota;
     private Integer nivelActual;
-
     private EstadoMascotaDTO estado;
 }
