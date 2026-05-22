@@ -4,7 +4,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.mascotav.DTO.EstadoMascotaDTO;
-import com.example.mascotav.model.Accion;
 import com.example.mascotav.model.EstadoMascota;
 import com.example.mascotav.model.Item;
 import com.example.mascotav.model.Mascota;
