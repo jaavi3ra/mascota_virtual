@@ -1,88 +1,223 @@
 # mascota_virtual
 
-# Instrucciones endpoints
+Proyecto backend desarrollado con Spring Boot y MySQL enfocado en la gestión de mascotas virtuales con mecánicas RPG.
 
-# IMPORTANTE * Primeros a ejecutar *
-## crear tienda
+---
+
+# Instrucciones de Endpoints
+
+# IMPORTANTE >:c
+## Primeros endpoints a ejecutar
+
+Estos endpoints deben ejecutarse antes de comenzar a utilizar el sistema principal.
+
+---
+
+# Crear Tienda
+
+## Endpoint
+```http
 [POST] /api/v1/tienda
-{    
+```
+
+## Body
+```json
+{
     "nombreTienda":"nombretienda"
 }
-## crear acciones
+```
+
+---
+
+# Crear Acciones
+
+## Endpoint
+```http
 [POST] /api/v1/accion
+```
+
+## Body
+```json
 {
-    
     "nombreAccion":"jugar plei",
     "afectaFelicidad": 15,
     "afectaEnergia": -7,
     "afectaSalud": -5,
     "afectaHambre": -15,
     "afectaExpBase": 20 
-    
 }
+```
 
-afectaExpBase es la experiencia que ganará la mascota. 
+## Descripción
+- `afectaExpBase` corresponde a la experiencia que ganará la mascota al realizar la acción.
 
-## crear items
+---
+
+# Crear Items
+
+## Endpoint
+```http
 [POST] /api/v1/item
+```
+
+## Body
+```json
 {
-   
     "nombreItem":"nombreitem",
-    "tipoItem": "comida",
+    "tipoItem":"comida",
     "accion":{
         "idAccion":2
     }
 }
-## iniciar tipos de mascota
+```
+
+---
+
+# Iniciar Tipos de Mascota
+
+## Endpoint
+```http
 [POST] /api/v1/tipo-mascota/crear
+```
 
-Este endpoint es un metodo que inicia la creacion alatorea de 5 tipos diferentes.
+## Descripción
+Este endpoint ejecuta automáticamente la creación aleatoria de 5 tipos diferentes de mascotas.
 
-## Agregar Item a la tienda
+---
+
+# Agregar Item a la Tienda
+
+## Endpoint
+```http
 [POST] /api/v1/tiendaItem/agregarItemTienda
+```
 
+## Body
+```json
 {
     "tienda":{
         "idTienda":1
-        },
+    },
     "item":{
         "idItem":3
-        }
+    }
 }
+```
 
-# Endpoints fundamentales
-## Crear Usuario
+---
+
+# Endpoints Fundamentales
+
+# Crear Usuario
+
+## Endpoint
+```http
 [POST] /api/v1/usuario
-->
+```
+
+## Body
+```json
 {
     "nombreUsuario":"nombre usuario",
-    "fechaCreacion": "dd/mm/yyyy"
+    "fechaCreacion":"dd/mm/yyyy"
 }
-    
-    
-## Crear Mascota
-[POST] /api/v1/mascota/crear/(IDUSUARIO)
-se crea la mascota para ese usuario.
-->
-    
-    "nombre":"mimi",   
-    "tipoMascota": {
-            "id": 1
-        }
-Al crear mascota se genera el Estado Mascota automaticamente y se inicia el nivel junto con su experencia.
+```
 
-# Endpoints para INTERACTUAR con item y mascota
-## comprar item de la tienda y agregarlo al inventario automaticamente
-[POST] /api/v1/tiendaItem/(IDMASCOTA)/comprarItems/(IdITEM)
+---
 
-## ver items comprados en inventario del usuario
-[GET] /api/v1/inventario/(IDUSUARIO)
+# Crear Mascota
 
-Muestra todos los item del inventario de ese usuario.
+## Endpoint
+```http
+[POST] /api/v1/mascota/crear/{IDUSUARIO}
+```
 
-## dar item a mascota
-[POST] /api/v1/inventario/(IDMASCOTa)/darItem/(IDITEM)
+## Descripción
+Crea una mascota asociada al usuario indicado.
 
-El item es manejado desde Inventario y asi actualiza la cantidad del item en ese inventario. Al queda sin stock en el inventario se debe comprar de nuevo el item.
+Al crear la mascota:
+- Se genera automáticamente el `EstadoMascota`
+- Se inicializa el nivel
+- Se inicia la experiencia de la mascota
 
-Al dar el item a la mascota este ganará experiencia y subira de nivel.
+## Body
+```json
+{
+    "nombre":"mimi",
+    "tipoMascota":{
+        "id":1
+    }
+}
+```
+
+---
+
+# Endpoints para Interactuar con Items y Mascotas
+
+# Comprar Item y Agregar al Inventario
+
+## Endpoint
+```http
+[POST] /api/v1/tiendaItem/{IDMASCOTA}/comprarItems/{IDITEM}
+```
+
+## Descripción
+Compra un item desde la tienda y lo agrega automáticamente al inventario del usuario dueño de la mascota.
+
+---
+
+# Ver Inventario del Usuario
+
+## Endpoint
+```http
+[GET] /api/v1/inventario/{IDUSUARIO}
+```
+
+## Descripción
+Muestra todos los items almacenados en el inventario del usuario.
+
+---
+
+# Dar Item a Mascota
+
+## Endpoint
+```http
+[POST] /api/v1/inventario/{IDMASCOTA}/darItem/{IDITEM}
+```
+
+## Descripción
+El item es utilizado desde el inventario del usuario.
+
+Al utilizar un item:
+- Se actualiza automáticamente la cantidad disponible en inventario
+- Si el item queda sin stock, debe volver a comprarse
+- La mascota gana experiencia
+- La mascota puede subir de nivel
+- Se actualizan los estados de la mascota según la acción asociada al item
+
+---
+
+# Tecnologías Utilizadas
+
+- Java
+- Spring Boot
+- Spring Data JPA
+- Hibernate
+- MySQL
+- Maven
+- Postman
+- Git y GitHub
+
+---
+
+
+
+## Ejecutar proyecto
+
+```bash
+mvn spring-boot:run
+```
+
+O ejecutar la clase principal desde el IDE.
+
+---
