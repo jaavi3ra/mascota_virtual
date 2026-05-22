@@ -28,7 +28,7 @@ public class TiendaItem {
 
     @NotNull
     @Column(name = "cooldown", nullable = false)
-    private int cooldownSegundos;
+    private Integer cooldownSegundos;
 
     @ManyToOne
     @JoinColumn(name = "id_tienda_fk")
@@ -38,6 +38,6 @@ public class TiendaItem {
     @JoinColumn(name = "id_item_fk")
     private Item item;
 
-    @OneToMany(mappedBy = "tiendaItem")
+    @OneToMany(mappedBy = "tiendaItem") // sin uso
     private List<UsuarioTiendaItem> reclamaciones;
 }

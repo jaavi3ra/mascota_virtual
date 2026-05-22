@@ -11,19 +11,14 @@ public class NivelService {
     @Autowired
     private NivelRepository nivelRepository;
    
-    public NivelDTO crearNiveles(){
-        Nivel nivel = null;
-        for(int i = 1; i <= 10; i++){ //probar con 10 nivel max
-
-            nivel = new Nivel();
-
-            nivel.setNum_nivel(i);
-
-            nivel.setExp_req(i * 10);
+    public Nivel iniciarNivel(){
+        Nivel nivel = new Nivel();   
+            nivel.setNum_nivel(1);
+            nivel.setExp_req(10);
             nivelRepository.save(nivel);
-           
-        }
-         return convertirADTO(nivel);
+        
+            convertirADTO(nivel);
+         return nivel;
     }
 
 

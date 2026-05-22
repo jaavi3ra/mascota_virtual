@@ -34,6 +34,7 @@ public class EstadoMascotaService {
             estado.setFelicidad(100);
             estado.setEnergia(100);
             estado.setMascota(mascota);
+            estado.getMascota().setNombre(mascota.getNombre());
         
            estadoRepository.save(estado);
         return estado;

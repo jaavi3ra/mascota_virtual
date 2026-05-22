@@ -1,7 +1,6 @@
 package com.example.mascotav.service;
 
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.mascotav.DTO.TiendaItemDTO;
@@ -29,27 +28,27 @@ public class TiendaItemService {
     @Autowired
     private InventarioRepository inventarioRepository;
 
-    public TiendaItemDTO agregarItemATienda(TiendaItem tiendaItem) {
+    public TiendaItem agregarItemATienda(TiendaItem tiendaItem) {
 
-    Tienda tienda = tiendaRepository
-        .findById(tiendaItem.getTienda().getIdTienda())
-        .orElseThrow(() ->
-            new RuntimeException("Tienda no encontrada"));
+        Tienda tienda = tiendaRepository
+            .findById(tiendaItem.getTienda().getIdTienda())
+            .orElseThrow(() ->
+                new RuntimeException("Tienda no encontrada"));
 
-    Item item = itemRepository
-        .findById(tiendaItem.getItem().getIdItem())
-        .orElseThrow(() ->
-            new RuntimeException("Item no encontrado"));
+        Item item = itemRepository
+            .findById(tiendaItem.getItem().getIdItem())
+            .orElseThrow(() ->
+                new RuntimeException("Item no encontrado"));
 
-    TiendaItem tItem = new TiendaItem();
+        TiendaItem tItem = new TiendaItem();
+        tItem.setTienda(tienda);
+        tItem.setItem(item);
+        tItem.setCooldownSegundos(180); // 30 min para toda compra
 
-    tItem.setTienda(tienda);
-    tItem.setItem(item);
-    tItem.setCooldownSegundos(180); // 30 min para toda compra
+        tiendaItemRepository.save(tItem);
 
-    tiendaItemRepository.save(tItem);
-
-        return convertirADTO(tItem);
+        //convertirADTO(tItem);
+        return tItem;
     }
 
     public Inventario comprarItem(Integer idUsuario,Integer idItem) {

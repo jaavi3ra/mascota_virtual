@@ -27,6 +27,9 @@ public class MascotaService {
     private NivelRepository nivelRepository;
 
     @Autowired
+    private NivelService nivelService;
+
+    @Autowired
     private EstadoMascotaService estadoMascotaService;
     
     @Autowired
@@ -75,17 +78,19 @@ public class MascotaService {
         .orElseThrow(() ->
             new RuntimeException("Tipo mascota no encontrado"));
 
-        Nivel nivel = nivelRepository
-        .findById(mascota.getNivel().getId_nivel())
-        .orElseThrow(() ->
-            new RuntimeException("Nivel no encontrado"));
+            //iniciar nivel al crear mascota con level 1 y expRequerida 10 para subir de nivel
+        Nivel nivel = nivelService.iniciarNivel();
        
         mascota.setUsuario(usuario); 
         mascota.setTipoMascota(tipoMascota);
         mascota.setNivel(nivel);
+        mascota.setExpActual(0); // valor para iniciar experiencia a mascota
 
         //guardar datos para generar idmascota
+         mascotaRepository.save(mascota);
+        // se inicia estado unico de la mascota con el id
         EstadoMascota estado = estadoMascotaService.iniciarEstado(mascota);   
+        // se agrega el estado a Mascota
         mascota.setEstadoMascota(estado);
 
         //actualizo mascota seteo estado
@@ -116,21 +121,23 @@ public class MascotaService {
    
     public String validarSubirDeNivel(Mascota mascota) {
         
-        int exp = mascota.getExpActual();
+        int expMascota = mascota.getExpActual();
         int expNecesaria = mascota.getNivel().getExp_req();
         Nivel nivel = mascota.getNivel();
 
-        if (exp >= expNecesaria) {
+        if (expMascota >= expNecesaria) {
             Integer nuevoNivel = nivel.getNum_nivel() + 1;
 
             nivel.setNum_nivel(nuevoNivel);
-            mascota.setExpActual(exp - expNecesaria); // con exp=10 y expNecesaria=10 → queda en 0
+            nivel.setExp_req(nuevoNivel * 10);
             nivelRepository.save(nivel);
+
+            mascota.setExpActual(expMascota - expNecesaria); // con exp=10 y expNecesaria=10 → queda en 0
             mascotaRepository.save(mascota);
            
            return "¡Felicidades! Tu mascota subió al nivel " + nuevoNivel;
         }     
-        return "Falta " + (expNecesaria - exp) + " exp para subir de nivel";
+        return "Falta " + (expNecesaria - expMascota) + " exp para subir de nivel";
         
     }
 

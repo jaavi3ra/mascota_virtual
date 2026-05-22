@@ -16,7 +16,7 @@ public class NivelController {
 
     @PostMapping("/crearlvl")
     public ResponseEntity<String> crearNiveles(){
-        nivelService.crearNiveles();
+        nivelService.iniciarNivel();
         return new ResponseEntity<>("Niveles creados correctamente.", HttpStatus.CREATED);
     }
 }
