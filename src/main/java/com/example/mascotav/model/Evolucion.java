@@ -8,6 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,9 +29,9 @@ public class Evolucion {
     @Size(min = 4, max = 10, message = "El nombre debe tener al menos 4 caracteres")
     private String nom_evo;
 
-    @ManyToOne()
-    @JoinColumn(name = "id_nivel_fk")
-    private Nivel nivel;
+    @NotNull
+    @JoinColumn(name = "nivel_evo")
+    private Integer nivel;
 
     @ManyToOne()
     @JoinColumn(name = "id_tipo_mascota_fk")

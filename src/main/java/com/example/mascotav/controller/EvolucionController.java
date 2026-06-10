@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.mascotav.DTO.EvolucionDTO;
+import com.example.mascotav.model.Evolucion;
 import com.example.mascotav.service.EvolucionService;
 
 @RestController
@@ -24,6 +27,17 @@ public class EvolucionController {
         return evoluciones.isEmpty() 
             ? new ResponseEntity<>("No hay evoluciones registradas.",HttpStatus.NO_CONTENT) 
             : new ResponseEntity<>(evoluciones, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> crearEvolucion(@RequestBody Evolucion evolucion){
+          try{
+                 evolucionService.crearEvolucion(evolucion);
+                 return new ResponseEntity<>("Evolucion creada exitosamente.",HttpStatus.CREATED)
+                
+            }catch(RuntimeException e){
+                 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            }
     }
 
 }

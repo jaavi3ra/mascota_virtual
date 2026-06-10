@@ -21,15 +21,15 @@ public class EvolucionService {
 
     public String verificarEvolucion(Mascota mascota){
 
-    Evolucion evolucion = evolucionRepository
-        .findByTipoMascota(mascota.getTipoMascota())
-        .orElse(null);
+        Evolucion evolucion = evolucionRepository
+            .findByTipoMascota(mascota.getTipoMascota())
+            .orElse(null);
 
-         if(evolucion != null && mascota.getNivel().getId_nivel() >= evolucion.getNivel().getId_nivel()){
+         if(evolucion != null && mascota.getNivel().getNum_nivel() >= evolucion.getNivel()){
 
            return "Tu mascota "+mascota.getNombre()+" Evolucionó!";
         }
-        return mascota.getNombre()+" subió de nivel.";
+        return null;
     }
 
     public EvolucionDTO crearEvolucion(Evolucion evo){
@@ -43,8 +43,8 @@ public class EvolucionService {
         if(evoeditado.getNom_evo() != null){
             evo.setNom_evo(evoeditado.getNom_evo());
         }
-        if(evoeditado.getNivel().getId_nivel() != null){
-            evo.getNivel().setId_nivel(evoeditado.getNivel().getId_nivel());
+        if(evoeditado.getNivel() != null){
+            evo.setNivel(evoeditado.getNivel());
         }
         if(evoeditado.getTipoMascota().getId() != null){
             evo.getTipoMascota().setId(evoeditado.getTipoMascota().getId());
@@ -68,8 +68,8 @@ public class EvolucionService {
         EvolucionDTO evoDTO = new EvolucionDTO();
         evoDTO.setId_evo(evo.getId_evo());
         evoDTO.setNom_evo(evo.getNom_evo());
-        if(evo.getNivel().getId_nivel() != null){
-           evoDTO.setNivelReq(evo.getNivel().getId_nivel());
+        if(evo.getNivel() != null){
+           evoDTO.setNivelReq(evo.getNivel());
         }else{
             evoDTO.setNivelReq(0);
 

@@ -47,7 +47,7 @@ public class EstadoMascotaService {
     }
 
     public EstadoMascota editarEstado(Mascota estado, Item item){
-            System.out.println("idestado: "+estado.getEstadoMascota());
+           // System.out.println("idestado: "+estado.getEstadoMascota());
             EstadoMascota estadonuevo = estadoRepository.findById(estado.getEstadoMascota().getIdEstado())
                     .orElseThrow(() ->  new RuntimeException("Tipo mascota no encontrado"));
            

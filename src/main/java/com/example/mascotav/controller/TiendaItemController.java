@@ -28,7 +28,7 @@ public class TiendaItemController {
        }
     }
 
-    @PostMapping("/{isuser}/comprarItems/{iditem}")
+    @PostMapping("/{isuser}/comprarItems/{iditem}") // metodo tendra que ir a usuariotiendaItem
     public ResponseEntity<?> comprarItem(@PathVariable Integer isuser, @PathVariable Integer iditem){
        try {
         tiendaItemService.comprarItem(isuser, iditem);
