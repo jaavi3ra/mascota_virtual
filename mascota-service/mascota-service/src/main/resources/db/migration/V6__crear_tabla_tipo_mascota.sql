@@ -1,0 +1,4 @@
+CREATE TABLE tipoMascota (
+   id INT AUTO_INCREMENT PRIMARY KEY,
+   nombreTipoMascota VARCHAR(50) NOT NULL
+);
