@@ -18,11 +18,14 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/inventario")
+
 public class InventarioController {
+
     @Autowired
     private InventarioService inventarioService;
 
     @GetMapping("/{iduser}")
+
     public ResponseEntity<?> listarItemdDeInventario(@Valid @PathVariable Integer iduser) {
         try {
             List<InventarioDTO> items = inventarioService.listarItemdelInventario(iduser);

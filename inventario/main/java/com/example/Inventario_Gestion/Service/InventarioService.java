@@ -12,22 +12,32 @@ import com.example.mascotav.repository.InventarioRepository;
 import com.example.mascotav.repository.ItemRepository;
 import com.example.mascotav.repository.MascotaRepository;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 @Transactional
 @Service
+@Slf4j
+
 public class InventarioService {
+
     @Autowired
     private InventarioRepository inventarioRepository;
+
     @Autowired
     private MascotaRepository mascotaRepository;
+
     @Autowired
     private MascotaService mascotaService;
+
     @Autowired
     private ItemRepository itemRepository;
+
     @Autowired
     private HistorialAccionesService historialAccionesService;
+
     @Autowired
     private EvolucionService evolucionService;
+
     @Autowired
     private EstadoMascotaService estadoserService;
 
@@ -68,6 +78,9 @@ public class InventarioService {
     }
 
     private void aplicarEfectos(Mascota mascota, Item item) {
+
+        log.info("Aplicando efecto del item {} a mascota {}", item.getIdItem(), mascota.getId());
+
         mascota.setExpActual(mascota.getExpActual() + item.getAccion().getAfectaExpBase());
         // guardar cambios de mascota experiencia y estado mascota
         mascotaRepository.save(mascota);
