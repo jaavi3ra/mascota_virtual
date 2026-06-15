@@ -1,15 +1,22 @@
 package com.mascota.mascota_service.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import com.mascota.mascota_service.DTO.EstadoMascotaDTO;
 import com.mascota.mascota_service.DTO.MascotaDTO;
+import com.mascota.mascota_service.DTO.UsuarioDTOExterno;
 import com.mascota.mascota_service.model.EstadoMascota;
 import com.mascota.mascota_service.model.Mascota;
 import com.mascota.mascota_service.model.TipoMascota;
 import com.mascota.mascota_service.repository.EstadoMascotaRepository;
 import com.mascota.mascota_service.repository.MascotaRepository;
 import com.mascota.mascota_service.repository.TipoMascotaRepository;
+import com.netflix.discovery.converters.Auto;
+
+import reactor.core.publisher.Mono;
 
 @Service
 public class MascotaService {
@@ -22,14 +29,28 @@ public class MascotaService {
     private EstadoMascotaService estadoMascotaService;
     @Autowired
     private NivelService nivelService;
+    @Autowired
+    private WebClient.Builder webClientBuilder;
 
-   /* private Usuario obtenerUsuario(Integer iduser){
-        return usuarioRepository
-                .findById(iduser)
-                .orElseThrow(() ->
-                    new RuntimeException("Usuario no encontrado"));
+   private Integer obtenerUsuario(Integer iduser){
+        return webClientBuilder.build()
+                .get()
+                .uri("http://localhost:8082/api/v1/usuario/buscar-iduser" + iduser)
+                .retrieve()
+                // Manejo de errores 4xx o 5xx del microservicio externo
+                .onStatus(HttpStatusCode::is4xxClientError, response -> 
+                    Mono.error(new RuntimeException("Usuario no encontrado."))
+                )
+                .onStatus(HttpStatusCode::is5xxServerError, response -> 
+                    Mono.error(new RuntimeException("Error en el servidor de usuarios"))
+                )
+                .bodyToMono(UsuarioDTOExterno.class)
+                .map(UsuarioDTOExterno::getIdUsuario)
+                .block();
+
     }
-*/ 
+    
+
     private TipoMascota obtenerTipoMascota(Integer idtipo){
         return tipoMascotaRepository
                 .findById(idtipo)
@@ -52,7 +73,7 @@ public class MascotaService {
 
     public MascotaDTO crearMascota(Integer userid,Mascota mascota) {
     
-       // mascota.setUsuario(obtenerUsuario(userid)); 
+        mascota.setUsuario(obtenerUsuario(userid)); 
         mascota.setTipoMascota(obtenerTipoMascota(mascota.getTipoMascota().getId())); 
         //iniciar nivel al crear mascota con level 1 y expRequerida 10 para subir de ni
         mascota.setNivel(nivelService.iniciarNivel());

@@ -26,7 +26,7 @@ public class MascotaController {
     private EstadoMascotaService estadoMascotaService;
     
     //crear mascota, se crea junto con estado mascota
-    @PostMapping("/crear/{userid}")
+    @PostMapping("/crear-mascota/{userid}")
     public ResponseEntity<?> crearMascota(@Valid @PathVariable Integer userid,@Valid @RequestBody Mascota mascota) {
         try {
             MascotaDTO mascotacreada = mascotaService.crearMascota(userid,mascota);
