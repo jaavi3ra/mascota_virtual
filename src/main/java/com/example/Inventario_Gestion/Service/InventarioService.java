@@ -1,16 +1,17 @@
-package com.example.mascotav.service;
+package com.example.Inventario_Gestion.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.mascotav.DTO.InventarioDTO;
-import com.example.mascotav.model.Inventario;
-import com.example.mascotav.model.Item;
-import com.example.mascotav.model.Mascota;
-import com.example.mascotav.repository.InventarioRepository;
-import com.example.mascotav.repository.ItemRepository;
-import com.example.mascotav.repository.MascotaRepository;
+
+import com.example.Inventario_Gestion.DTO.InventarioDTO;
+import com.example.Inventario_Gestion.DTO.MascotaDTOExterno;
+import com.example.Inventario_Gestion.Model.Inventario;
+import com.example.Inventario_Gestion.Model.Item;
+import com.example.Inventario_Gestion.Repository.InventarioRepository;
+import com.example.Inventario_Gestion.Repository.ItemRepository;
+
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,22 +25,7 @@ public class InventarioService {
     private InventarioRepository inventarioRepository;
 
     @Autowired
-    private MascotaRepository mascotaRepository;
-
-    @Autowired
-    private MascotaService mascotaService;
-
-    @Autowired
     private ItemRepository itemRepository;
-
-    @Autowired
-    private HistorialAccionesService historialAccionesService;
-
-    @Autowired
-    private EvolucionService evolucionService;
-
-    @Autowired
-    private EstadoMascotaService estadoserService;
 
     public List<InventarioDTO> listarItemdelInventario(Integer iduser) {
         List<InventarioDTO> inventItem = new ArrayList<>();
@@ -47,11 +33,6 @@ public class InventarioService {
             inventItem.add(convertirADTO(inv));
         }
         return inventItem;
-    }
-
-    private Mascota obtenerMascota(Integer idmascota) {
-        return mascotaRepository.findById(idmascota)
-                .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
     }
 
     private Item obtenerItem(Integer iditem) {
@@ -77,40 +58,23 @@ public class InventarioService {
         inventarioRepository.save(inventario);
     }
 
-    private void aplicarEfectos(Mascota mascota, Item item) {
+    public String usarItem(MascotaDTOExterno mascotaDto, Integer idItem) {
 
-        log.info("Aplicando efecto del item {} a mascota {}", item.getIdItem(), mascota.getId());
-
-        mascota.setExpActual(mascota.getExpActual() + item.getAccion().getAfectaExpBase());
-        // guardar cambios de mascota experiencia y estado mascota
-        mascotaRepository.save(mascota);
-        estadoserService.editarEstado(mascota, item);
-        // se crea un registro de la accion
-        historialAccionesService.registrarHistorial(mascota, item);
-    }
-
-    // al usar item implica editar estado de mascota e inventario, ya que se consume
-    // el item del inventario
-    public String usarItem(Integer idMascota, Integer idItem) {
-
-        Mascota mascota = obtenerMascota(idMascota);
         Item item = obtenerItem(idItem);
-        Inventario inventario = obtenerItemdelInventario(mascota.getUsuario().getId(), idItem);
+
+        Inventario inventario = obtenerItemdelInventario(mascotaDto.get, idItem);
 
         validarStock(inventario);
         consumirItem(inventario);
-        aplicarEfectos(mascota, item);
 
         return contruirMensaje(mascota, item);
     }
 
-    private String contruirMensaje(Mascota mascota, Item item) {
+    private String contruirMensaje(MascotaDTOExterno mascotaDto, Item item) {
 
-        return " La Mascota: " + mascota.getNombre() +
+        return " La Mascota: " + mascotaDto.getNombre() +
                 "\n\tUsó el item :" + item.getNombreItem() +
-                "\n\tActivó la acción :" + item.getAccion().getNombreAccion() +
-                "\n\t" + mascotaService.validarSubirDeNivel(mascota)
-                + "\n\t" + evolucionService.verificarEvolucion(mascota);
+                "\n\tActivó la acción :" + item.getAccion().getNombreAccion();
 
     }
 

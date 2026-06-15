@@ -1,6 +1,11 @@
+package com.example.Inventario_Gestion.DTO;
+
+import java.time.LocalDateTime;
+
 import lombok.Data;
 
-@Datapublic
+@Data
+
 class UTIemDTOExterno {
     private Integer id;
     private Integer idUsuario;

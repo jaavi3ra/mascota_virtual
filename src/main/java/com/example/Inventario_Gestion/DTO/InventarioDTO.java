@@ -1,4 +1,4 @@
-package com.example.mascotav.DTO;
+package com.example.Inventario_Gestion.DTO;
 
 import lombok.Data;
 

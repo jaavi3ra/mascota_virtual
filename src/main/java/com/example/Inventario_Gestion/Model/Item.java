@@ -1,4 +1,4 @@
-package com.example.mascotav.model;
+package com.example.Inventario_Gestion.Model;
 
 import java.util.List;
 import jakarta.persistence.Column;
@@ -7,7 +7,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -39,13 +38,17 @@ public class Item {
     private String tipoItem;
 
     // Relaciones
-    @ManyToOne()
+    // @ManyToOne()---Queda como un simple Integer porque permite guardar el código
+    // del efecto del ítem sin obligar a tu base de datos a conectarse físicamente
+    // con la tabla de otro microservicio.
     @JoinColumn(name = "id_accion_fk")
-    private Accion accion;
+    private Integer idAccionFk;
 
     @OneToMany(mappedBy = "item")
     private List<Inventario> inventarios;
 
-    @OneToMany(mappedBy = "item")
-    private List<TiendaItem> tiendaItems;
+    // Por qué se elimina: Porque TiendaItem le pertenece al microservicio de la
+    // Tienda.
+    // @OneToMany(mappedBy = "item")
+    // private List<TiendaItem> tiendaItems;
 }

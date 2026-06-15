@@ -1,3 +1,5 @@
+package com.example.Inventario_Gestion.DTO;
+
 import lombok.Data;
 
 @Data

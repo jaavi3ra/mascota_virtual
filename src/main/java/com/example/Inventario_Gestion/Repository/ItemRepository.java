@@ -1,9 +1,11 @@
-package com.example.mascotav.repository;
+package com.example.Inventario_Gestion.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import com.example.mascotav.model.Item;
+
+import com.example.Inventario_Gestion.Model.Item;
+
 import org.springframework.data.repository.query.Param;
 import java.util.List;
 

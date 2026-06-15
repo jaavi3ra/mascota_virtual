@@ -1,4 +1,4 @@
-package com.example.mascotav.model;
+package com.example.Inventario_Gestion.Model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,9 +28,8 @@ public class Inventario {
     @Column(name = "cantidad", nullable = false)
     private Integer cantidad;
 
-    @ManyToOne()
     @JoinColumn(name = "id_user_fk")
-    private Usuario usuario;
+    private Integer idUserFk;
 
     @ManyToOne()
     @JoinColumn(name = "id_item_fk")

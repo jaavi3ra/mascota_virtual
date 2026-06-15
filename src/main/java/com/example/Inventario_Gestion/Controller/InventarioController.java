@@ -1,4 +1,4 @@
-package com.example.mascotav.controller;
+package com.example.Inventario_Gestion.Controller;
 
 import java.util.List;
 

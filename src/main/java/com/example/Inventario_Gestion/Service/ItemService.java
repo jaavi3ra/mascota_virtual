@@ -1,23 +1,23 @@
-package com.example.mascotav.service;
+package com.example.Inventario_Gestion.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.mascotav.DTO.ItemDTO;
-import com.example.mascotav.model.Accion;
-import com.example.mascotav.model.Item;
-import com.example.mascotav.repository.AccionRepository;
-import com.example.mascotav.repository.ItemRepository;
+
+import com.example.Inventario_Gestion.DTO.ItemDTO;
+import com.example.Inventario_Gestion.Model.Item;
+import com.example.Inventario_Gestion.Repository.InventarioRepository;
+import com.example.Inventario_Gestion.Repository.ItemRepository;
+
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
 public class ItemService {
+
     @Autowired
     private ItemRepository itemRepository;
-    @Autowired
-    private AccionRepository accionRepository;
 
     public List<ItemDTO> obtenerTodos() {
         return itemRepository.findAll().stream()
@@ -35,7 +35,9 @@ public class ItemService {
     }
 
     private ItemDTO convertirADTO(Item item) {
+
         ItemDTO itDTO = new ItemDTO();
+
         itDTO.setIdItem(item.getIdItem());
         itDTO.setNombreItem(item.getNombreItem());
         itDTO.setTipoItem(item.getTipoItem());
