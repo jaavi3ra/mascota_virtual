@@ -25,7 +25,6 @@ public class InventarioController {
     private InventarioService inventarioService;
 
     @GetMapping("/{iduser}")
-
     public ResponseEntity<?> listarItemdDeInventario(@Valid @PathVariable Integer iduser) {
         try {
             List<InventarioDTO> items = inventarioService.listarItemdelInventario(iduser);
