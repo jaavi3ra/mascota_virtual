@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-
 import com.mascota.mascota_service.DTO.EstadoMascotaDTO;
 import com.mascota.mascota_service.DTO.MascotaDTO;
 import com.mascota.mascota_service.DTO.UsuarioDTOExterno;
@@ -15,7 +14,6 @@ import com.mascota.mascota_service.repository.EstadoMascotaRepository;
 import com.mascota.mascota_service.repository.MascotaRepository;
 import com.mascota.mascota_service.repository.TipoMascotaRepository;
 import com.netflix.discovery.converters.Auto;
-
 import reactor.core.publisher.Mono;
 
 @Service
