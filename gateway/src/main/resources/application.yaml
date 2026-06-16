@@ -12,22 +12,28 @@ spring:
           webmvc:
             routes:
               - id: mascota-service
-                uri: http://127.0.0.1:8081
+                uri:  lb://mascota-service
                 predicates:
-                  - Path=/api/v1/mascota/**
+                  - Path=/api/v1/mascota/**, /mascota-service/api-docs/**
                   
               - id: tipo-mascota-service
-                uri: http://127.0.0.1:8081
+                uri: lb://mascota-service
                 predicates:
-                  - Path=/api/v1/tipomascota/**
+                  - Path=/api/v1/tipomascota/**, /mascota-service/api-docs/**
 
               - id: usuario-service
-                uri: http://127.0.0.1:8082
+                uri: lb://usuario-service
                 predicates:
-                  - Path=/api/v1/usuario/**
+                  - Path=/api/v1/usuario/**, /usuario-service/api-docs/**
 
-            #ejemplo de estructura
-             # - id: nombredebloque -> id es solo para identidicar ruta
-             #  uri: http://127.0.0.1:8083
-             #  predicates:
-             #    - Path=/api/v1/nombre/**
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui/index.html
+    urls:
+      - name: Microservicio mascota-service
+        url: /mascota-service/api-docs
+      - name: Microservicio usuario-service
+        url: /usuario-service/api-docs
+  api-docs:
+    enabled: true
