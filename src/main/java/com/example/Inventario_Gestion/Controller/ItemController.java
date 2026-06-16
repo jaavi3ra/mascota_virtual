@@ -1,4 +1,4 @@
-package com.example.mascotav.controller;
+package com.example.Inventario_Gestion.Controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,9 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.mascotav.DTO.ItemDTO;
-import com.example.mascotav.model.Item;
-import com.example.mascotav.service.ItemService;
+import com.example.Inventario_Gestion.DTO.ItemDTO;
+import com.example.Inventario_Gestion.Model.Item;
+import com.example.Inventario_Gestion.Service.ItemService;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
