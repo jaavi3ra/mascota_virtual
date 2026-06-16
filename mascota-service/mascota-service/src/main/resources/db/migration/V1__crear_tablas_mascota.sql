@@ -43,14 +43,14 @@ CREATE TABLE evolucion (
    */
 );
 CREATE TABLE tipoMascota (
-   id INT AUTO_INCREMENT PRIMARY KEY,
+   id_tipo INT AUTO_INCREMENT PRIMARY KEY,
    nombreTipoMascota VARCHAR(50) NOT NULL
 );
 
 ALTER TABLE mascota
 ADD CONSTRAINT fk_mascota_tipo
 FOREIGN KEY (id_tipo_mascota_fk)
-REFERENCES tipomascota(id_tipo_mascota);
+REFERENCES tipomascota(id_tipo);
 
 ALTER TABLE mascota
 ADD CONSTRAINT fk_mascota_nivel
