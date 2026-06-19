@@ -8,17 +8,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.mascotav.model.TiendaItem;
-import com.example.mascotav.service.TiendaItemService;
+
+import com.example.Tienda_Gestion.Model.TiendaItem;
+import com.example.Tienda_Gestion.Service.TiendaItemService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/tiendaItem")
 public class TiendaItemController {
+
    @Autowired
    private TiendaItemService tiendaItemService;
 
    @PostMapping("/agregarItemTienda")
-   public ResponseEntity<?> agregarItemaTienda(@RequestBody TiendaItem tiendaItem) {
+   public ResponseEntity<?> agregarItemaTienda(@Valid @RequestBody TiendaItem tiendaItem) {
       try {
          tiendaItemService.agregarItemATienda(tiendaItem);
          return new ResponseEntity<>("Item agregado a la tienda!", HttpStatus.CREATED);

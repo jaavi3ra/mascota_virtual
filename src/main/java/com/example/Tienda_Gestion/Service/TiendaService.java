@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.mascotav.DTO.TiendaDTO;
-import com.example.mascotav.model.Tienda;
-import com.example.mascotav.repository.TiendaRepository;
+
+import com.example.Tienda_Gestion.Model.Tienda;
+import com.example.Tienda_Gestion.DTO.TiendaDTO;
+import com.example.Tienda_Gestion.Repository.TiendaRepository;
+
 import jakarta.transaction.Transactional;
 
 @Service
@@ -16,22 +18,23 @@ public class TiendaService {
     @Autowired
     private TiendaRepository tiendaRepository;
 
-    public List<TiendaDTO> obtenerTodas() {
+    public List<TiendaDTO> listarTodasTiendas() {
         return tiendaRepository.findAll().stream()
                 .map(this::convertirADTO)
                 .toList();
     }
 
-    public Tienda guardar(Tienda tienda) {
+    public Tienda guardarTienda(Tienda tienda) {
         return tiendaRepository.save(tienda);
     }
 
-    // Metodo para cambiar el nombre de la tienda
-    public TiendaDTO actualizarNombre(Integer id, String nuevoNombre) {
+    public TiendaDTO actualizarNombreTienda(Integer id, String nuevoNombre) {
         // Se verifica que no exista la tienda
         Tienda tienda = tiendaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No existe tienda con ese ID"));
+
         tienda.setNombreTienda(nuevoNombre);
+
         Tienda tiendaActualizada = tiendaRepository.save(tienda);
 
         return convertirADTO(tiendaActualizada);

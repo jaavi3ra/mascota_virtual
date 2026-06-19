@@ -1,100 +1,95 @@
 package com.example.Tienda_Gestion.Service;
 
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.mascotav.DTO.TiendaItemDTO;
-import com.example.mascotav.model.Inventario;
-import com.example.mascotav.model.Item;
-import com.example.mascotav.model.Tienda;
-import com.example.mascotav.model.TiendaItem;
-import com.example.mascotav.model.Usuario;
-import com.example.mascotav.repository.InventarioRepository;
-import com.example.mascotav.repository.ItemRepository;
-import com.example.mascotav.repository.TiendaItemRepository;
-import com.example.mascotav.repository.TiendaRepository;
-import com.example.mascotav.repository.UsuarioRepository;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import com.example.Tienda_Gestion.DTO.ItemDTOExterno;
+import com.example.Tienda_Gestion.DTO.TiendaItemDTO;
+import com.example.Tienda_Gestion.DTO.UsuarioDTOExterno;
+import com.example.Tienda_Gestion.Model.Tienda;
+import com.example.Tienda_Gestion.Model.TiendaItem;
+import com.example.Tienda_Gestion.Repository.TiendaItemRepository;
+import com.example.Tienda_Gestion.Repository.TiendaRepository;
 
 @Service
 public class TiendaItemService {
+
     @Autowired
     private TiendaItemRepository tiendaItemRepository;
+
     @Autowired
     private TiendaRepository tiendaRepository;
-    @Autowired
-    private ItemRepository itemRepository;
-    @Autowired
-    private UsuarioRepository  usuarioRepository;
-    @Autowired
-    private InventarioRepository inventarioRepository;
 
-    public TiendaItem agregarItemATienda(TiendaItem tiendaItem) {
+    private final WebClient.Builder webClientBuilder;
+
+    public TiendaItemService(WebClient.Builder webClientBuilder) {
+        this.webClientBuilder = webClientBuilder;
+    }
+
+    public TiendaItemDTO agregarItemATienda(TiendaItem tiendaItem) {
 
         Tienda tienda = tiendaRepository
-            .findById(tiendaItem.getTienda().getIdTienda())
-            .orElseThrow(() ->
-                new RuntimeException("Tienda no encontrada"));
+                .findById(tiendaItem.getTienda().getIdTienda())
+                .orElseThrow(() -> new RuntimeException("Tienda no encontrada"));
 
-        Item item = itemRepository
-            .findById(tiendaItem.getItem().getIdItem())
-            .orElseThrow(() ->
-                new RuntimeException("Item no encontrado"));
+        Integer idItem = tiendaItem.getIdItemFk();
 
-        TiendaItem tItem = new TiendaItem();
-        tItem.setTienda(tienda);
-        tItem.setItem(item);
-        tItem.setCooldownSegundos(180); // 30 min para toda compra
+        ItemDTOExterno item = webClientBuilder.build()
+                .get()
+                .uri("http://inventario_gestion-service/api/v1/item/{id}", idItem)
+                .retrieve()
+                .bodyToMono(ItemDTOExterno.class)
+                .block();
 
-        tiendaItemRepository.save(tItem);
+        TiendaItem nuevoItem = new TiendaItem();
+        nuevoItem.setTienda(tienda);
+        nuevoItem.setIdItemFk(item.getIditem());
+        nuevoItem.setCooldownSegundos(180); // 30 min para toda compra
 
-        //convertirADTO(tItem);
-        return tItem;
+        TiendaItem itemGuardado = tiendaItemRepository.save(nuevoItem);
+
+        // convertirADTO(tItem);
+        return convertirADTO(itemGuardado);
     }
 
-    public Inventario comprarItem(Integer idUsuario,Integer idItem) {
+    public void comprarItem(Integer idUsuario, Integer idTiendaItem) {
 
-        //System.out.println("ID USUARIO: " + idUsuario);
-        //System.out.println("ID ITEM: " + idItem);
+        TiendaItem tiendaItem = tiendaItemRepository.findById(idTiendaItem)
+                .orElseThrow(() -> new RuntimeException("El item no esta dispoonible"));
 
-    Usuario usuario = usuarioRepository
-        .findById(idUsuario)
-        .orElseThrow(() ->
-            new RuntimeException("Usuario no encontrado"));
+        Integer idItem = tiendaItem.getIdItemFk();
+        Integer cooldown = tiendaItem.getCooldownSegundos();
 
-    Item item = itemRepository
-        .findById(idItem)
-        .orElseThrow(() ->
-            new RuntimeException("Item no encontrado"));
+        ItemDTOExterno item = webClientBuilder.build()
+                .get()
+                .uri("http://inventario_gestion-service/api/v1/item/{id}", idItem)
+                .retrieve()
+                .bodyToMono(ItemDTOExterno.class)
+                .block();
 
-    Optional<Inventario> inventarioExistente = inventarioRepository
-    .findByUsuarioAndItem(usuario.getId(), item.getIdItem());
+        if (item == null) {
+            throw new RuntimeException("No se pudo obtener el ítem");
+        }
 
-    Inventario inventario;
+        UsuarioDTOExterno usuario = webClientBuilder.build()
+                .get()
+                .uri("http://usuario-service/api/v1/usuario/{id}", idUsuario)
+                .retrieve()
+                .bodyToMono(UsuarioDTOExterno.class)
+                .block();
 
-    // si ya tiene el item
-    if(inventarioExistente.isPresent()){
-
-        inventario = inventarioExistente.get();
-
-        inventario.setCantidad(
-            inventario.getCantidad() + 1);
-    } else {
-        // crear nuevo inventario
-        inventario = new Inventario();
-        inventario.setUsuario(usuario);
-        inventario.setItem(item);
-        inventario.setCantidad(1);
+        if (usuario == null) {
+            throw new RuntimeException("No se pudo obtener el usuario");
+        }
     }
-    return  inventarioRepository.save(inventario);
-}
 
-    private TiendaItemDTO convertirADTO(TiendaItem tienda) {
+    private TiendaItemDTO convertirADTO(TiendaItem tiendaItem) {
         TiendaItemDTO tiDTO = new TiendaItemDTO();
-        tiDTO.setId_tienda_item(tienda.getIdTiendaItem());
-        tiDTO.setCooldown_segundos(tienda.getCooldownSegundos());
-        tiDTO.getId_item_FK().setIdItem(tienda.getItem().getIdItem());
-        tiDTO.getId_tienda_FK().setIdTienda(tienda.getTienda().getIdTienda());
-
+        tiDTO.setIdTiendaItem(tiendaItem.getIdTiendaItem());
+        tiDTO.setCooldown_segundos(tiendaItem.getCooldownSegundos());
+        tiDTO.setId_item_FK(tiendaItem.getIdItemFk());
+        tiDTO.setId_tienda_FK(tiendaItem.getTienda());
 
         return tiDTO;
     }
