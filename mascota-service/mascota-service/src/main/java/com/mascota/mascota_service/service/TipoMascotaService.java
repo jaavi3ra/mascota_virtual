@@ -3,21 +3,21 @@ package com.mascota.mascota_service.service;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.mascota.mascota_service.DTO.TipoMascotaDTO;
 import com.mascota.mascota_service.model.TipoMascota;
 import com.mascota.mascota_service.repository.TipoMascotaRepository;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class TipoMascotaService {
     @Autowired
     private TipoMascotaRepository tipoMascotaRepository;
     
     public List<TipoMascotaDTO> creartipo(){
-                List<String> nombres = Arrays.asList(
+        List<String> nombres = Arrays.asList(
                     "Dragon Paraplejico",
                     "Lobo Chiguaga",
                     "Slime Vencido",
@@ -33,6 +33,7 @@ public class TipoMascotaService {
             tipoMascotaRepository.save(tipos);
         }
         
+        log.info("Tipos de Mascotas creadas.");
         return tipoMascotaRepository.findAll().stream()
                     .map(this::convertirADTO)
                     .toList();

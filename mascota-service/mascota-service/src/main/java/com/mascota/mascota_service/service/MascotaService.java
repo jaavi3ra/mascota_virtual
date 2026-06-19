@@ -1,23 +1,22 @@
 package com.mascota.mascota_service.service;
 
+import org.springdoc.api.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-
 import com.mascota.mascota_service.DTO.EstadoMascotaDTO;
 import com.mascota.mascota_service.DTO.MascotaDTO;
 import com.mascota.mascota_service.DTO.UsuarioDTOExterno;
 import com.mascota.mascota_service.model.EstadoMascota;
 import com.mascota.mascota_service.model.Mascota;
 import com.mascota.mascota_service.model.TipoMascota;
-import com.mascota.mascota_service.repository.EstadoMascotaRepository;
 import com.mascota.mascota_service.repository.MascotaRepository;
 import com.mascota.mascota_service.repository.TipoMascotaRepository;
-import com.netflix.discovery.converters.Auto;
-
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
+@Slf4j // anotacion de lombok para log.error()
 @Service
 public class MascotaService {
 
@@ -33,9 +32,10 @@ public class MascotaService {
     private WebClient.Builder webClientBuilder;
 
    private Integer obtenerUsuario(Integer iduser){
+    // falta logs try
         return webClientBuilder.build()
                 .get()
-                .uri("http://localhost:8082/api/v1/usuario/buscar-iduser" + iduser)
+                .uri("http://usuario-service/api/v1/usuario/buscar-iduser" + iduser)
                 .retrieve()
                 // Manejo de errores 4xx o 5xx del microservicio externo
                 .onStatus(HttpStatusCode::is4xxClientError, response -> 
@@ -47,11 +47,10 @@ public class MascotaService {
                 .bodyToMono(UsuarioDTOExterno.class)
                 .map(UsuarioDTOExterno::getIdUsuario)
                 .block();
-
-    }
-    
+    }   
 
     private TipoMascota obtenerTipoMascota(Integer idtipo){
+        // falta log try
         return tipoMascotaRepository
                 .findById(idtipo)
                 .orElseThrow(() ->
@@ -71,10 +70,14 @@ public class MascotaService {
         mascotaRepository.save(mascota);
     }
 
-    public MascotaDTO crearMascota(Integer userid,Mascota mascota) {
-    
+    public MascotaDTO crearMascota(Integer userid,String nombre, Integer idtipo) {
+       try{
+        log.info("Creando mascota...");
+         Mascota mascota = new Mascota();
+
+        mascota.setNombre(nombre);
         mascota.setUsuario(obtenerUsuario(userid)); 
-        mascota.setTipoMascota(obtenerTipoMascota(mascota.getTipoMascota().getId())); 
+        mascota.setTipoMascota(obtenerTipoMascota(idtipo)); 
         //iniciar nivel al crear mascota con level 1 y expRequerida 10 para subir de ni
         mascota.setNivel(nivelService.iniciarNivel());
         mascota.setExpActual(0); // valor para iniciar experiencia a mascota
@@ -82,7 +85,13 @@ public class MascotaService {
         //guardar datos para generar idmascota
         guardarMascota(mascota);
         inicializarEstado(mascota);
+        log.info("mascota creada.");
         return convertirADTO(mascota);
+       }catch(Exception e) {
+        log.error("No se pudo crear mascota, error:",e);
+        return null;
+       }
+       
     }
 
     private MascotaDTO convertirADTO(Mascota mascota) {

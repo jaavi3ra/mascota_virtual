@@ -2,12 +2,13 @@ package com.mascota.mascota_service.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.mascota.mascota_service.DTO.EvolucionDTO;
 import com.mascota.mascota_service.model.Evolucion;
 import com.mascota.mascota_service.model.Mascota;
 import com.mascota.mascota_service.repository.EvolucionRepository;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j 
 @Service
 public class EvolucionService {
     @Autowired

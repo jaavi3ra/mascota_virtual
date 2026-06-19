@@ -2,7 +2,6 @@ package com.mascota.mascota_service.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.mascota.mascota_service.DTO.MascotaDTO;
 import com.mascota.mascota_service.model.Mascota;
-import com.mascota.mascota_service.service.EstadoMascotaService;
 import com.mascota.mascota_service.service.MascotaService;
 import jakarta.validation.Valid;
 
@@ -22,14 +20,12 @@ import jakarta.validation.Valid;
 public class MascotaController {
     @Autowired
     private MascotaService mascotaService;
-    @Autowired
-    private EstadoMascotaService estadoMascotaService;
     
     //crear mascota, se crea junto con estado mascota
     @PostMapping("/crear-mascota/{userid}")
-    public ResponseEntity<?> crearMascota(@Valid @PathVariable Integer userid,@Valid @RequestBody Mascota mascota) {
+    public ResponseEntity<?> crearMascota( @PathVariable Integer userid,@Valid @RequestBody String nombre, Integer idtipo) {
         try {
-            MascotaDTO mascotacreada = mascotaService.crearMascota(userid,mascota);
+            MascotaDTO mascotacreada = mascotaService.crearMascota(userid,nombre, idtipo);
             
             Map<String, Object> response = new HashMap<>();
 

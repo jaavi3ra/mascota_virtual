@@ -1,11 +1,10 @@
 server:
-  port: '8081'
+  port: 0
 
 springdoc:
   api-docs:
     path: /api-docs
-  swagger-ui:
-    path: /doc/swagger-ui/index.html
+
 
 spring:
   application:
@@ -28,6 +27,20 @@ spring:
   datasource:
     username: root
     url: jdbc:mysql://localhost:3306/mascota_db?createDatabaseIfNotExist=true
+    driverClassName: com.mysql.cj.jdbc.Driver
+    password: ''
+  jpa:
+    hibernate:
+      ddl-auto: update # Permitimos que actualice localmente si es necesario
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    username: root
+    url: jdbc:mysql://localhost:3306/mascota_db_test?createDatabaseIfNotExist=true
     driverClassName: com.mysql.cj.jdbc.Driver
     password: ''
   jpa:
