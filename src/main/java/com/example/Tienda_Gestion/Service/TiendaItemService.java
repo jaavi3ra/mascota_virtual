@@ -74,7 +74,7 @@ public class TiendaItemService {
 
         UsuarioDTOExterno usuario = webClientBuilder.build()
                 .get()
-                .uri("http://usuario-service/api/v1/usuario/{id}", idUsuario)
+                .uri("http://usuario-service/api/v1/usuario/buscar-iduser/{iduser}", idUsuario)
                 .retrieve()
                 .bodyToMono(UsuarioDTOExterno.class)
                 .block();
