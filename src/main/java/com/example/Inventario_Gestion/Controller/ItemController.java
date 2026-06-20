@@ -11,6 +11,7 @@ import com.example.Inventario_Gestion.Model.Item;
 import com.example.Inventario_Gestion.Service.ItemService;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -19,6 +20,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ItemController {
     @Autowired
     private ItemService itemService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> obtenerItenPorId(@PathVariable Integer id) {
+        try {
+            ItemDTO item = itemService.obtenerItemId(id);
+            return new ResponseEntity<>(item, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 
     @GetMapping
     public ResponseEntity<List<ItemDTO>> listar() {
