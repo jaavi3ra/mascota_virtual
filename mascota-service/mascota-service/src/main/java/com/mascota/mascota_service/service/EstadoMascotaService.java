@@ -13,7 +13,7 @@ public class EstadoMascotaService {
         private EstadoMascotaRepository estadoMascotaRepository;
 
        public EstadoMascota iniciarEstado(Mascota mascota){
-    
+        log.info("Creando estado mascota...");
         EstadoMascota estado = new EstadoMascota();
         // REGLA CRÍTICA: Hambre llega a 0, explota todo  
             estado.setHambre(100);

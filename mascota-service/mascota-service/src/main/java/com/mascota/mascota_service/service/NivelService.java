@@ -7,12 +7,16 @@ import com.mascota.mascota_service.DTO.NivelDTO;
 import com.mascota.mascota_service.model.Nivel;
 import com.mascota.mascota_service.repository.NivelRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class NivelService {
     @Autowired
     private NivelRepository nivelRepository;
    
     public Nivel iniciarNivel(){
+        log.info("iniciando nivel para mascota...");
         Nivel nivel = new Nivel();   
             nivel.setNum_nivel(1);
             nivel.setExp_req(10);

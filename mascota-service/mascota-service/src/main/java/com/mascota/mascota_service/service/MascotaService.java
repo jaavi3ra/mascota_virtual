@@ -1,6 +1,5 @@
 package com.mascota.mascota_service.service;
 
-import org.springdoc.api.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -29,45 +28,54 @@ public class MascotaService {
     @Autowired
     private NivelService nivelService;
     @Autowired
-    private WebClient.Builder webClientBuilder;
+    private UsuarioClientService usuarioClientService;
+
 
    private Integer obtenerUsuario(Integer iduser){
-    // falta logs try
-        return webClientBuilder.build()
-                .get()
-                .uri("http://usuario-service/api/v1/usuario/buscar-iduser" + iduser)
-                .retrieve()
-                // Manejo de errores 4xx o 5xx del microservicio externo
-                .onStatus(HttpStatusCode::is4xxClientError, response -> 
-                    Mono.error(new RuntimeException("Usuario no encontrado."))
-                )
-                .onStatus(HttpStatusCode::is5xxServerError, response -> 
-                    Mono.error(new RuntimeException("Error en el servidor de usuarios"))
-                )
-                .bodyToMono(UsuarioDTOExterno.class)
-                .map(UsuarioDTOExterno::getIdUsuario)
-                .block();
+        try{
+            log.info("Obteniendo usuario...");
+            return usuarioClientService.obtenerUsuario(iduser);
+        }catch(Exception e){
+            log.error("No se pudo obtener usuario: ", e);
+            return 0;
+        }
+       
     }   
 
     private TipoMascota obtenerTipoMascota(Integer idtipo){
-        // falta log try
-        return tipoMascotaRepository
+        try{
+            log.info("Obteniendo tipomascota...");
+             return tipoMascotaRepository
                 .findById(idtipo)
                 .orElseThrow(() ->
                     new RuntimeException("Tipo mascota no encontrado"));
+        }catch(Exception e){
+            log.error("error al obtener tipo mascota: ",e);
+            return null;
+        }
+       
     }
     private MascotaDTO guardarMascota(Mascota mascota){
         mascotaRepository.save(mascota);
+        log.info("Mascota ingresada.");
         return convertirADTO(mascota);
         
     }
     private void inicializarEstado(Mascota mascota){
         // se inicia estado unico de la mascota con el id
+        
         EstadoMascota estado = estadoMascotaService.iniciarEstado(mascota); 
         // se agrega el estado a Mascota
+        if(estado != null){
         mascota.setEstadoMascota(estado);
         // guardo cambios
         mascotaRepository.save(mascota);
+        log.info("Estado mascota creada.");
+        }else{
+           log.error("No se pudo crear estado ",estado); 
+        }
+        
+        
     }
 
     public MascotaDTO crearMascota(Integer userid,String nombre, Integer idtipo) {
