@@ -26,6 +26,16 @@ spring:
                 predicates:
                   - Path=/api/v1/usuario/**, /usuario-service/api-docs/**
 
+              - id: tienda-gestion-service
+                uri: lb://tienda_gestion-service
+                predicates:
+                  - Path=/api/v1/tienda/**, /api/v1/tiendaItem/**, /tienda_gestion/api-docs/**
+
+              - id: inventario-gestion-service
+                uri: lb://inventario_gestion-service
+                predicates:
+                  - Path=/api/v1/inventario/**, /api/v1/item/**, /inventario_gestion/api-docs/**
+
 
 springdoc:
   swagger-ui:
@@ -35,5 +45,9 @@ springdoc:
         url: /mascota-service/api-docs
       - name: Microservicio usuario-service
         url: /usuario-service/api-docs
+      - name: Microservicio tienda-service
+        url: /tienda_gestion/api-docs
+      - name: Microservicio inventario-service
+        url: /inventario_gestion/api-docs
   api-docs:
     enabled: true
