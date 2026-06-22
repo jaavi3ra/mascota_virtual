@@ -10,9 +10,11 @@ import com.example.Tienda_Gestion.DTO.TiendaDTO;
 import com.example.Tienda_Gestion.Repository.TiendaRepository;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional
+@Slf4j
 public class TiendaService {
 
     @Autowired
@@ -29,7 +31,7 @@ public class TiendaService {
     }
 
     public TiendaDTO actualizarNombreTienda(Integer id, String nuevoNombre) {
-        // Se verifica que no exista la tienda
+        // Se verifica que exista la tienda
         Tienda tienda = tiendaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No existe tienda con ese ID"));
 

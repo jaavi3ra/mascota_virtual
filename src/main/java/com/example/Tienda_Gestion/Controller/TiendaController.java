@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/tienda")
 public class TiendaController {
@@ -32,7 +34,7 @@ public class TiendaController {
     }
 
     @PostMapping
-    public ResponseEntity<Tienda> crear(@RequestBody Tienda tienda) {
+    public ResponseEntity<Tienda> crear(@Valid @RequestBody Tienda tienda) {
         return new ResponseEntity<>(tiendaService.guardarTienda(tienda), HttpStatus.CREATED);
     }
 

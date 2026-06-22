@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ItemDTOExterno {
-    private Integer iditem;
-    private String nopmbreItem;
+    private Integer idItem;
+    private String nombreItem;
     private String tipoItem;
 }

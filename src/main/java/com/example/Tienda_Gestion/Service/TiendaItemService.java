@@ -12,7 +12,10 @@ import com.example.Tienda_Gestion.Model.TiendaItem;
 import com.example.Tienda_Gestion.Repository.TiendaItemRepository;
 import com.example.Tienda_Gestion.Repository.TiendaRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class TiendaItemService {
 
     @Autowired
@@ -21,11 +24,8 @@ public class TiendaItemService {
     @Autowired
     private TiendaRepository tiendaRepository;
 
-    private final WebClient.Builder webClientBuilder;
-
-    public TiendaItemService(WebClient.Builder webClientBuilder) {
-        this.webClientBuilder = webClientBuilder;
-    }
+    @Autowired
+    private WebClient.Builder webClientBuilder;
 
     public TiendaItemDTO agregarItemATienda(TiendaItem tiendaItem) {
 
@@ -44,7 +44,7 @@ public class TiendaItemService {
 
         TiendaItem nuevoItem = new TiendaItem();
         nuevoItem.setTienda(tienda);
-        nuevoItem.setIdItemFk(item.getIditem());
+        nuevoItem.setIdItemFk(item.getIdItem());
         nuevoItem.setCooldownSegundos(180); // 30 min para toda compra
 
         TiendaItem itemGuardado = tiendaItemRepository.save(nuevoItem);
@@ -56,7 +56,7 @@ public class TiendaItemService {
     public void comprarItem(Integer idUsuario, Integer idTiendaItem) {
 
         TiendaItem tiendaItem = tiendaItemRepository.findById(idTiendaItem)
-                .orElseThrow(() -> new RuntimeException("El item no esta dispoonible"));
+                .orElseThrow(() -> new RuntimeException("El ítem no está disponible"));
 
         Integer idItem = tiendaItem.getIdItemFk();
         Integer cooldown = tiendaItem.getCooldownSegundos();
