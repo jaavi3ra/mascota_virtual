@@ -14,7 +14,7 @@ eureka:
 
 spring:
   application:
-    name: tienda_gestion-service
+    name: tienda-service
   flyway:
     enabled: 'true'
     baseline-on-migrate: 'true'
