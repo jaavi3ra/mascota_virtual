@@ -81,7 +81,6 @@ public class TiendaItemServiceTest {
         TiendaItem tiendaItemFalso = new TiendaItem();
         tiendaItemFalso.setIdTiendaItem(3);
         tiendaItemFalso.setIdItemFk(5);
-        tiendaItemFalso.setCooldownSegundos(180);
 
         ItemDTOExterno itemDTOExternoFalso = new ItemDTOExterno();
         itemDTOExternoFalso.setIdItem(5);

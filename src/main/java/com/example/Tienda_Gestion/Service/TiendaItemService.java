@@ -50,7 +50,6 @@ public class TiendaItemService {
         TiendaItem nuevoItem = new TiendaItem();
         nuevoItem.setTienda(tienda);
         nuevoItem.setIdItemFk(item.getIdItem());
-        nuevoItem.setCooldownSegundos(180); // 30 min para toda compra
 
         TiendaItem itemGuardado = tiendaItemRepository.save(nuevoItem);
 
@@ -83,7 +82,6 @@ public class TiendaItemService {
     private TiendaItemDTO convertirADTO(TiendaItem tiendaItem) {
         TiendaItemDTO tiDTO = new TiendaItemDTO();
         tiDTO.setIdTiendaItem(tiendaItem.getIdTiendaItem());
-        tiDTO.setCooldown_segundos(tiendaItem.getCooldownSegundos());
         tiDTO.setId_item_FK(tiendaItem.getIdItemFk());
         tiDTO.setId_tienda_FK(tiendaItem.getTienda());
 

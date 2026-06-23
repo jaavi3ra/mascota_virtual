@@ -25,10 +25,6 @@ public class TiendaItem {
     private Integer idTiendaItem;
 
     @NotNull
-    @Column(name = "cooldown", nullable = false)
-    private Integer cooldownSegundos;
-
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "id_tienda_fk", nullable = false)
     private Tienda tienda;

@@ -1,0 +1,1 @@
+ALTER TABLE tiendaItem DROP COLUMN IF EXISTS cooldown;
