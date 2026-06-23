@@ -21,31 +21,52 @@ public class TiendaService {
     private TiendaRepository tiendaRepository;
 
     public List<TiendaDTO> listarTodasTiendas() {
-        return tiendaRepository.findAll().stream()
+        log.info("Listando tiendas");
+
+        List<TiendaDTO> tiendas = tiendaRepository.findAll().stream()
                 .map(this::convertirADTO)
                 .toList();
+
+        log.info("Tiendas listadas correctamente");
+        return tiendas;
     }
 
     public Tienda guardarTienda(Tienda tienda) {
-        return tiendaRepository.save(tienda);
+        log.info("Guardando tienda");
+
+        Tienda tiendaGuardada = tiendaRepository.save(tienda);
+
+        log.info("Tienda guardada correctamente");
+        return tiendaGuardada;
     }
 
     public TiendaDTO actualizarNombreTienda(Integer id, String nuevoNombre) {
+        log.info("Actualizando nombre de tienda");
+
         // Se verifica que exista la tienda
         Tienda tienda = tiendaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No existe tienda con ese ID"));
+                .orElseThrow(() -> {
+                    log.error("No se encontró la tienda");
+                    return new RuntimeException("No existe tienda con ese ID");
+                });
 
         tienda.setNombreTienda(nuevoNombre);
 
         Tienda tiendaActualizada = tiendaRepository.save(tienda);
 
+        log.info("Nombre de tienda actualizado correctamente");
         return convertirADTO(tiendaActualizada);
     }
 
     public TiendaDTO obtenerPorId(Integer id) {
+        log.info("Buscando tienda");
+
         return tiendaRepository.findById(id)
                 .map(this::convertirADTO)
-                .orElseThrow(() -> new RuntimeException("No se encontro la tienda"));
+                .orElseThrow(() -> {
+                    log.error("No se encontró la tienda");
+                    return new RuntimeException("No se encontró la tienda");
+                });
     }
 
     private TiendaDTO convertirADTO(Tienda tienda) {
