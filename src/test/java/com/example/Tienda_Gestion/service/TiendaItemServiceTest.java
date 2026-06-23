@@ -8,11 +8,9 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.Tienda_Gestion.DTO.ItemDTOExterno;
 import com.example.Tienda_Gestion.DTO.TiendaItemDTO;
@@ -22,6 +20,8 @@ import com.example.Tienda_Gestion.Model.TiendaItem;
 import com.example.Tienda_Gestion.Repository.TiendaItemRepository;
 import com.example.Tienda_Gestion.Repository.TiendaRepository;
 import com.example.Tienda_Gestion.Service.TiendaItemService;
+import com.example.Tienda_Gestion.Service.Client.ItemClientService;
+import com.example.Tienda_Gestion.Service.Client.UsuarioClientService;
 
 @ExtendWith(MockitoExtension.class)
 public class TiendaItemServiceTest {
@@ -29,8 +29,11 @@ public class TiendaItemServiceTest {
     @Mock
     private TiendaRepository tiendaRepository;
 
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-    private WebClient.Builder webClientBuilder;
+    @Mock
+    private ItemClientService itemClientService;
+
+    @Mock
+    private UsuarioClientService usuarioClientService;
 
     @Mock
     private TiendaItemRepository tiendaItemRepository;
@@ -56,13 +59,7 @@ public class TiendaItemServiceTest {
         itemDTOExternoFalso.setNombreItem("Hongos alucinogenos de poder");
         itemDTOExternoFalso.setTipoItem("Potenciador de ataque");
 
-        when(webClientBuilder.build()
-                .get()
-                .uri("http://inventario_gestion-service/api/v1/item/{id}", 5)
-                .retrieve()
-                .bodyToMono(ItemDTOExterno.class)
-                .block())
-                .thenReturn(itemDTOExternoFalso);
+        when(itemClientService.obtenerItem(5)).thenReturn(itemDTOExternoFalso);
 
         when(tiendaRepository.findById(idTSimulado)).thenReturn(Optional.of(tiendaFalsa));
 
@@ -74,6 +71,7 @@ public class TiendaItemServiceTest {
         assertEquals(5, resultado.getId_item_FK(), "El ID del ítem debe coincidir");
 
         verify(tiendaRepository).findById(idTSimulado);
+        verify(itemClientService).obtenerItem(5);
         verify(tiendaItemRepository).save(any(TiendaItem.class));
     }
 
@@ -93,26 +91,15 @@ public class TiendaItemServiceTest {
         usuarioDTOExternoFalso.setIdUsuario(3);
         usuarioDTOExternoFalso.setNombreUser("Lord Valdomero");
 
-        when(webClientBuilder.build()
-                .get()
-                .uri("http://inventario_gestion-service/api/v1/item/{id}", 5)
-                .retrieve()
-                .bodyToMono(ItemDTOExterno.class)
-                .block())
-                .thenReturn(itemDTOExternoFalso);
-
-        when(webClientBuilder.build()
-                .get()
-                .uri("http://usuario-service/api/v1/usuario/buscar-iduser/{iduser}", 3)
-                .retrieve()
-                .bodyToMono(UsuarioDTOExterno.class)
-                .block())
-                .thenReturn(usuarioDTOExternoFalso);
+        when(itemClientService.obtenerItem(5)).thenReturn(itemDTOExternoFalso);
+        when(usuarioClientService.obtenerUsuario(3)).thenReturn(usuarioDTOExternoFalso);
 
         when(tiendaItemRepository.findById(3)).thenReturn(Optional.of(tiendaItemFalso));
 
         assertDoesNotThrow(() -> tiendaItemService.comprarItem(3, 3));
 
         verify(tiendaItemRepository).findById(3);
+        verify(itemClientService).obtenerItem(5);
+        verify(usuarioClientService).obtenerUsuario(3);
     }
 }

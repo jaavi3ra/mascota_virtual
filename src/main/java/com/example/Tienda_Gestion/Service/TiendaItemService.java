@@ -2,15 +2,15 @@ package com.example.Tienda_Gestion.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.Tienda_Gestion.DTO.ItemDTOExterno;
 import com.example.Tienda_Gestion.DTO.TiendaItemDTO;
-import com.example.Tienda_Gestion.DTO.UsuarioDTOExterno;
 import com.example.Tienda_Gestion.Model.Tienda;
 import com.example.Tienda_Gestion.Model.TiendaItem;
 import com.example.Tienda_Gestion.Repository.TiendaItemRepository;
 import com.example.Tienda_Gestion.Repository.TiendaRepository;
+import com.example.Tienda_Gestion.Service.Client.ItemClientService;
+import com.example.Tienda_Gestion.Service.Client.UsuarioClientService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,22 +25,27 @@ public class TiendaItemService {
     private TiendaRepository tiendaRepository;
 
     @Autowired
-    private WebClient.Builder webClientBuilder;
+    private ItemClientService itemClientService;
+
+    @Autowired
+    private UsuarioClientService usuarioClientService;
 
     public TiendaItemDTO agregarItemATienda(TiendaItem tiendaItem) {
 
+        log.info("Agregando ítem a tienda");
+
         Tienda tienda = tiendaRepository
                 .findById(tiendaItem.getTienda().getIdTienda())
-                .orElseThrow(() -> new RuntimeException("Tienda no encontrada"));
+                .orElseThrow(() -> {
+                    log.error("No se encontró la tienda");
+                    return new RuntimeException("Tienda no encontrada");
+                });
 
         Integer idItem = tiendaItem.getIdItemFk();
 
-        ItemDTOExterno item = webClientBuilder.build()
-                .get()
-                .uri("http://inventario_gestion-service/api/v1/item/{id}", idItem)
-                .retrieve()
-                .bodyToMono(ItemDTOExterno.class)
-                .block();
+        log.info("Consultando ítem en Inventario-Gestión");
+
+        ItemDTOExterno item = itemClientService.obtenerItem(idItem);
 
         TiendaItem nuevoItem = new TiendaItem();
         nuevoItem.setTienda(tienda);
@@ -49,39 +54,30 @@ public class TiendaItemService {
 
         TiendaItem itemGuardado = tiendaItemRepository.save(nuevoItem);
 
-        // convertirADTO(tItem);
+        log.info("Ítem agregado correctamente a la tienda");
         return convertirADTO(itemGuardado);
     }
 
     public void comprarItem(Integer idUsuario, Integer idTiendaItem) {
+        log.info("Iniciando compra de ítem");
 
         TiendaItem tiendaItem = tiendaItemRepository.findById(idTiendaItem)
-                .orElseThrow(() -> new RuntimeException("El ítem no está disponible"));
+                .orElseThrow(() -> {
+                    log.error("El ítem no está disponible");
+                    return new RuntimeException("El ítem no está disponible");
+                });
 
         Integer idItem = tiendaItem.getIdItemFk();
-        Integer cooldown = tiendaItem.getCooldownSegundos();
 
-        ItemDTOExterno item = webClientBuilder.build()
-                .get()
-                .uri("http://inventario_gestion-service/api/v1/item/{id}", idItem)
-                .retrieve()
-                .bodyToMono(ItemDTOExterno.class)
-                .block();
+        log.info("Consultando ítem en Inventario-Gestión");
 
-        if (item == null) {
-            throw new RuntimeException("No se pudo obtener el ítem");
-        }
+        itemClientService.obtenerItem(idItem);
 
-        UsuarioDTOExterno usuario = webClientBuilder.build()
-                .get()
-                .uri("http://usuario-service/api/v1/usuario/buscar-iduser/{iduser}", idUsuario)
-                .retrieve()
-                .bodyToMono(UsuarioDTOExterno.class)
-                .block();
+        log.info("Consultando usuario");
 
-        if (usuario == null) {
-            throw new RuntimeException("No se pudo obtener el usuario");
-        }
+        usuarioClientService.obtenerUsuario(idUsuario);
+
+        log.info("Datos de compra validados correctamente");
     }
 
     private TiendaItemDTO convertirADTO(TiendaItem tiendaItem) {
