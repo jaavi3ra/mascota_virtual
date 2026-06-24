@@ -18,7 +18,7 @@ public class AccionClientService {
         try{
             return webClientBuilder.build()
                 .get()
-                .uri("http://accion-service/api/v1/accion/{idaccion}" + idaccion)
+                .uri("http://accion-service/api/v1/accion/{idaccion}" , idaccion)
                 .retrieve()
                 .bodyToMono(AccionDTOExterno.class)              
                 .block();
