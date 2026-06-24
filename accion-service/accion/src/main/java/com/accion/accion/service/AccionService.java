@@ -57,32 +57,32 @@ public class AccionService {
         
         log.info("Ejecutando accion de item: idItem={}, idMascota={}", idItem, idMascota);
 
-        // 1. Llama al microservicio de Tienda para buscar los datos del Item usando su ID
+        // 1. Llama al microservicio de Inventario para buscar los datos del ítem
         ItemDTOExterno item = webClientBuilder.build()
                 .get()
-                .uri("http://localhost:8083/api/v1/tienda/items/" + idItem)
+                .uri("http://inventario-service/api/v1/item/{id}", idItem)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, response -> 
                     Mono.error(new RuntimeException("Item no encontrado en la tienda."))
                 )
                 .onStatus(HttpStatusCode::is5xxServerError, response -> 
-                    Mono.error(new RuntimeException("Error en el servidor de tienda."))
+                    Mono.error(new RuntimeException("Error en el servidor de inventario."))
                 )
                 .bodyToMono(ItemDTOExterno.class)
                 .block();
 
-        if (item == null || item.getIdAccion() == null) {
+        if (item == null || item.getIdAccionFk() == null) {
             throw new RuntimeException("El item obtenido no posee una accion configurada.");
         }
 
         // 2. Busca localmente en tu tabla si existe la Accion que viene amarrada a ese Item
-        Accion accion = accionRepository.findById(item.getIdAccion())
+        Accion accion = accionRepository.findById(item.getIdAccionFk())
                 .orElseThrow(() -> new RuntimeException("La accion vinculada al item no existe localmente"));
 
         // 3. Llama al microservicio de Mascotas para obtener el nombre del animal usando su ID
         MascotaDTOExterno mascota = webClientBuilder.build()
                 .get()
-                .uri("http://localhost:8081/api/v1/mascotas/" + idMascota)
+                .uri("http://mascota-service/api/v1/mascota/buscar-pet/{id}", idMascota)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, response -> 
                     Mono.error(new RuntimeException("Mascota no encontrada."))

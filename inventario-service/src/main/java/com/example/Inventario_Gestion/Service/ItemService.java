@@ -60,6 +60,7 @@ public class ItemService {
         itDTO.setIdItem(item.getIdItem());
         itDTO.setNombreItem(item.getNombreItem());
         itDTO.setTipoItem(item.getTipoItem());
+        itDTO.setIdAccionFk(item.getIdAccionFk());
 
         List<String> nombresItem = new ArrayList<>();
         nombresItem.add(item.getNombreItem());

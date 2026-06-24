@@ -40,7 +40,7 @@ spring:
                 uri: lb://tienda-service
                 predicates:
                   - Path=/api/v1/tienda/**
-                    , /api/v1/tiendaitem/**
+                    , /api/v1/tiendaItem/**
                     , /tienda-service/api-docs/**
 
               - id: accion-service

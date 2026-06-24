@@ -6,6 +6,6 @@ import lombok.Data;
 public class InventarioDTOExterno {
     private Integer id_inven;
     private Integer cantidad;
-    private Integer item;
-    private Integer Usuario; // el inventario del usuario
+    private ItemDTOExterno item;
+    private Integer idUserFk;
 }

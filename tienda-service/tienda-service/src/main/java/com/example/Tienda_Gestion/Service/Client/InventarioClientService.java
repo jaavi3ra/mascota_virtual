@@ -56,7 +56,7 @@ public class InventarioClientService {
                 .block();
         }catch(Exception e){
             log.error("error [postinventario3]: ",e);
-            return null;
+            throw new RuntimeException("No se pudo guardar el inventario", e);
         }
     }
     public InventarioDTOExterno actualizarInventario(InventarioDTOExterno inventario){
@@ -70,7 +70,7 @@ public class InventarioClientService {
                 .block();
         }catch(Exception e){
             log.error("error [patchinventario4]: ",e);
-            return null;
+            throw new RuntimeException("No se pudo actualizar el inventario", e);
         }
     }
 }

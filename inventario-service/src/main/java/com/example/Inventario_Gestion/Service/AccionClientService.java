@@ -12,25 +12,28 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class AccionClientService {
+
     @Autowired
     private WebClient.Builder webClientBuilder;
 
-    public AccionDTOExterno obtenerAccion(Integer idaccion){
-        try{
+    public AccionDTOExterno obtenerAccion(Integer idAccion) {
+        try {
             return webClientBuilder.build()
-                .get()
-                .uri("http://accion-service/api/v1/accion/{idaccion}", idaccion)
-                .retrieve()
-                .bodyToMono(AccionDTOExterno.class)
-                .block();
-        }catch(Exception e){
-            log.error("error [getAccion]: ",e);
+                    .get()
+                    .uri("http://accion-service/api/v1/accion/{idAccion}", idAccion)
+                    .retrieve()
+                    .bodyToMono(AccionDTOExterno.class)
+                    .block();
+        } catch (Exception e) {
+            log.error("error [getAccion]: ", e);
             return null;
         }
-
     }
 
-    public HistorialAccionDTOExterno registroHistorial(Integer idMascota, AccionDTOExterno accion, String descripcion) {
+    public HistorialAccionDTOExterno registroHistorial(
+            Integer idMascota,
+            AccionDTOExterno accion,
+            String descripcion) {
         try {
             return webClientBuilder.build()
                     .post()
@@ -42,11 +45,9 @@ public class AccionClientService {
                     .retrieve()
                     .bodyToMono(HistorialAccionDTOExterno.class)
                     .block();
-
         } catch (Exception e) {
             log.error("error [postRegistro]", e);
             return null;
         }
     }
-
 }
