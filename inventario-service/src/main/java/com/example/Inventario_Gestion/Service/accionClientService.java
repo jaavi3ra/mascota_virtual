@@ -6,7 +6,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.Inventario_Gestion.DTO.AccionDTOExterno;
 import com.example.Inventario_Gestion.DTO.HistorialAccionDTOExterno;
-import com.example.Inventario_Gestion.Model.Item;
 
 import lombok.extern.slf4j.Slf4j;
 

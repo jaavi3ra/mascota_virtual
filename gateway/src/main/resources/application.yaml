@@ -16,6 +16,7 @@ spring:
                 predicates:
                   - Path=/api/v1/mascota/** 
                     , /api/v1/tipomascota/**
+                    , /api/v1/estado/**
                     , /api/v1/mascota/buscar-pet/** 
                     , /mascota-service/api-docs/**
                 
@@ -38,7 +39,9 @@ spring:
               - id: tienda-service
                 uri: lb://tienda-service
                 predicates:
-                  - Path=/api/v1/tienda/**, /tienda-service/api-docs/**
+                  - Path=/api/v1/tienda/**
+                    , /api/v1/tiendaitem/**
+                    , /tienda-service/api-docs/**
 
               - id: accion-service
                 uri: lb://accion-service

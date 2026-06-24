@@ -89,7 +89,7 @@ class InventarioServiceTest {
             verify(inventarioRepository).save(inventario);
             verify(mascotaClientService).aplicarEfectos(mascota, item);
             verify(accionClientService)
-                    .registroHistorial(eq(idMascota), eq(item), anyString());
+                    .registroHistorial(eq(idMascota), eq(accion), anyString());
         }
 
         @Test

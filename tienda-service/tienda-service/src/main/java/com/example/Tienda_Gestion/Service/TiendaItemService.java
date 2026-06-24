@@ -81,7 +81,7 @@ public class TiendaItemService {
 
     private void agregarItemInventario(Integer userid, Integer itemid){
         try{
-            Optional<InventarioDTOExterno> inventarioExistente = Optional.of(inventarioClientService
+            Optional<InventarioDTOExterno> inventarioExistente = Optional.ofNullable(inventarioClientService
                                             .findByUsuarioAndItem(userid, itemid));
             if(inventarioExistente!=null){
                 log.info("Consultando ítem en Inventario...");
