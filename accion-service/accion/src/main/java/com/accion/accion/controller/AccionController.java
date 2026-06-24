@@ -1,6 +1,7 @@
 package com.accion.accion.controller;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,11 +10,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.accion.accion.DTO.AccionDTO;
 import com.accion.accion.model.Accion;
 import com.accion.accion.service.AccionService;
+
 import jakarta.validation.Valid;
 
 @RestController
@@ -35,15 +37,6 @@ public class AccionController {
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }
-
-    @PostMapping("/usar")
-    public ResponseEntity<String> usarItem(
-            @RequestParam Integer idMascota, 
-            @RequestParam Integer idItem) {
-        
-        String mensaje = accionService.ejecutarAccionDeItem(idMascota, idItem);
-        return new ResponseEntity<>(mensaje, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
