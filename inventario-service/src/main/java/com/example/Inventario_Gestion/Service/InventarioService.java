@@ -129,7 +129,7 @@ public class InventarioService {
                 .aplicarEfectos(mascota, item);
             //registro de interaccion de mascota con item
             accionClientService
-                .registroHistorial(idMascota, item, contruirMensaje(mascota, item, accion));
+                .registroHistorial(idMascota, accion, contruirMensaje(mascota, item, accion));
             
             log.info("se uso el item en mascota correctamente.");
             return contruirMensaje(mascota, item, accion);            

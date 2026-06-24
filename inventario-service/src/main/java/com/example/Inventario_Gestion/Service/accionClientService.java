@@ -31,15 +31,15 @@ public class AccionClientService {
 
     }
 
-    public HistorialAccionDTOExterno registroHistorial(Integer idMascota, Item item, String descrip) {
+    public HistorialAccionDTOExterno registroHistorial(Integer idMascota, AccionDTOExterno accion, String descripcion) {
         try {
             return webClientBuilder.build()
                     .post()
                     .uri(uriBuilder -> uriBuilder
                             .path("http://accion-service/api/v1/historial/mascota/{idMascota}")
-                            .queryParam("descrip", descrip)
+                            .queryParam("descripcion", descripcion)
                             .build(idMascota))
-                    .bodyValue(item)
+                    .bodyValue(accion)
                     .retrieve()
                     .bodyToMono(HistorialAccionDTOExterno.class)
                     .block();
