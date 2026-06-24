@@ -1,14 +1,19 @@
 package com.example.Tienda_Gestion.Service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.Tienda_Gestion.DTO.InventarioDTOExterno;
 import com.example.Tienda_Gestion.DTO.ItemDTOExterno;
 import com.example.Tienda_Gestion.DTO.TiendaItemDTO;
+import com.example.Tienda_Gestion.DTO.UsuarioDTOExterno;
 import com.example.Tienda_Gestion.Model.Tienda;
 import com.example.Tienda_Gestion.Model.TiendaItem;
 import com.example.Tienda_Gestion.Repository.TiendaItemRepository;
 import com.example.Tienda_Gestion.Repository.TiendaRepository;
+import com.example.Tienda_Gestion.Service.Client.InventarioClientService;
 import com.example.Tienda_Gestion.Service.Client.ItemClientService;
 import com.example.Tienda_Gestion.Service.Client.UsuarioClientService;
 
@@ -29,6 +34,9 @@ public class TiendaItemService {
 
     @Autowired
     private UsuarioClientService usuarioClientService;
+
+    @Autowired
+    private InventarioClientService inventarioClientService;
 
     public TiendaItemDTO agregarItemATienda(TiendaItem tiendaItem) {
 
@@ -57,26 +65,56 @@ public class TiendaItemService {
         return convertirADTO(itemGuardado);
     }
 
-    public void comprarItem(Integer idUsuario, Integer idTiendaItem) {
-        log.info("Iniciando compra de ítem");
+        public void comprarItem(Integer idUsuario, Integer idItem) {
+        log.info("Iniciando compra de ítem...");
 
-        TiendaItem tiendaItem = tiendaItemRepository.findById(idTiendaItem)
-                .orElseThrow(() -> {
-                    log.error("El ítem no está disponible");
-                    return new RuntimeException("El ítem no está disponible");
-                });
+        log.info("obteniendo usuario...");
+        UsuarioDTOExterno usuario =  usuarioClientService
+            .obtenerUsuario(idUsuario);       
 
-        Integer idItem = tiendaItem.getIdItemFk();
+        log.info("obteniendo ítem ...");
+        ItemDTOExterno item = itemClientService
+            .obtenerItem(idItem);
+     
+        agregarItemInventario(usuario.getIdUsuario(), item.getIdItem());
+    }
 
-        log.info("Consultando ítem en Inventario-Gestión");
+    private void agregarItemInventario(Integer userid, Integer itemid){
+        try{
+            Optional<InventarioDTOExterno> inventarioExistente = Optional.of(inventarioClientService
+                                            .findByUsuarioAndItem(userid, itemid));
+            if(inventarioExistente!=null){
+                log.info("Consultando ítem en Inventario...");
+                    InventarioDTOExterno inventario;    
+                    if(inventarioExistente.isPresent()){
+                        inventario = inventarioExistente.get();
+                        log.info("agregando +1 ítem en Inventario...");
+                        inventario.setCantidad(
+                        inventario.getCantidad() + 1
+                        );
 
-        itemClientService.obtenerItem(idItem);
+                        inventarioClientService
+                                .actualizarInventario(inventario);
+                    }else{
+                        // crear nuevo inventario
+                        log.info("creando ítem en Inventario...");
+                        inventario = new InventarioDTOExterno();
+                        inventario.setUsuario(userid);
+                        inventario.setItem(itemid);
+                        inventario.setCantidad(1);
 
-        log.info("Consultando usuario");
-
-        usuarioClientService.obtenerUsuario(idUsuario);
-
-        log.info("Datos de compra validados correctamente");
+                        inventarioClientService
+                                .guardarInventario(inventario);
+                    }
+                        log.info("Datos de compra validados correctamente"); 
+            }else{
+                log.error("error [objetoinventario]: ", inventarioExistente);
+            }
+                
+        }catch(Exception e){
+            log.error("error [addsItemaInvent]: ", e);
+        }
+     
     }
 
     private TiendaItemDTO convertirADTO(TiendaItem tiendaItem) {
