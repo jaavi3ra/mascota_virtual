@@ -20,7 +20,7 @@ public class UsuarioClientService {
         try{
             return webClientBuilder.build()
                 .get()
-                .uri("http://usuario-service/api/v1/usuario/buscar-iduser/{iduser}" + iduser)
+                .uri("http://usuario-service/api/v1/usuario/{iduser}" + iduser)
                 .retrieve()
                 // Manejo de errores 4xx o 5xx del microservicio externo
                 .onStatus(HttpStatusCode::is4xxClientError, response -> 

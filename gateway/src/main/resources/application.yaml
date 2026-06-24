@@ -14,22 +14,26 @@ spring:
               - id: mascota-service
                 uri:  lb://mascota-service
                 predicates:
-                  - Path=/api/v1/mascota/**, /mascota-service/api-docs/**
-                  
-              - id: tipo-mascota
-                uri: lb://mascota-service
-                predicates:
-                  - Path=/api/v1/tipomascota/**, /mascota-service/api-docs/**
-
+                  - Path=/api/v1/mascota/** 
+                    , /api/v1/tipomascota/**
+                    , /api/v1/mascota/buscar-pet/** 
+                    , /mascota-service/api-docs/**
+                
               - id: usuario-service
                 uri: lb://usuario-service
                 predicates:
-                  - Path=/api/v1/usuario/**, /usuario-service/api-docs/**
+                  - Path=/api/v1/usuario/**
+                    , /usuario-service/api-docs/**
 
               - id: inventario-service
                 uri: lb://inventario-service
                 predicates:
-                  - Path=/api/v1/inventario/**, /inventario-service/api-docs/**
+                  - Path=/api/v1/inventario/**
+                   , /api/v1/item/**
+                   , /api/v1/inventario/**/buscaritem/**
+                   , /api/v1/inventario/save-inventario
+                   , /api/v1/inventario/update-inventario
+                   , /inventario-service/api-docs/**
 
               - id: tienda-service
                 uri: lb://tienda-service
@@ -39,7 +43,9 @@ spring:
               - id: accion-service
                 uri: lb://accion-service
                 predicates:
-                  - Path=/api/v1/accion/**, /accion-service/api-docs/**
+                  - Path=/api/v1/accion/** 
+                    , /api/v1/historial/mascota/**
+                    , /accion-service/api-docs/**
 
 
 springdoc:

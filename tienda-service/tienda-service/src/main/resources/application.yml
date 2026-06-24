@@ -3,7 +3,7 @@ server:
 
 springdoc:
   api-docs:
-    path: /tienda-gestion/api-docs
+    path: /tienda-service/api-docs
   swagger-ui:
     path: /swagger-ui.html
 
