@@ -22,7 +22,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         }catch(Exception e){
             log.error("No se pudo encontrar id: ", e);
-            return null;
+            throw new RuntimeException("No se pudo encontrar el usuario", e);
         }
     }
 
@@ -33,7 +33,7 @@ public class UsuarioService {
             return convertirADTO(nuevo); 
         }catch(Exception e){
             log.error("No se pudo registrar el usuario: ", e);
-            return null;
+            throw new RuntimeException("No se pudo registrar el usuario", e);
         }
 
     }

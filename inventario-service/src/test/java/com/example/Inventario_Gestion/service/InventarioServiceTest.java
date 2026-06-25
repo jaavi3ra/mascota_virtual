@@ -1,7 +1,7 @@
 package com.example.Inventario_Gestion.service;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -93,7 +93,7 @@ class InventarioServiceTest {
         }
 
         @Test
-        public void obtenerItemDelInventario_DeberiaRetornarNull_SiNoExiste() {
+        public void obtenerItemDelInventario_DeberiaLanzarError_SiNoExiste() {
 
             Integer idUser = 10;
             Integer idItem = 5;
@@ -101,10 +101,8 @@ class InventarioServiceTest {
             when(inventarioRepository.findByUsuarioAndItem(idUser, idItem))
                     .thenReturn(Optional.empty());
 
-            Inventario resultado =
-                    inventarioService.obtenerItemdelInventario(idUser, idItem);
-
-            assertNull(resultado);
+            assertThrows(RuntimeException.class,
+                    () -> inventarioService.obtenerItemdelInventario(idUser, idItem));
 
             verify(inventarioRepository)
                     .findByUsuarioAndItem(idUser, idItem);

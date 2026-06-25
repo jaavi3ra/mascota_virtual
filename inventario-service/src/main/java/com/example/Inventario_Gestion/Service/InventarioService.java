@@ -39,7 +39,7 @@ public class InventarioService {
                 .orElseThrow(() -> new RuntimeException("Inventario no encontrado"));
         }catch(Exception e){
             log.error("error [getInventario]: ", e);
-            return  null;
+            throw new RuntimeException("No se pudo obtener el inventario", e);
         }
     }
 
@@ -49,7 +49,7 @@ public class InventarioService {
             return inventarioRepository.save(inventario);
         }catch(Exception e){
             log.error("error [saveInventario]: ", e);
-            return null;
+            throw new RuntimeException("No se pudo guardar el inventario", e);
         }
     }
 
@@ -63,7 +63,7 @@ public class InventarioService {
             return inventItem;
         }catch(Exception e ){
             log.error("error [listItems]: ", e);
-            return null;
+            throw new RuntimeException("No se pudo listar el inventario", e);
         }
 
     }
@@ -74,7 +74,7 @@ public class InventarioService {
                 .orElseThrow(() -> new RuntimeException("Item no encontrado"));
         }catch(Exception e){
             log.error("error [getItem]: ", e);
-            return  null;
+            throw new RuntimeException("No se pudo obtener el ítem", e);
         }
 
     }
@@ -86,7 +86,7 @@ public class InventarioService {
                 .orElseThrow(() -> new RuntimeException("No tienes este item"));
         }catch(Exception e ){
             log.error("error [getIteminInventario]: ", e);
-            return null;
+            throw new RuntimeException("El usuario no tiene este ítem", e);
         }
 
     }
@@ -104,6 +104,7 @@ public class InventarioService {
             inventarioRepository.save(inventario);
         }catch(Exception e){
             log.error("Error [consumirItem]: ", e);
+            throw new RuntimeException("No se pudo consumir el ítem", e);
         }
 
     }
@@ -135,7 +136,7 @@ public class InventarioService {
             return contruirMensaje(mascota, item, accion);            
         }catch(Exception e){
             log.error("error [useitem]: ", e);
-            return null;
+            throw new RuntimeException("No se pudo usar el ítem", e);
         }
 
     }

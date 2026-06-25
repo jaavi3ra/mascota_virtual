@@ -50,7 +50,7 @@ public class EstadoMascotaService {
             return estadonuevo;
         }catch(Exception e){
             log.error("No se pudo editar estado: ", e);
-            return null;
+            throw new RuntimeException("No se pudo editar el estado de la mascota", e);
         }
 
     }

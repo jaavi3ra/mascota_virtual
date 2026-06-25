@@ -46,8 +46,7 @@ public class Mascota {
     @JoinColumn(name = "id_tipo_mascota_fk")
     private TipoMascota tipoMascota;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_user_FK", nullable = false)
+    @Column(name = "id_user_FK", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Integer usuario;

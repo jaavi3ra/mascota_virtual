@@ -2,7 +2,7 @@ package com.mascotav.usuario_service.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -51,17 +51,15 @@ public class usuarioServiceTest {
     }
 
     @Test
-    void buscarPorId_DeberiaRetornarNullSiNoExiste() {
+    void buscarPorId_DeberiaLanzarErrorSiNoExiste() {
 
         // GIVEN
         when(usuarioRepository.findById(1))
                 .thenReturn(Optional.empty());
 
-        // WHEN
-        Usuario resultado = usuarioService.buscarPorId(1);
-
-        // THEN
-        assertNull(resultado);
+        // WHEN / THEN
+        assertThrows(RuntimeException.class,
+                () -> usuarioService.buscarPorId(1));
 
         verify(usuarioRepository, times(1))
                 .findById(1);

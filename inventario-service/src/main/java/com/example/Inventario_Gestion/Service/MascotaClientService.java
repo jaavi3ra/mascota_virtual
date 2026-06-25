@@ -1,5 +1,7 @@
 package com.example.Inventario_Gestion.Service;
 
+import java.time.Duration;
+
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.Inventario_Gestion.DTO.AccionDTOExterno;
@@ -27,10 +29,11 @@ public class MascotaClientService {
                 .uri("http://mascota-service/api/v1/mascota/buscar-pet/{idmascota}", idmascota)
                 .retrieve()
                 .bodyToMono(MascotaDTOExterno.class)
+                .timeout(Duration.ofSeconds(5))
                 .block();
         }catch(Exception e){
-            log.error("error [getpet]: ",e.getMessage());
-            return null;
+            log.error("error [getpet]: ", e);
+            throw new RuntimeException("No se pudo obtener la mascota", e);
         }
            
     }
@@ -42,10 +45,11 @@ public class MascotaClientService {
                 .bodyValue(mascota)
                 .retrieve()
                 .bodyToMono(MascotaDTOExterno.class)
+                .timeout(Duration.ofSeconds(5))
                 .block();
           }catch(Exception e){
-            log.error("error [savepet]: ",e.getMessage());
-            return null;
+            log.error("error [savepet]: ", e);
+            throw new RuntimeException("No se pudo guardar la mascota", e);
           }
            
     }
@@ -58,11 +62,12 @@ public class MascotaClientService {
                 .bodyValue(mascota)
                 .retrieve()
                 .bodyToMono(MascotaDTOExterno.class)
+                .timeout(Duration.ofSeconds(5))
                 .block();
 
           }catch(Exception e){
-            log.error("error [updatepet]: ",e.getMessage());
-            return null;
+            log.error("error [updatepet]: ", e);
+            throw new RuntimeException("No se pudo actualizar la experiencia", e);
           }
            
     }
@@ -74,11 +79,12 @@ public class MascotaClientService {
                 .bodyValue(idaccion)
                 .retrieve()
                 .bodyToMono(EstadoMascotaDTOExterno.class)
+                .timeout(Duration.ofSeconds(5))
                 .block();
 
           }catch(Exception e){
-            log.error("error [updateStatpet]: ",e.getMessage());
-            return null;
+            log.error("error [updateStatpet]: ", e);
+            throw new RuntimeException("No se pudo actualizar el estado de la mascota", e);
           }
            
     }
