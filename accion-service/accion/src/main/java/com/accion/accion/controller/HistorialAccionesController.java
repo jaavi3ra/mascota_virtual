@@ -20,9 +20,15 @@ public class HistorialAccionesController {
     private HistorialAccionesService historialAccionesService;
 
     @PostMapping("/mascota/{idMascota}")
-    public ResponseEntity<?> crearHistorial(@PathVariable Integer idMascota, @RequestBody Accion accion, @RequestParam String descripcion) {
+    public ResponseEntity<?> crearHistorial(
+            @PathVariable Integer idMascota, 
+            @RequestBody(required = false) Accion accion,
+            @RequestParam(value = "descripcion", required = false) String descripcion) {
         try {
-            return new ResponseEntity<>(historialAccionesService.guardar(idMascota, accion, descripcion), HttpStatus.CREATED);
+            String descripcionFinal = (descripcion != null) ? descripcion : "Accion registrada externamente";
+            Integer idAccion = (accion != null) ? accion.getIdAccion() : null;
+            
+            return new ResponseEntity<>(historialAccionesService.guardarDesdeExterno(idMascota, idAccion, descripcionFinal), HttpStatus.CREATED);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
