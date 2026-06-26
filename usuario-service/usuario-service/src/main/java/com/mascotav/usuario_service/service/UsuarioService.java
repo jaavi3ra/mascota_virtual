@@ -15,11 +15,12 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Usuario buscarPorId(Integer id) {
+    public UsuarioDTO buscarPorId(Integer id) {
         try {
             log.info("buscando usuario ...");
-             return usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            Usuario usuario = usuarioRepository.findById(id).orElse(null);                        
+            return convertirADTO(usuario);
+                
         }catch(Exception e){
             log.error("No se pudo encontrar id: ", e);
             throw new RuntimeException("No se pudo encontrar el usuario", e);

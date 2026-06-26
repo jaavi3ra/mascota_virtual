@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.mascotav.usuario_service.dto.UsuarioDTO;
 import com.mascotav.usuario_service.model.Usuario;
 import com.mascotav.usuario_service.repository.UsuarioRepository;
 
@@ -39,12 +40,12 @@ public class usuarioServiceTest {
                 .thenReturn(Optional.of(usuario));
 
         // WHEN
-        Usuario resultado = usuarioService.buscarPorId(1);
+        UsuarioDTO resultado = usuarioService.buscarPorId(1);
 
         // THEN
         assertNotNull(resultado);
-        assertEquals(1, resultado.getId());
-        assertEquals("Fernanda", resultado.getNombreUsuario());
+        assertEquals(1, resultado.getIdUsuario());
+        assertEquals("Fernanda", resultado.getNombreUser());
 
         verify(usuarioRepository, times(1))
                 .findById(1);

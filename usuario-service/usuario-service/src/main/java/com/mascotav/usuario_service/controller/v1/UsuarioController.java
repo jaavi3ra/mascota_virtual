@@ -1,4 +1,4 @@
-package com.mascotav.usuario_service.controller;
+package com.mascotav.usuario_service.controller.v1;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,12 +23,8 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable Integer id) {
         try {
-            Usuario usuario = usuarioService.buscarPorId(id);
-            UsuarioDTO usuarioDTO = new UsuarioDTO();
-            usuarioDTO.setIdUsuario(usuario.getId());
-            usuarioDTO.setNombreUser(usuario.getNombreUsuario());
-            usuarioDTO.setFechaCreacion(usuario.getFechaCreacion());
-            return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
+            UsuarioDTO usuario = usuarioService.buscarPorId(id);
+            return new ResponseEntity<>(usuario, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
