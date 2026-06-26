@@ -15,34 +15,35 @@ import com.mascota.mascota_service.model.EstadoMascota;
 import com.mascota.mascota_service.model.Mascota;
 import com.mascota.mascota_service.repository.EstadoMascotaRepository;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension.class) //puerta de entrada para hacer pruebas inicializa Mockito
 public class estadomascotaServiceTest {
 
 
-    @Mock
+    @Mock // crea un simulador, en este caso  del repositorio
     private EstadoMascotaRepository estadoMascotaRepository;
 
-    @InjectMocks
+    @InjectMocks // crea la clase a testear y utliza el mock anterior
     private EstadoMascotaService estadoMascotaService;
 
     @Test
     void iniciarEstado_DeberiaCrearEstadoInicial() {
 
-        // GIVEN
+        // GIVEN = preparo los datos de entrada
         Mascota mascota = new Mascota();
         mascota.setNombre("efe");
 
-        // WHEN
+        // WHEN = metodo que quiero testear
         EstadoMascota estado = estadoMascotaService.iniciarEstado(mascota);
 
-        // THEN
+        // THEN 
         assertNotNull(estado);
         assertEquals(100, estado.getHambre());
         assertEquals(100, estado.getEnergia());
         assertEquals(100, estado.getSalud());
         assertEquals(100, estado.getFelicidad());
 
-        verify(estadoMascotaRepository).save(any(EstadoMascota.class));
+        // verificar si realmente el metodo llama a .save del repositorio
+        verify(estadoMascotaRepository).save(estado);
     }
 }
 

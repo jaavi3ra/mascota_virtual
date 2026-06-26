@@ -66,7 +66,7 @@ public class mascotaServiceTest {
         estado.setFelicidad(100);
         estado.setSalud(100);
 
-        // Entrenamiento de mocks
+        // WHEN
         when(usuarioClientService.obtenerUsuario(userId))
                 .thenReturn(userId);
 

@@ -18,7 +18,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v2/estado")
-public class estadoMascotaController {
+public class EstadoMascotaController {
 
     @Autowired
     private EstadoMascotaService estadoMascotaService;

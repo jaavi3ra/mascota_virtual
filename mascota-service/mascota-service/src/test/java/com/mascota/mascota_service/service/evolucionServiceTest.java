@@ -30,6 +30,7 @@ public class evolucionServiceTest {
     @Test
     void verificarEvolucion_DeberiaEvolucionar() {
 
+        //GIVEN
         TipoMascota tipo = new TipoMascota();
 
         Nivel nivel = new Nivel();
@@ -43,11 +44,13 @@ public class evolucionServiceTest {
         Evolucion evolucion = new Evolucion();
         evolucion.setNivel(5);
 
+        //WHEN
         when(evolucionRepository.findByTipoMascota(tipo))
                 .thenReturn(Optional.of(evolucion));
 
         String mensaje = evolucionService.verificarEvolucion(mascota);
 
+        //THEN
         assertEquals("Tu mascota Dragon Evolucionó!", mensaje);
 
         verify(evolucionRepository).findByTipoMascota(tipo);
