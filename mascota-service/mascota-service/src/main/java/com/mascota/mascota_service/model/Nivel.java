@@ -36,6 +36,4 @@ public class Nivel {
     @OneToMany(mappedBy = "nivel")
     private List<Mascota> mascotas;
 
-    @OneToMany(mappedBy = "nivel")
-    private List<Evolucion> evoluciones;
 }

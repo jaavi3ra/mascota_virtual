@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.Tienda_Gestion.DTO.ItemDTOExterno;
+import com.example.Tienda_Gestion.DTO.InventarioDTOExterno;
 import com.example.Tienda_Gestion.DTO.TiendaItemDTO;
 import com.example.Tienda_Gestion.DTO.UsuarioDTOExterno;
 import com.example.Tienda_Gestion.Model.Tienda;
@@ -21,6 +22,7 @@ import com.example.Tienda_Gestion.Repository.TiendaItemRepository;
 import com.example.Tienda_Gestion.Repository.TiendaRepository;
 import com.example.Tienda_Gestion.Service.TiendaItemService;
 import com.example.Tienda_Gestion.Service.Client.ItemClientService;
+import com.example.Tienda_Gestion.Service.Client.InventarioClientService;
 import com.example.Tienda_Gestion.Service.Client.UsuarioClientService;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,6 +39,9 @@ public class TiendaItemServiceTest {
 
     @Mock
     private TiendaItemRepository tiendaItemRepository;
+
+    @Mock
+    private InventarioClientService inventarioClientService;
 
     @InjectMocks
     private TiendaItemService tiendaItemService;
@@ -94,11 +99,15 @@ public class TiendaItemServiceTest {
         when(usuarioClientService.obtenerUsuario(3)).thenReturn(usuarioDTOExternoFalso);
 
         when(tiendaItemRepository.findById(3)).thenReturn(Optional.of(tiendaItemFalso));
+        when(inventarioClientService.findByUsuarioAndItem(3, 5)).thenReturn(null);
+        when(inventarioClientService.guardarInventario(any(InventarioDTOExterno.class)))
+                .thenAnswer(invocacion -> invocacion.getArgument(0));
 
         assertDoesNotThrow(() -> tiendaItemService.comprarItem(3, 3));
 
         verify(tiendaItemRepository).findById(3);
         verify(itemClientService).obtenerItem(5);
         verify(usuarioClientService).obtenerUsuario(3);
+        verify(inventarioClientService).guardarInventario(any(InventarioDTOExterno.class));
     }
 }

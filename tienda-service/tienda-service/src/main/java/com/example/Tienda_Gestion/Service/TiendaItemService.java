@@ -76,56 +76,51 @@ public class TiendaItemService {
         return convertirADTO(itemGuardado);
     }
 
-        public void comprarItem(Integer idUsuario, Integer idItem) {
+    public void comprarItem(Integer idUsuario, Integer idTiendaItem) {
         log.info("Iniciando compra de ítem...");
 
+        TiendaItem tiendaItem = tiendaItemRepository.findById(idTiendaItem)
+                .orElseThrow(() -> new RuntimeException("El ítem no está disponible en la tienda"));
+
+        Integer idItem = tiendaItem.getIdItemFk();
+
         log.info("obteniendo usuario...");
-        UsuarioDTOExterno usuario =  usuarioClientService
-            .obtenerUsuario(idUsuario);       
+        UsuarioDTOExterno usuario = usuarioClientService
+                .obtenerUsuario(idUsuario);
 
         log.info("obteniendo ítem ...");
         ItemDTOExterno item = itemClientService
-            .obtenerItem(idItem);
-     
+                .obtenerItem(idItem);
+
         agregarItemInventario(usuario.getIdUsuario(), item.getIdItem());
     }
 
-    private void agregarItemInventario(Integer userid, Integer itemid){
-        try{
-            Optional<InventarioDTOExterno> inventarioExistente = Optional.ofNullable(inventarioClientService
-                                            .findByUsuarioAndItem(userid, itemid));
-            if(inventarioExistente!=null){
-                log.info("Consultando ítem en Inventario...");
-                    InventarioDTOExterno inventario;    
-                    if(inventarioExistente.isPresent()){
-                        inventario = inventarioExistente.get();
-                        log.info("agregando +1 ítem en Inventario...");
-                        inventario.setCantidad(
-                        inventario.getCantidad() + 1
-                        );
+    private void agregarItemInventario(Integer userId, Integer itemId) {
+        Optional<InventarioDTOExterno> inventarioExistente = Optional.ofNullable(
+                inventarioClientService.findByUsuarioAndItem(userId, itemId));
 
-                        inventarioClientService
-                                .actualizarInventario(inventario);
-                    }else{
-                        // crear nuevo inventario
-                        log.info("creando ítem en Inventario...");
-                        inventario = new InventarioDTOExterno();
-                        inventario.setUsuario(userid);
-                        inventario.setItem(itemid);
-                        inventario.setCantidad(1);
+        InventarioDTOExterno resultado;
 
-                        inventarioClientService
-                                .guardarInventario(inventario);
-                    }
-                        log.info("Datos de compra validados correctamente"); 
-            }else{
-                log.error("error [objetoinventario]: ", inventarioExistente);
-            }
-                
-        }catch(Exception e){
-            log.error("error [addsItemaInvent]: ", e);
+        if (inventarioExistente.isPresent()) {
+            InventarioDTOExterno inventario = inventarioExistente.get();
+            inventario.setCantidad(inventario.getCantidad() + 1);
+            resultado = inventarioClientService.actualizarInventario(inventario);
+        } else {
+            InventarioDTOExterno inventario = new InventarioDTOExterno();
+            ItemDTOExterno item = new ItemDTOExterno();
+            item.setIdItem(itemId);
+
+            inventario.setIdUserFk(userId);
+            inventario.setItem(item);
+            inventario.setCantidad(1);
+            resultado = inventarioClientService.guardarInventario(inventario);
         }
-     
+
+        if (resultado == null) {
+            throw new RuntimeException("No se pudo registrar la compra en Inventario");
+        }
+
+        log.info("Compra registrada correctamente");
     }
 
     private TiendaItemDTO convertirADTO(TiendaItem tiendaItem) {

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,7 +13,6 @@ import com.mascota.mascota_service.DTO.MascotaDTO;
 import com.mascota.mascota_service.model.EstadoMascota;
 import com.mascota.mascota_service.service.EstadoMascotaService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Path;
 
@@ -22,7 +22,7 @@ public class EstadoMascotacontroller {
     @Autowired
     private EstadoMascotaService estadoMascotaService;
 
-    @PutMapping("/editar-estado/{id}")
+    @PutMapping("/editar-estado/{idestadopet}")
     public ResponseEntity<?> editarEstado(@PathVariable Integer idestadopet,@Valid @RequestBody  Integer idaccion) {
         try {
             EstadoMascota estado = estadoMascotaService.editarEstado(idestadopet, idaccion);

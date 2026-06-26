@@ -36,7 +36,7 @@ public class ItemService {
             return convertirADTO(item);
         }catch(Exception e){
             log.error("error [getItem]: ", e );
-            return null;
+            throw new RuntimeException("No se pudo obtener el ítem", e);
         }
 
     }
@@ -48,7 +48,7 @@ public class ItemService {
             return convertirADTO(item);
         }catch(Exception e ){
             log.error("error [saveItem]: ", e);
-            return null;
+            throw new RuntimeException("No se pudo guardar el ítem", e);
         }
 
     }
@@ -60,6 +60,7 @@ public class ItemService {
         itDTO.setIdItem(item.getIdItem());
         itDTO.setNombreItem(item.getNombreItem());
         itDTO.setTipoItem(item.getTipoItem());
+        itDTO.setIdAccionFk(item.getIdAccionFk());
 
         List<String> nombresItem = new ArrayList<>();
         nombresItem.add(item.getNombreItem());

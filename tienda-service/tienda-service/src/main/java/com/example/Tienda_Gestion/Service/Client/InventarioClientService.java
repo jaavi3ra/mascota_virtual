@@ -1,5 +1,7 @@
 package com.example.Tienda_Gestion.Service.Client;
 
+import java.time.Duration;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -7,6 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.example.Tienda_Gestion.DTO.InventarioDTOExterno;
 
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
@@ -21,10 +24,11 @@ public class InventarioClientService {
                 .uri("http://inventario-service/api/v1/inventario/{idinvent}" , idinvent)
                 .retrieve()
                 .bodyToMono(InventarioDTOExterno.class)              
+                .timeout(Duration.ofSeconds(5))
                 .block();
         }catch(Exception e){
             log.error("error [getinventario1]: ",e);
-            return null;
+            throw new RuntimeException("No se pudo obtener el inventario", e);
         }
          
     }
@@ -36,12 +40,22 @@ public class InventarioClientService {
                 .uri("http://inventario-service/api/v1/inventario/{userid}/buscaritem/{itemid}",
                     userid, 
                     itemid)
-                .retrieve()
-                .bodyToMono(InventarioDTOExterno.class)              
+                .exchangeToMono(response -> {
+                    // Un 404 significa que el usuario todavía no tiene este ítem.
+                    // Se devuelve vacío para que Tienda pueda crear su primer registro de inventario.
+                    if (response.statusCode().value() == 404) {
+                        return Mono.empty();
+                    }
+                    if (response.statusCode().isError()) {
+                        return response.createException().flatMap(Mono::error);
+                    }
+                    return response.bodyToMono(InventarioDTOExterno.class);
+                })
+                .timeout(Duration.ofSeconds(5))
                 .block();
         }catch(Exception e){
             log.error("error [getinventario2]: ",e);
-            return null;
+            throw new RuntimeException("No se pudo consultar el inventario", e);
         }
     }
 
@@ -53,10 +67,11 @@ public class InventarioClientService {
                 .bodyValue(inventario)
                 .retrieve()
                 .bodyToMono(InventarioDTOExterno.class)              
+                .timeout(Duration.ofSeconds(5))
                 .block();
         }catch(Exception e){
             log.error("error [postinventario3]: ",e);
-            return null;
+            throw new RuntimeException("No se pudo guardar el inventario", e);
         }
     }
     public InventarioDTOExterno actualizarInventario(InventarioDTOExterno inventario){
@@ -67,10 +82,11 @@ public class InventarioClientService {
                 .bodyValue(inventario)
                 .retrieve()
                 .bodyToMono(InventarioDTOExterno.class)              
+                .timeout(Duration.ofSeconds(5))
                 .block();
         }catch(Exception e){
             log.error("error [patchinventario4]: ",e);
-            return null;
+            throw new RuntimeException("No se pudo actualizar el inventario", e);
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.mascota.mascota_service.service;
 
+import java.time.Duration;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -31,10 +33,11 @@ public class UsuarioClientService {
                 )
                 .bodyToMono(UsuarioDTOExterno.class)
                 .map(UsuarioDTOExterno::getIdUsuario)
+                .timeout(Duration.ofSeconds(5))
                 .block();
         }catch(Exception e){
             log.error("error [getuser]: ", e);
-            return null;
+            throw new RuntimeException("No se pudo obtener el usuario", e);
         }
 
     }

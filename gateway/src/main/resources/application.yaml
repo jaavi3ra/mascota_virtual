@@ -31,7 +31,6 @@ spring:
                 predicates:
                   - Path=/api/v1/inventario/**
                    , /api/v1/item/**
-                   , /api/v1/inventario/**/buscaritem/**
                    , /api/v1/inventario/save-inventario
                    , /api/v1/inventario/update-inventario
                    , /inventario-service/api-docs/**
@@ -40,7 +39,7 @@ spring:
                 uri: lb://tienda-service
                 predicates:
                   - Path=/api/v1/tienda/**
-                    , /api/v1/tiendaitem/**
+                    , /api/v1/tiendaItem/**
                     , /tienda-service/api-docs/**
 
               - id: accion-service

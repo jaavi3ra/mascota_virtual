@@ -41,7 +41,7 @@ public class Item {
     // @ManyToOne()---Queda como un simple Integer porque permite guardar el código
     // del efecto del ítem sin obligar a tu base de datos a conectarse físicamente
     // con la tabla de otro microservicio.
-    @JoinColumn(name = "id_accion_fk")
+    @Column(name = "id_accion_fk")
     private Integer idAccionFk;
 
     @OneToMany(mappedBy = "item")

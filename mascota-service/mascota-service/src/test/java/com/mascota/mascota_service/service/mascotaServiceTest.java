@@ -16,7 +16,6 @@ import static org.mockito.Mockito.times;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mascota.mascota_service.DTO.MascotaDTO;
 import com.mascota.mascota_service.model.EstadoMascota;
@@ -35,9 +34,9 @@ public class mascotaServiceTest {
     private TipoMascotaRepository tipoMascotaRepository;
     @Mock
     private MascotaRepository mascotaRepository;
-    @Autowired
+    @Mock
     private EstadoMascotaService estadoMascotaService;
-    @Autowired
+    @Mock
     private NivelService nivelService;
     @Mock
     private UsuarioClientService usuarioClientService;
@@ -89,7 +88,7 @@ public class mascotaServiceTest {
 
         // THEN
         assertNotNull(resultado);
-        assertEquals("efes", resultado.getNombre());
+        assertEquals("Firulais", resultado.getNombre());
         assertEquals("Dragon", resultado.getTipoMascota());
         assertEquals(1, resultado.getNivelActual());
 

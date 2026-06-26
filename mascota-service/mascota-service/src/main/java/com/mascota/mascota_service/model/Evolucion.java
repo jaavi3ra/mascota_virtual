@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -30,7 +31,7 @@ public class Evolucion {
     private String nom_evo;
 
     @NotNull
-    @JoinColumn(name = "nivel_evo")
+    @Column(name = "nivel_evo")
     private Integer nivel;
 
     @ManyToOne()

@@ -38,7 +38,7 @@ public class MascotaService {
              return convertirADTO(mascota);
         }catch(Exception e){
             log.error("error al obtener mascota: ",e);
-            return null;
+            throw new RuntimeException("No se pudo obtener la mascota", e);
         }
        
     }
@@ -48,7 +48,7 @@ public class MascotaService {
             return usuarioClientService.obtenerUsuario(iduser);
         }catch(Exception e){
             log.error("No se pudo obtener usuario: ", e);
-            return 0;
+            throw new RuntimeException("No se pudo obtener el usuario", e);
         }
        
     }   
@@ -62,7 +62,7 @@ public class MascotaService {
                     new RuntimeException("Tipo mascota no encontrado"));
         }catch(Exception e){
             log.error("error al obtener tipo mascota: ",e);
-            return null;
+            throw new RuntimeException("No se pudo obtener el tipo de mascota", e);
         }
        
     }
@@ -97,6 +97,7 @@ public class MascotaService {
         mascotaRepository.save(mascota);
        }catch(Exception e){
         log.error("no se pudo actualizar exp: ", e);
+        throw new RuntimeException("No se pudo actualizar la experiencia", e);
        }
         
     }
@@ -120,7 +121,7 @@ public class MascotaService {
         return convertirADTO(mascota);
        }catch(Exception e) {
         log.error("No se pudo crear mascota, error:",e);
-        return null;
+        throw new RuntimeException("No se pudo crear la mascota", e);
        }
        
     }
@@ -131,6 +132,7 @@ public class MascotaService {
         masDTO.setIdMascota(mascota.getIdMascota());
         masDTO.setNombre(mascota.getNombre());
         masDTO.setNivelActual(mascota.getNivel().getNum_nivel());
+        masDTO.setIdUsuarioFk(mascota.getUsuario());
 
         if (mascota.getTipoMascota() != null) {
             masDTO.setTipoMascota(mascota.getTipoMascota().getNombreTipoMascota());

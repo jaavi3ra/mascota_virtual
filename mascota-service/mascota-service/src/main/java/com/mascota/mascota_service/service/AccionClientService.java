@@ -1,5 +1,7 @@
 package com.mascota.mascota_service.service;
 
+import java.time.Duration;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -21,10 +23,11 @@ public class AccionClientService {
                 .uri("http://accion-service/api/v1/accion/{idaccion}" , idaccion)
                 .retrieve()
                 .bodyToMono(AccionDTOExterno.class)              
+                .timeout(Duration.ofSeconds(5))
                 .block();
         }catch(Exception e){
             log.error("error [getaccion]: ",e);
-            return null;
+            throw new RuntimeException("No se pudo obtener la acción", e);
         }
          
     }

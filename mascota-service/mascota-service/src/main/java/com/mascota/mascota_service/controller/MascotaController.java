@@ -52,7 +52,7 @@ public class MascotaController {
         }
     }
 
-    @PutMapping("/actualizarExp/{id}")
+    @PutMapping("/actualizarExp/{afectaExpBase}")
     public ResponseEntity<?> actualizarExp(@PathVariable  int afectaExpBase,@Valid @RequestBody Mascota mascota){
         try{
             mascotaService.actualizarExpMascota(mascota, afectaExpBase);
