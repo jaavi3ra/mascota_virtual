@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mascota.mascota_service.DTO.AccionDTOExterno;
+import com.mascota.mascota_service.DTO.EstadoMascotaDTO;
 import com.mascota.mascota_service.model.EstadoMascota;
 import com.mascota.mascota_service.model.Mascota;
 import com.mascota.mascota_service.repository.EstadoMascotaRepository;
@@ -32,7 +33,7 @@ public class EstadoMascotaService {
         
     }
 
-    public EstadoMascota editarEstado(Integer idestadopet, Integer idaccion){
+    public EstadoMascotaDTO editarEstado(Integer idestadopet, Integer idaccion){
         try{
             EstadoMascota estadonuevo = estadoMascotaRepository
                     .findById(idestadopet)
@@ -47,11 +48,23 @@ public class EstadoMascotaService {
             estadonuevo.setSalud(accion.getAfectaSalud() + estadonuevo.getSalud());
             estadoMascotaRepository.save(estadonuevo);
             log.info("estado de mascota editada.");
-            return estadonuevo;
+
+            return convertirADTO(estadonuevo);
         }catch(Exception e){
             log.error("No se pudo editar estado: ", e);
             throw new RuntimeException("No se pudo editar el estado de la mascota", e);
         }
 
+    }
+
+        private EstadoMascotaDTO convertirADTO(EstadoMascota estado) {
+        EstadoMascotaDTO estDTO = new EstadoMascotaDTO();
+        estDTO.setIdEstadoMascota(estado.getIdEstado());
+        estDTO.setEnergia(estado.getEnergia());
+        estDTO.setFelicidad(estado.getFelicidad());
+        estDTO.setHambre(estado.getHambre());
+        estDTO.setSalud(estado.getSalud());
+
+        return estDTO;
     }
 }

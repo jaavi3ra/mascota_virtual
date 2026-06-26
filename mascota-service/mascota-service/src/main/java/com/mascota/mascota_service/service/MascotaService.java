@@ -90,11 +90,12 @@ public class MascotaService {
         
     }
 
-    public void actualizarExpMascota(Mascota mascota, Integer afectaExpBase){
+    public MascotaDTO actualizarExpMascota(Mascota mascota, Integer afectaExpBase){
        try{
          log.info("actualizando exp mascota...");
         mascota.setExpActual( mascota.getExpActual() + afectaExpBase);
         mascotaRepository.save(mascota);
+        return convertirADTO(mascota);
        }catch(Exception e){
         log.error("no se pudo actualizar exp: ", e);
         throw new RuntimeException("No se pudo actualizar la experiencia", e);
@@ -135,7 +136,7 @@ public class MascotaService {
         masDTO.setIdUsuarioFk(mascota.getUsuario());
 
         if (mascota.getTipoMascota() != null) {
-            masDTO.setTipoMascota(mascota.getTipoMascota().getNombreTipoMascota());
+            masDTO.setTipoMascota(mascota.getTipoMascota().getId());
         }
         if (mascota.getEstadoMascota() != null) {
             EstadoMascotaDTO estDTO = new EstadoMascotaDTO();

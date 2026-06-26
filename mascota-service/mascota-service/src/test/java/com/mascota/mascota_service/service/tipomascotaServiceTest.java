@@ -39,7 +39,7 @@ public class tipomascotaServiceTest {
                         new TipoMascota()
                 ));
 
-        List<TipoMascotaDTO> lista = tipoMascotaService.creartipo();
+        List<TipoMascotaDTO> lista = tipoMascotaService.findAll();
 
         assertNotNull(lista);
 

@@ -1,4 +1,4 @@
-package com.mascota.mascota_service.controller;
+package com.mascota.mascota_service.controller.v1;
 
 import java.util.HashMap;
 import java.util.Map;

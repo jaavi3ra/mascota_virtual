@@ -1,4 +1,4 @@
-package com.mascota.mascota_service.controller;
+package com.mascota.mascota_service.controller.v1;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mascota.mascota_service.DTO.EstadoMascotaDTO;
 import com.mascota.mascota_service.DTO.MascotaDTO;
 import com.mascota.mascota_service.model.EstadoMascota;
 import com.mascota.mascota_service.service.EstadoMascotaService;
@@ -25,7 +26,7 @@ public class EstadoMascotacontroller {
     @PutMapping("/editar-estado/{idestadopet}")
     public ResponseEntity<?> editarEstado(@PathVariable Integer idestadopet,@Valid @RequestBody  Integer idaccion) {
         try {
-            EstadoMascota estado = estadoMascotaService.editarEstado(idestadopet, idaccion);
+            EstadoMascotaDTO estado = estadoMascotaService.editarEstado(idestadopet, idaccion);
             return new ResponseEntity<>(estado, HttpStatus.CREATED);
             
         } catch (RuntimeException e) {
