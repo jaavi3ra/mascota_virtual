@@ -8,4 +8,5 @@ import com.example.Tienda_Gestion.Model.TiendaItem;
 @Repository
 public interface TiendaItemRepository extends JpaRepository<TiendaItem, Integer> {
 
+     Optional<TiendaItem> findByTiendaAndItem(Integer tienda, Integer item);
 }

@@ -21,6 +21,16 @@ public class TiendaItemController {
    @Autowired
    private TiendaItemService tiendaItemService;
 
+   @GetMapping("/{idtienda}/buscaritem/{itemid}")
+   public ResponseEntity<?> buscarPorId(@PathVariable Integer idtienda, @PathVariable Integer itemid){
+      try{
+         TiendaItem tiendaitem = tiendaItemService.buscarPorId(idtienda, itemid);
+         return new ResponseEntity<>(tiendaitem, HttpStatus.OK);
+      }catch(RuntimeException e ){
+         return new ResponseEntity<>("No se encontro item en la tienda :(", HttpStatus.BAD_REQUEST);
+      }
+   }
+
    @PostMapping("/agregarItemTienda")
    public ResponseEntity<?> agregarItemaTienda(@Valid @RequestBody TiendaItem tiendaItem) {
       try {
