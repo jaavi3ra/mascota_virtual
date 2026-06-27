@@ -38,11 +38,10 @@ public class TiendaItemService {
     @Autowired
     private InventarioClientService inventarioClientService;
 
-    public TiendaItem obtenerPorid(Integer idtienda, Integer itemid) {
+    public TiendaItem buscarPorId(Integer idtienda, Integer itemid) {
         log.info("Buscando item en tienda...");
 
-        return tiendaitemRepository.findByTiendaAndItem(idtienda, itemid)
-                .map(this::convertirADTO)
+        return tiendaItemRepository.findByTienda_IdTiendaAndIdItemFk(idtienda, itemid)
                 .orElseThrow(() -> {
                     log.error("No se encontró la item en tienda");
                     return new RuntimeException("No se encontró la item tienda");
