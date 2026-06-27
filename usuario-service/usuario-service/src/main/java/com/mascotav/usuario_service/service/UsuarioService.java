@@ -3,6 +3,8 @@ package com.mascotav.usuario_service.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import com.mascotav.usuario_service.dto.UsuarioDTO;
 import com.mascotav.usuario_service.model.Usuario;
 import com.mascotav.usuario_service.repository.UsuarioRepository;
@@ -37,6 +39,12 @@ public class UsuarioService {
             throw new RuntimeException("No se pudo registrar el usuario", e);
         }
 
+    }
+
+    public List<UsuarioDTO> listarUsuarios() {
+        return usuarioRepository.findAll().stream()
+                .map(this::convertirADTO)
+                .toList();
     }
 
     private UsuarioDTO convertirADTO(Usuario usuario) {

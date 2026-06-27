@@ -24,6 +24,7 @@ spring:
                 uri: lb://usuario-service
                 predicates:
                   - Path=/api/v1/usuario/**
+                    , /api/v2/usuario/**
                     , /usuario-service/api-docs/**
 
               - id: inventario-service
@@ -39,7 +40,9 @@ spring:
                 uri: lb://tienda-service
                 predicates:
                   - Path=/api/v1/tienda/**
+                    , /api/v2/tienda/**
                     , /api/v1/tiendaItem/**
+                    , /api/v2/tiendaItem/**
                     , /tienda-service/api-docs/**
 
               - id: accion-service
