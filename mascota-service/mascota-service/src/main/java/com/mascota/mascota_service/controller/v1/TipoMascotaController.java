@@ -11,28 +11,28 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mascota.mascota_service.DTO.TipoMascotaDTO;
 import com.mascota.mascota_service.service.TipoMascotaService;
 
-@RestController
+@RestController("TipoMascotaControllerV1")
 @RequestMapping("/api/v1/tipomascota")
 public class TipoMascotaController {
     @Autowired
     private TipoMascotaService tipoMascotaService;
 
     @GetMapping
-    public ResponseEntity<?> allTiposMascota(){
+    public ResponseEntity<?> allTiposMascota() {
         List<TipoMascotaDTO> tipos = tipoMascotaService.findAll();
         return new ResponseEntity<>(tipos, HttpStatus.OK);
     }
 
     @PostMapping("/crear-tipos")
-    public  ResponseEntity<?> crearTiposMascotas(){ 
-        try{
-              TipoMascotaDTO tipos = tipoMascotaService.creartipo();
-                return new ResponseEntity<>(tipos, HttpStatus.CREATED);
-        }catch(RuntimeException e){
-            
+    public ResponseEntity<?> crearTiposMascotas() {
+        try {
+            TipoMascotaDTO tipos = tipoMascotaService.creartipo();
+            return new ResponseEntity<>(tipos, HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+
             return new ResponseEntity<>("No se pudo crear tipos de mascota", HttpStatus.BAD_REQUEST);
-            
+
         }
-            
+
     }
 }

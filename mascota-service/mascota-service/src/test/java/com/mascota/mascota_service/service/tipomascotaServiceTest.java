@@ -1,8 +1,7 @@
 package com.mascota.mascota_service.service;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -28,7 +27,7 @@ public class tipomascotaServiceTest {
     private TipoMascotaService tipoMascotaService;
 
     @Test
-    void creartipo_DeberiaGuardarCincoTipos() {
+    void findAll_DeberiaRetornarCincoTipos() {
 
         when(tipoMascotaRepository.findAll())
                 .thenReturn(List.of(
@@ -42,9 +41,9 @@ public class tipomascotaServiceTest {
         List<TipoMascotaDTO> lista = tipoMascotaService.findAll();
 
         assertNotNull(lista);
+        assertEquals(5, lista.size());
 
-        verify(tipoMascotaRepository, times(5))
-                .save(any(TipoMascota.class));
+        verify(tipoMascotaRepository).findAll();
     }
 
 

@@ -8,7 +8,7 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
 import com.mascota.mascota_service.DTO.TipoMascotaDTO;
-import com.mascota.mascota_service.controller.v1.TipoMascotaController;
+import com.mascota.mascota_service.controller.v2.TipoMascotaController;
 
 @Component
 public class TipoMascotaAssembler implements RepresentationModelAssembler<TipoMascotaDTO, EntityModel<TipoMascotaDTO>> {
@@ -24,7 +24,7 @@ public class TipoMascotaAssembler implements RepresentationModelAssembler<TipoMa
 
                 linkTo(methodOn(TipoMascotaController.class)
                         .crearTiposMascotas())
-                        .withSelfRel()
+                        .withRel("crear-tipos")
         );
     }
 }

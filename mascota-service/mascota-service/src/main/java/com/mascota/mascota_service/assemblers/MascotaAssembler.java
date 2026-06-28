@@ -8,7 +8,7 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
 import com.mascota.mascota_service.DTO.MascotaDTO;
-import com.mascota.mascota_service.controller.v1.MascotaController;
+import com.mascota.mascota_service.controller.v2.MascotaController;
 import com.mascota.mascota_service.model.Mascota;
 
 @Component

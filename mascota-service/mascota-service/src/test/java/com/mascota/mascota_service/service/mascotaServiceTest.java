@@ -89,7 +89,7 @@ public class mascotaServiceTest {
         // THEN
         assertNotNull(resultado);
         assertEquals("Firulais", resultado.getNombre());
-        assertEquals("Dragon", resultado.getTipoMascota());
+        assertEquals(tipoId, resultado.getTipoMascota());
         assertEquals(1, resultado.getNivelActual());
 
         verify(usuarioClientService).obtenerUsuario(userId);

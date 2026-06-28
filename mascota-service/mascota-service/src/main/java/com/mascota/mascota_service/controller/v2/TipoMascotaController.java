@@ -20,7 +20,7 @@ import com.mascota.mascota_service.DTO.TipoMascotaDTO;
 import com.mascota.mascota_service.assemblers.TipoMascotaAssembler;
 import com.mascota.mascota_service.service.TipoMascotaService;
 
-@RestController
+@RestController("TipoMascotaControllerV2")
 @RequestMapping("/api/v2/tipomascota")
 public class TipoMascotaController {
     @Autowired
@@ -45,9 +45,8 @@ public class TipoMascotaController {
                 CollectionModel.of(tipos,
                         linkTo(methodOn(TipoMascotaController.class)
                                 .allTiposMascota())
-                                .withSelfRel()));                           
+                                .withSelfRel()));
     }
-
 
     @PostMapping(value = "/crear-tipos", produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<TipoMascotaDTO>> crearTiposMascotas() {
