@@ -18,6 +18,9 @@ spring:
                     , /api/v1/tipomascota/**
                     , /api/v1/estado/**
                     , /api/v1/mascota/buscar-pet/** 
+                    , /api/v2/mascota/**
+                    , /api/v2/tipomascota/**
+                    , /api/v2/estado/**
                     , /mascota-service/api-docs/**
                 
               - id: usuario-service
@@ -34,6 +37,8 @@ spring:
                    , /api/v1/item/**
                    , /api/v1/inventario/save-inventario
                    , /api/v1/inventario/update-inventario
+                   , /api/v2/inventario/**
+                   , /api/v2/item/**
                    , /inventario-service/api-docs/**
 
               - id: tienda-service
@@ -50,6 +55,8 @@ spring:
                 predicates:
                   - Path=/api/v1/accion/** 
                     , /api/v1/historial/mascota/**
+                    , /api/v2/accion/**
+                    , /api/v2/historial/**
                     , /accion-service/api-docs/**
 
 
