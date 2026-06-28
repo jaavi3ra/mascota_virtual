@@ -8,5 +8,6 @@ public class ItemDTOExterno {
     private String nombreItem;
     private String tipoItem;
     private Integer idAccion;
+    private Integer idAccionFk;
 
 }

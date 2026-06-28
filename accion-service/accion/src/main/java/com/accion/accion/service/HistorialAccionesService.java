@@ -48,6 +48,10 @@ public class HistorialAccionesService {
         return historialAccionesRepository.save(registro);
     }
 
+    public HistorialAccionesDTO guardarDesdeExternoDTO(Integer idMascota, Integer idAccion, String descripcion) {
+        return convertirADTO(guardarDesdeExterno(idMascota, idAccion, descripcion));
+    }
+
     private HistorialAccionesDTO convertirADTO(HistorialAcciones h) {
         HistorialAccionesDTO hisDTO = new HistorialAccionesDTO();
         hisDTO.setIdHistorial(h.getIdHistorial());

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.accion.accion.DTO.AccionDTO;
@@ -54,21 +55,10 @@ public class AccionControllerV2 {
     @GetMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<AccionDTO>> porId(@PathVariable Integer id) {
         try {
-            Accion accion = accionService.buscarPorId(id);
-            if (accion == null) {
+            AccionDTO dto = accionService.buscarPorIdDTO(id);
+            if (dto == null) {
                 return ResponseEntity.notFound().build();
             }
-            
-            // Convertimos la entidad de la v1 al DTO que pide el assembler
-            AccionDTO dto = new AccionDTO();
-            dto.setIdAccion(accion.getIdAccion());
-            dto.setNombreAccion(accion.getNombreAccion());
-            dto.setAfectaFelicidad(accion.getAfectaFelicidad());
-            dto.setAfectaEnergia(accion.getAfectaEnergia());
-            dto.setAfectaSalud(accion.getAfectaSalud());
-            dto.setAfectaHambre(accion.getAfectaHambre());
-            dto.setAfectaExpBase(accion.getAfectaExpBase());
-            
             return ResponseEntity.ok(assembler.toModel(dto));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -78,16 +68,27 @@ public class AccionControllerV2 {
     @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<AccionDTO>> registrar(@Valid @RequestBody Accion accion) {
         try {
-            Accion nuevaAccion = accionService.guardar(accion);
-            
-            AccionDTO dto = new AccionDTO();
-            dto.setIdAccion(nuevaAccion.getIdAccion());
-            dto.setNombreAccion(nuevaAccion.getNombreAccion());
-            
+            AccionDTO dto = accionService.guardarDTO(accion);
             return ResponseEntity
                     .created(linkTo(methodOn(AccionControllerV2.class).porId(dto.getIdAccion())).toUri())
                     .body(assembler.toModel(dto));
         } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping(value = "/usar", produces = MediaTypes.HAL_JSON_VALUE)
+    public ResponseEntity<EntityModel<String>> usarItem(
+            @RequestParam Integer idMascota,
+            @RequestParam Integer idItem) {
+        try {
+            String mensaje = accionService.ejecutarAccionDeItem(idMascota, idItem);
+            EntityModel<String> respuesta = EntityModel.of(
+                    mensaje,
+                    linkTo(methodOn(AccionControllerV2.class).usarItem(idMascota, idItem)).withSelfRel(),
+                    linkTo(methodOn(AccionControllerV2.class).todas()).withRel("acciones"));
+            return ResponseEntity.ok(respuesta);
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
         }
     }

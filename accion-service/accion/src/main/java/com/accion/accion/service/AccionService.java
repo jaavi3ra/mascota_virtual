@@ -41,10 +41,18 @@ public class AccionService {
         return accionRepository.save(accion);
     }
 
+    public AccionDTO guardarDTO(Accion accion) {
+        return convertirADTO(guardar(accion));
+    }
+
     public Accion buscarPorId(Integer id) {
         log.info("Buscando accion por ID");
         return accionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Accion con ID " + id + " no encontrada."));
+    }
+
+    public AccionDTO buscarPorIdDTO(Integer id) {
+        return convertirADTO(buscarPorId(id));
     }
 
     public String ejecutarAccionDeItem(Integer idMascota, Integer idItem) {
@@ -52,7 +60,7 @@ public class AccionService {
 
         ItemDTOExterno item = webClientBuilder.build()
                 .get()
-                .uri("http://tienda-service/api/v1/tienda/items/" + idItem)
+                .uri("http://inventario-service/api/v1/item/" + idItem)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, response -> 
                     Mono.error(new RuntimeException("Item no encontrado en la tienda."))
@@ -63,16 +71,18 @@ public class AccionService {
                 .bodyToMono(ItemDTOExterno.class)
                 .block();
 
-        if (item == null || item.getIdAccion() == null) {
+        Integer idAccionItem = obtenerIdAccionItem(item);
+
+        if (item == null || idAccionItem == null) {
             throw new RuntimeException("El item obtenido no posee una accion configurada.");
         }
 
-        Accion accion = accionRepository.findById(item.getIdAccion())
+        Accion accion = accionRepository.findById(idAccionItem)
                 .orElseThrow(() -> new RuntimeException("La accion vinculada al item no existe localmente"));
 
         MascotaDTOExterno mascota = webClientBuilder.build()
                 .get()
-                .uri("http://mascota-service/api/v1/mascotas/" + idMascota)
+                .uri("http://mascota-service/api/v1/mascota/buscar-pet/" + idMascota)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, response -> 
                     Mono.error(new RuntimeException("Mascota no encontrada."))
@@ -92,6 +102,13 @@ public class AccionService {
         historialAccionesRepository.save(registro);
 
         return "Se ha procesado el item '" + item.getNombreItem() + "' con la accion: " + accion.getNombreAccion();
+    }
+
+    private Integer obtenerIdAccionItem(ItemDTOExterno item) {
+        if (item == null) {
+            return null;
+        }
+        return item.getIdAccionFk() != null ? item.getIdAccionFk() : item.getIdAccion();
     }
 
     private AccionDTO convertirADTO(Accion accion) {

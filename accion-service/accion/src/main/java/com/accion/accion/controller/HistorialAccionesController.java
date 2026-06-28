@@ -13,7 +13,7 @@ import com.accion.accion.model.Accion;
 import com.accion.accion.service.HistorialAccionesService;
 
 @RestController
-@RequestMapping("/api/v2/historial")
+@RequestMapping("/api/v1/historial")
 public class HistorialAccionesController {
 
     @Autowired
