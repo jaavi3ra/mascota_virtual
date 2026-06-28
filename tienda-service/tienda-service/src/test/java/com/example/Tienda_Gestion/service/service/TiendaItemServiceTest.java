@@ -1,4 +1,4 @@
-package com.example.Tienda_Gestion.service;
+package com.example.Tienda_Gestion.service.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -48,7 +48,7 @@ public class TiendaItemServiceTest {
 
     @Test
     void agregarItemATienda() {
-        //GIVEN
+        // GIVEN
         Integer idTSimulado = 3;
 
         Tienda tiendaFalsa = new Tienda();
@@ -64,7 +64,7 @@ public class TiendaItemServiceTest {
         itemDTOExternoFalso.setNombreItem("Hongos alucinogenos de poder");
         itemDTOExternoFalso.setTipoItem("Potenciador de ataque");
 
-        //WHEN
+        // WHEN
         when(itemClientService.obtenerItem(5)).thenReturn(itemDTOExternoFalso);
 
         when(tiendaRepository.findById(idTSimulado)).thenReturn(Optional.of(tiendaFalsa));
@@ -73,7 +73,7 @@ public class TiendaItemServiceTest {
 
         TiendaItemDTO resultado = tiendaItemService.agregarItemATienda(tiendaItemFalso);
 
-        //THEN
+        // THEN
         assertNotNull(resultado, "El resultado no debería ser nulo");
         assertEquals(5, resultado.getId_item_FK(), "El ID del ítem debe coincidir");
 
@@ -84,7 +84,7 @@ public class TiendaItemServiceTest {
 
     @Test
     void comprarItem() {
-        //GIVEN
+        // GIVEN
         TiendaItem tiendaItemFalso = new TiendaItem();
         tiendaItemFalso.setIdTiendaItem(3);
         tiendaItemFalso.setIdItemFk(5);
@@ -97,7 +97,7 @@ public class TiendaItemServiceTest {
         usuarioDTOExternoFalso.setIdUsuario(3);
         usuarioDTOExternoFalso.setNombreUser("Lord Valdomero");
 
-        //WHEN
+        // WHEN
         when(itemClientService.obtenerItem(5)).thenReturn(itemDTOExternoFalso);
         when(usuarioClientService.obtenerUsuario(3)).thenReturn(usuarioDTOExternoFalso);
 
@@ -108,7 +108,7 @@ public class TiendaItemServiceTest {
 
         assertDoesNotThrow(() -> tiendaItemService.comprarItem(3, 3));
 
-        //THEN
+        // THEN
         verify(tiendaItemRepository).findById(3);
         verify(itemClientService).obtenerItem(5);
         verify(usuarioClientService).obtenerUsuario(3);

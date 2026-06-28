@@ -1,4 +1,4 @@
-package com.example.Tienda_Gestion.Controller;
+package com.example.Tienda_Gestion.Controller.V1;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import jakarta.validation.Valid;
 
-@RestController
+@RestController("tiendaControllerV1")
 @RequestMapping("/api/v1/tienda")
 public class TiendaController {
 

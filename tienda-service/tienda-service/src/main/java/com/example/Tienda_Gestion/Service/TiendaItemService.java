@@ -38,14 +38,16 @@ public class TiendaItemService {
     @Autowired
     private InventarioClientService inventarioClientService;
 
-    public TiendaItem buscarPorId(Integer idtienda, Integer itemid) {
+    public TiendaItemDTO buscarPorId(Integer idtienda, Integer itemid) {
         log.info("Buscando item en tienda...");
 
-        return tiendaItemRepository.findByTienda_IdTiendaAndIdItemFk(idtienda, itemid)
+        TiendaItem tiendaItem = tiendaItemRepository.findByTienda_IdTiendaAndIdItemFk(idtienda, itemid)
                 .orElseThrow(() -> {
                     log.error("No se encontró la item en tienda");
                     return new RuntimeException("No se encontró la item tienda");
                 });
+
+        return convertirADTO(tiendaItem);
     }
 
     public TiendaItemDTO agregarItemATienda(TiendaItem tiendaItem) {

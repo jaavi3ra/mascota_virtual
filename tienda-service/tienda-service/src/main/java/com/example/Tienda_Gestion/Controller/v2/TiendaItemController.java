@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,12 +31,24 @@ public class TiendaItemController {
     @Autowired
     private TiendaItemModelAssembler assembler;
 
+    @GetMapping(value = "/{idtienda}/buscaritem/{itemid}", produces = MediaTypes.HAL_JSON_VALUE)
+    public ResponseEntity<EntityModel<TiendaItemDTO>> buscarPorId(@PathVariable Integer idtienda,
+            @PathVariable Integer itemid) {
+        try {
+            TiendaItemDTO dto = tiendaItemService.buscarPorId(idtienda, itemid);
+            return ResponseEntity.ok(assembler.toModel(dto));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping(value = "/agregarItemTienda", produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<TiendaItemDTO>> agregarItemaTienda(@Valid @RequestBody TiendaItem tiendaItem) {
         try {
             TiendaItemDTO creado = tiendaItemService.agregarItemATienda(tiendaItem);
             return ResponseEntity
-                    .created(linkTo(methodOn(TiendaItemController.class).agregarItemaTienda(tiendaItem)).toUri())
+                    .created(linkTo(methodOn(TiendaItemController.class)
+                            .buscarPorId(creado.getId_tienda_FK().getIdTienda(), creado.getId_item_FK())).toUri())
                     .body(assembler.toModel(creado));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();

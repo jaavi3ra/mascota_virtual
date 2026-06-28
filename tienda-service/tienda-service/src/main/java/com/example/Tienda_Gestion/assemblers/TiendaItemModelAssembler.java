@@ -11,14 +11,18 @@ import com.example.Tienda_Gestion.Controller.v2.TiendaItemController;
 import com.example.Tienda_Gestion.DTO.TiendaItemDTO;
 
 @Component
-public class TiendaItemModelAssembler implements RepresentationModelAssembler<TiendaItemDTO, EntityModel<TiendaItemDTO>> {
+public class TiendaItemModelAssembler
+                implements RepresentationModelAssembler<TiendaItemDTO, EntityModel<TiendaItemDTO>> {
 
-    @Override
-    public EntityModel<TiendaItemDTO> toModel(TiendaItemDTO tiendaItem) {
-        return EntityModel.of(
-                tiendaItem,
-                linkTo(methodOn(TiendaItemController.class).agregarItemaTienda(null)).withSelfRel(),
-                linkTo(methodOn(TiendaItemController.class).comprarItem(1, tiendaItem.getIdTiendaItem()))
-                        .withRel("comprar-item"));
-    }
+        @Override
+        public EntityModel<TiendaItemDTO> toModel(TiendaItemDTO tiendaItem) {
+                return EntityModel.of(
+                                tiendaItem,
+                                linkTo(methodOn(TiendaItemController.class)
+                                                .buscarPorId(tiendaItem.getId_tienda_FK().getIdTienda(),
+                                                                tiendaItem.getId_item_FK()))
+                                                .withSelfRel(),
+                                linkTo(methodOn(TiendaItemController.class).agregarItemaTienda(null))
+                                                .withRel("agregar-item-tienda"));
+        }
 }
