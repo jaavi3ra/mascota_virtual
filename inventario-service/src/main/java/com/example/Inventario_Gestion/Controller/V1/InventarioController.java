@@ -1,4 +1,4 @@
-package com.example.Inventario_Gestion.Controller;
+package com.example.Inventario_Gestion.Controller.V1;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +21,7 @@ import com.example.Inventario_Gestion.Service.InventarioService;
 
 import jakarta.validation.Valid;
 
-@RestController
+@RestController("InventarioControllerV1")
 @RequestMapping("/api/v1/inventario")
 
 public class InventarioController {
@@ -30,27 +30,27 @@ public class InventarioController {
     private InventarioService inventarioService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarporidInventario(@PathVariable Integer id){
-        try{
-            Inventario inventario = inventarioService.obtenerInventariobyId(id);
+    public ResponseEntity<?> buscarporidInventario(@PathVariable Integer id) {
+        try {
+            InventarioDTO inventario = inventarioService.obtenerInventariobyId(id);
             return new ResponseEntity<>(inventario, HttpStatus.OK);
-        }catch(RuntimeException e){
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/{userid}/buscaritem/{itemid}")
-    public ResponseEntity<?> obtenerItemenInventario(@PathVariable Integer userid, @PathVariable Integer itemid){
-        try{
-            Inventario inventario = inventarioService.obtenerItemdelInventario(userid,itemid);
+    public ResponseEntity<?> obtenerItemenInventario(@PathVariable Integer userid, @PathVariable Integer itemid) {
+        try {
+            InventarioDTO inventario = inventarioService.obtenerItemdelInventario(userid, itemid);
             return new ResponseEntity<>(inventario, HttpStatus.OK);
-        }catch(RuntimeException e){
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/usuario/{iduser}")
-    public ResponseEntity<?> listarItemdDeInventario( @PathVariable Integer iduser) {
+    public ResponseEntity<?> listarItemdDeInventario(@PathVariable Integer iduser) {
         try {
             List<InventarioDTO> items = inventarioService.listarItemdelInventario(iduser);
             return items.isEmpty()
@@ -63,25 +63,24 @@ public class InventarioController {
     }
 
     @PostMapping("/save-inventario")
-    public ResponseEntity<?> saveInventario(@Valid @RequestBody Inventario inventario){
-        try{
-            Inventario inventarionuevo = inventarioService.guardarInventario(inventario);
+    public ResponseEntity<?> saveInventario(@Valid @RequestBody Inventario inventario) {
+        try {
+            InventarioDTO inventarionuevo = inventarioService.guardarInventario(inventario);
             return new ResponseEntity<>(inventarionuevo, HttpStatus.CREATED);
-        }catch(RuntimeException e){
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PatchMapping("/update-inventario")
-    public ResponseEntity<?> updateInventario(@Valid @RequestBody Inventario inventario){
-        try{
-            Inventario inventarionuevo = inventarioService.guardarInventario(inventario);
+    public ResponseEntity<?> updateInventario(@Valid @RequestBody Inventario inventario) {
+        try {
+            InventarioDTO inventarionuevo = inventarioService.guardarInventario(inventario);
             return new ResponseEntity<>(inventarionuevo, HttpStatus.CREATED);
-        }catch(RuntimeException e){
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
 
     @PutMapping("/{idmascota}/darItem/{iditem}")
     // editar estado de mascotaid con itemId

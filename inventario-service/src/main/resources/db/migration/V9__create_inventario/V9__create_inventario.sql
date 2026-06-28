@@ -2,7 +2,7 @@ CREATE TABLE item (
     id_item INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(20) NOT NULL,
     tipo_item VARCHAR(20) NOT NULL
-)
+);
 
 
 CREATE TABLE inventario(

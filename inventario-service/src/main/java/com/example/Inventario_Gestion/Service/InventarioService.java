@@ -33,35 +33,37 @@ public class InventarioService {
     @Autowired
     private AccionClientService accionClientService;
 
-    public Inventario obtenerInventariobyId(Integer id){
-        try{
-            return inventarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Inventario no encontrado"));
-        }catch(Exception e){
+    public InventarioDTO obtenerInventariobyId(Integer id) {
+        try {
+            Inventario inventario = inventarioRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Inventario no encontrado"));
+            return convertirADTO(inventario);
+        } catch (Exception e) {
             log.error("error [getInventario]: ", e);
             throw new RuntimeException("No se pudo obtener el inventario", e);
         }
     }
 
-    public Inventario guardarInventario(Inventario inventario){
-        try{
-            log.info("Guardando Inventario.");
-            return inventarioRepository.save(inventario);
-        }catch(Exception e){
+    public InventarioDTO guardarInventario(Inventario inventario) {
+        try {
+            Inventario inventarioGuardado = inventarioRepository.save(inventario);
+            log.info("Inventario guardado.");
+            return convertirADTO(inventarioGuardado);
+        } catch (Exception e) {
             log.error("error [saveInventario]: ", e);
             throw new RuntimeException("No se pudo guardar el inventario", e);
         }
     }
 
     public List<InventarioDTO> listarItemdelInventario(Integer iduser) {
-        try{
+        try {
             List<InventarioDTO> inventItem = new ArrayList<>();
-                for (Inventario inv : inventarioRepository.findInventbyUsuario(iduser)) {
+            for (Inventario inv : inventarioRepository.findInventbyUsuario(iduser)) {
                 inventItem.add(convertirADTO(inv));
             }
             log.info("items de inventario listado.");
             return inventItem;
-        }catch(Exception e ){
+        } catch (Exception e) {
             log.error("error [listItems]: ", e);
             throw new RuntimeException("No se pudo listar el inventario", e);
         }
@@ -69,26 +71,31 @@ public class InventarioService {
     }
 
     public Item obtenerItem(Integer iditem) {
-        try{
+        try {
             return itemRepository.findById(iditem)
-                .orElseThrow(() -> new RuntimeException("Item no encontrado"));
-        }catch(Exception e){
+                    .orElseThrow(() -> new RuntimeException("Item no encontrado"));
+        } catch (Exception e) {
             log.error("error [getItem]: ", e);
             throw new RuntimeException("No se pudo obtener el ítem", e);
         }
 
     }
 
-    public Inventario obtenerItemdelInventario(Integer iduser, Integer iditem) {
-        try{
-            return inventarioRepository
-                .findByUsuarioAndItem(iduser, iditem)
-                .orElseThrow(() -> new RuntimeException("No tienes este item"));
-        }catch(Exception e ){
+    public InventarioDTO obtenerItemdelInventario(Integer iduser, Integer iditem) {
+        try {
+            Inventario inventario = obtenerInventarioEntityPorUsuarioItem(iduser, iditem);
+            return convertirADTO(inventario);
+        } catch (Exception e) {
             log.error("error [getIteminInventario]: ", e);
             throw new RuntimeException("El usuario no tiene este ítem", e);
         }
 
+    }
+
+    private Inventario obtenerInventarioEntityPorUsuarioItem(Integer iduser, Integer iditem) {
+        return inventarioRepository
+                .findByUsuarioAndItem(iduser, iditem)
+                .orElseThrow(() -> new RuntimeException("No tienes este item"));
     }
 
     private void validarStock(Inventario inventario) {
@@ -98,11 +105,11 @@ public class InventarioService {
     }
 
     private void consumirItem(Inventario inventario) {
-        try{
+        try {
             inventario.setCantidad(inventario.getCantidad() - 1);
             // guardar cambios del inventario
             inventarioRepository.save(inventario);
-        }catch(Exception e){
+        } catch (Exception e) {
             log.error("Error [consumirItem]: ", e);
             throw new RuntimeException("No se pudo consumir el ítem", e);
         }
@@ -110,31 +117,30 @@ public class InventarioService {
     }
 
     public String usarItem(Integer idMascota, Integer idItem) {
-        try{
+        try {
             log.info("Buscando mascota e Item...");
             // obtener objetos
             MascotaDTOExterno mascota = mascotaClientService
-                .obtenerMascota(idMascota);
+                    .obtenerMascota(idMascota);
 
             Item item = obtenerItem(idItem);
 
-            Inventario inventario = 
-                obtenerItemdelInventario(mascota.getIdUsuarioFk(), idItem);
+            Inventario inventario = obtenerInventarioEntityPorUsuarioItem(mascota.getIdUsuarioFk(), idItem);
 
-            AccionDTOExterno accion =  accionClientService
-                .obtenerAccion(item.getIdAccionFk());
+            AccionDTOExterno accion = accionClientService
+                    .obtenerAccion(item.getIdAccionFk());
             // metodos validacion
             validarStock(inventario);
             consumirItem(inventario);
             mascotaClientService
-                .aplicarEfectos(mascota, item);
-            //registro de interaccion de mascota con item
+                    .aplicarEfectos(mascota, item);
+            // registro de interaccion de mascota con item
             accionClientService
-                .registroHistorial(idMascota, accion, contruirMensaje(mascota, item, accion));
-            
+                    .registroHistorial(idMascota, accion, contruirMensaje(mascota, item, accion));
+
             log.info("se uso el item en mascota correctamente.");
-            return contruirMensaje(mascota, item, accion);            
-        }catch(Exception e){
+            return contruirMensaje(mascota, item, accion);
+        } catch (Exception e) {
             log.error("error [useitem]: ", e);
             throw new RuntimeException("No se pudo usar el ítem", e);
         }

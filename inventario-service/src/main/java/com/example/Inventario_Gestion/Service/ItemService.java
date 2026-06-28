@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import com.example.Inventario_Gestion.DTO.AccionDTOExterno;
 import com.example.Inventario_Gestion.DTO.ItemDTO;
 import com.example.Inventario_Gestion.Model.Item;
 import com.example.Inventario_Gestion.Repository.ItemRepository;
@@ -29,28 +27,26 @@ public class ItemService {
     }
 
     public ItemDTO obtenerItemId(Integer id) {
-        try{
+        try {
             Item item = itemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Item no encontrado"));
-                log.info("id obtenido.");
+                    .orElseThrow(() -> new RuntimeException("Item no encontrado"));
+            log.info("id obtenido.");
             return convertirADTO(item);
-        }catch(Exception e){
-            log.error("error [getItem]: ", e );
+        } catch (Exception e) {
+            log.error("error [getItem]: ", e);
             throw new RuntimeException("No se pudo obtener el ítem", e);
         }
-
     }
 
     public ItemDTO guardar(Item item) {
-        try{
+        try {
             itemRepository.save(item);
             log.info("item guardado.");
             return convertirADTO(item);
-        }catch(Exception e ){
+        } catch (Exception e) {
             log.error("error [saveItem]: ", e);
             throw new RuntimeException("No se pudo guardar el ítem", e);
         }
-
     }
 
     private ItemDTO convertirADTO(Item item) {
