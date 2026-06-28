@@ -17,7 +17,7 @@ import com.accion.accion.service.AccionService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/accion")
+@RequestMapping("/api/v2/accion")
 public class AccionController {
 
     @Autowired
