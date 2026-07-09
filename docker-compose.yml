@@ -84,7 +84,7 @@ services:
 
 
  accion-service:
-   build: ./accion-service
+   build: ./accion-service/accion
    container_name: accion-service
    environment:
      SPRING_PROFILES_ACTIVE: dev
@@ -116,7 +116,7 @@ services:
        condition: service_healthy
 
  usuario-service:
-   build: ./usuario-service
+   build: ./usuario-service/usuario-service
    container_name: usuario-service
    environment:
      SPRING_PROFILES_ACTIVE: dev
