@@ -27,7 +27,7 @@ public class TipoMascota {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_tipo_mascota")
+    @Column(name = "id_tipo")
     private Integer id;
 
     @NotBlank(message = "El nombre de la mascota es obligatorio")
