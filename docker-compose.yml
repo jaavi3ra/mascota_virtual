@@ -1,0 +1,138 @@
+version: '3.8'
+
+
+services:
+ mariadb-db:
+   image: mariadb:10.11
+   container_name: mariadb-db
+   ports:
+     - "3306:3306"
+   environment:
+     MYSQL_ROOT_PASSWORD: ""
+     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+     MYSQL_DATABASE: db_mascotav_dev
+   networks:
+     - network-mascotav
+   healthcheck:
+     test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root"]
+     interval: 10s
+     timeout: 5s
+     retries: 20
+
+
+ eureka-server:
+   build: ./eureka
+   container_name: eureka-server
+   ports:
+     - "8761:8761"
+   networks:
+     - network-mascotav
+   healthcheck:
+     test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+     interval: 15s
+     timeout: 5s
+     retries: 10
+     start_period: 30s
+
+
+ api-gateway:
+   build: ./gateway
+   container_name: api-gateway
+   ports:
+     - "8080:8080"
+   environment:
+     EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+     SPRING_PROFILES_ACTIVE: dev
+   networks:
+     - network-mascotav
+   depends_on:
+     eureka-server:
+       condition: service_healthy
+
+
+ mascota-service:
+   build: ./mascota-service/mascota-service
+   container_name: mascota-service
+   environment:
+     SPRING_PROFILES_ACTIVE: dev
+     EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+     DATABASE_HOST: mariadb-db
+     GATEWAY_URL: http://localhost:8080
+   networks:
+     - network-mascotav
+   depends_on:
+     mariadb-db:
+       condition: service_healthy
+     eureka-server:
+       condition: service_healthy
+
+ tienda-service:
+   build: ./tienda-service/tienda-service
+   container_name: tienda-service
+   environment:
+     SPRING_PROFILES_ACTIVE: dev
+     EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+     DATABASE_HOST: mariadb-db
+     GATEWAY_URL: http://localhost:8080
+   networks:
+     - network-mascotav
+   depends_on:
+     mariadb-db:
+       condition: service_healthy
+     eureka-server:
+       condition: service_healthy
+
+
+ accion-service:
+   build: ./accion-service
+   container_name: accion-service
+   environment:
+     SPRING_PROFILES_ACTIVE: dev
+     EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+     DATABASE_HOST: mariadb-db
+     GATEWAY_URL: http://localhost:8080
+   networks:
+     - network-mascotav
+   depends_on:
+     mariadb-db:
+       condition: service_healthy
+     eureka-server:
+       condition: service_healthy
+
+ inventario-service:
+   build: ./inventario-service
+   container_name: inventario-service
+   environment:
+     SPRING_PROFILES_ACTIVE: dev
+     EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+     DATABASE_HOST: mariadb-db
+     GATEWAY_URL: http://localhost:8080
+   networks:
+     - network-mascotav
+   depends_on:
+     mariadb-db:
+       condition: service_healthy
+     eureka-server:
+       condition: service_healthy
+
+ usuario-service:
+   build: ./usuario-service
+   container_name: usuario-service
+   environment:
+     SPRING_PROFILES_ACTIVE: dev
+     EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+     DATABASE_HOST: mariadb-db
+     GATEWAY_URL: http://localhost:8080
+   networks:
+     - network-mascotav
+   depends_on:
+     mariadb-db:
+       condition: service_healthy
+     eureka-server:
+       condition: service_healthy
+
+
+
+networks:
+ network-mascotav:
+   driver: bridge

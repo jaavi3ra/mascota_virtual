@@ -1,0 +1,70 @@
+server:
+  port: 0
+
+springdoc:
+  api-docs:
+    path: /inventario-service/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+  packages-to-scan: com.example.Inventario_Gestion.Controller
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${random.value}
+
+spring:
+  application:
+    name: inventario-service
+  flyway:
+    enabled: 'true'
+    baseline-on-migrate: 'true'
+  jpa:
+    show-sql: 'true'
+  profiles:
+    active: dev
+  mvc:
+    cors:
+      mappings:
+        "/**":
+          allowed-origin-patterns: "*"
+          allowed-methods: GET, POST, PUT, DELETE, PATCH, OPTIONS
+          allowed-headers: "*"
+          exposed-headers: "*"
+          allow-credentials: false
+          max-age: 3600
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://${DATABASE_HOST:localhost}:3306/db_gestion_inventario_dev?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: ''
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    username: root
+    url: jdbc:mysql://localhost:3306/db_gestion_inventario_test?createDatabaseIfNotExist=true
+    password: ''
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+

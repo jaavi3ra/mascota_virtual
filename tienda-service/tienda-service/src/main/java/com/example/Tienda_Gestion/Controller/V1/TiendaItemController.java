@@ -1,0 +1,56 @@
+package com.example.Tienda_Gestion.Controller.V1;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.Tienda_Gestion.DTO.TiendaItemDTO;
+import com.example.Tienda_Gestion.Model.TiendaItem;
+import com.example.Tienda_Gestion.Service.TiendaItemService;
+
+import jakarta.validation.Valid;
+
+@RestController("tiendaItemControllerV1")
+@RequestMapping("/api/v1/tiendaItem")
+public class TiendaItemController {
+
+   @Autowired
+   private TiendaItemService tiendaItemService;
+
+   @GetMapping("/{idtienda}/buscaritem/{itemid}")
+   public ResponseEntity<?> buscarPorId(@PathVariable Integer idtienda, @PathVariable Integer itemid) {
+      try {
+         TiendaItemDTO tiendaitem = tiendaItemService.buscarPorId(idtienda, itemid);
+         return new ResponseEntity<>(tiendaitem, HttpStatus.OK);
+      } catch (RuntimeException e) {
+         return new ResponseEntity<>("No se encontro item en la tienda :(", HttpStatus.BAD_REQUEST);
+      }
+   }
+
+   @PostMapping("/agregarItemTienda")
+   public ResponseEntity<?> agregarItemaTienda(@Valid @RequestBody TiendaItem tiendaItem) {
+      try {
+         tiendaItemService.agregarItemATienda(tiendaItem);
+         return new ResponseEntity<>("Item agregado a la tienda!", HttpStatus.CREATED);
+      } catch (RuntimeException e) {
+         return new ResponseEntity<>("No se pudo agregar :(", HttpStatus.BAD_REQUEST);
+      }
+   }
+
+   @PostMapping("/{idUsuario}/comprarItems/{idTiendaItem}")
+   public ResponseEntity<?> comprarItem(@PathVariable Integer idUsuario, @PathVariable Integer idTiendaItem) {
+      try {
+         tiendaItemService.comprarItem(idUsuario, idTiendaItem);
+         return new ResponseEntity<>("Ítem comprado y añadido al inventario.", HttpStatus.CREATED);
+      } catch (RuntimeException e) {
+         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+      }
+
+   }
+}

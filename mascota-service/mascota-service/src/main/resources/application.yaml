@@ -1,0 +1,64 @@
+server:
+  port: 0
+
+springdoc:
+  api-docs:
+    path: /mascota-service/api-docs
+  packages-to-scan: com.mascota.mascota-service.controller
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${random.value}
+
+spring:
+  application:
+    name: mascota-service
+  flyway:
+    enabled: 'true'
+    baseline-on-migrate: 'true'
+  jpa:
+    show-sql: 'true'
+  profiles:
+    active: dev
+  mvc:
+    cors:
+      mappings:
+        "/**":
+          allowed-origin-patterns: "*"
+          allowed-methods: GET, POST, PUT, DELETE, PATCH, OPTIONS
+          allowed-headers: "*"
+          exposed-headers: "*"
+          allow-credentials: false
+          max-age: 3600
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://${DATABASE_HOST:localhost}:3306/mascota_db?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: ''
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update # Permitimos que actualice localmente si es necesario
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:mysql://localhost:3306/mascota_db_test?createDatabaseIfNotExist=true
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: ''
+  jpa:
+    hibernate:
+      ddl-auto: update # Permitimos que actualice localmente si es necesario
